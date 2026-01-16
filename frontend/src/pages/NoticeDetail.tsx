@@ -131,8 +131,18 @@ export function NoticeDetailPage() {
                                 {notice.content ? (
                                     <div className="prose prose-invert prose-lg max-w-none">
                                         <div
-                                            className="text-gray-300 leading-relaxed whitespace-pre-wrap"
-                                            dangerouslySetInnerHTML={{ __html: notice.content.replace(/\n/g, '<br/>') }}
+                                            className="text-gray-300 leading-relaxed"
+                                            dangerouslySetInnerHTML={{
+                                                __html: notice.content
+                                                    // Convert **bold** to <strong>
+                                                    .replace(/\*\*(.+?)\*\*/g, '<strong class="text-white">$1</strong>')
+                                                    // Convert numbered lists (1. item)
+                                                    .replace(/^(\d+)\.\s+(.+)$/gm, '<li class="ml-4">$1. $2</li>')
+                                                    // Convert bullet points (- item)
+                                                    .replace(/^-\s+(.+)$/gm, '<li class="ml-4 list-disc">• $1</li>')
+                                                    // Convert newlines to <br>
+                                                    .replace(/\n/g, '<br/>')
+                                            }}
                                         />
                                     </div>
                                 ) : (

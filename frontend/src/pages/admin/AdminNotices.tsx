@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Plus, Edit2, Trash2, Search, Calendar, Eye, EyeOff, Star, X, FileText, AlertCircle, Briefcase, Bell, Download } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Calendar, Eye, Star, X, FileText, AlertCircle, Briefcase, Bell, Download, Loader2 } from 'lucide-react';
 import { useNotices } from '../../hooks/useApi';
+import { noticesApi } from '../../services/api';
 import type { Notice } from '../../types';
 
 interface NoticeFormData {
@@ -51,17 +52,33 @@ export function AdminNotices() {
         setIsModalOpen(true);
     };
 
-    const openEditModal = (notice: Notice) => {
+    const openEditModal = async (notice: Notice) => {
         setEditingNotice(notice);
-        setFormData({
-            title: notice.title,
-            category: notice.category,
-            excerpt: notice.excerpt || '',
-            content: notice.content || '',
-            published_date: notice.published_date,
-            is_featured: notice.is_featured,
-            is_active: true,
-        });
+        // Fetch full notice details (including content) since list API doesn't include it
+        try {
+            const fullNotice = await noticesApi.getBySlug(notice.slug);
+            setFormData({
+                title: fullNotice.title,
+                category: fullNotice.category,
+                excerpt: fullNotice.excerpt || '',
+                content: fullNotice.content || '',
+                published_date: fullNotice.published_date,
+                is_featured: fullNotice.is_featured,
+                is_active: true,
+            });
+        } catch (error) {
+            console.error('Failed to fetch notice details:', error);
+            // Fallback to using list data without content
+            setFormData({
+                title: notice.title,
+                category: notice.category,
+                excerpt: notice.excerpt || '',
+                content: '',
+                published_date: notice.published_date,
+                is_featured: notice.is_featured,
+                is_active: true,
+            });
+        }
         setIsModalOpen(true);
     };
 
