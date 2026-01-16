@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BIFPCL Proprietary Admin Suite</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1736cf",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0a0e1a",
+                        "surface-dark": "#141b2d",
+                        "border-dark": "#242a47",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111422;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #242a47;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1736cf;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-72 bg-surface-dark border-r border-border-dark flex flex-col shrink-0">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="bg-primary size-10 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<div>
+<h1 class="text-white text-base font-bold leading-none">BIFPCL</h1>
+<p class="text-[#939cc8] text-xs font-medium uppercase tracking-wider mt-1">Control Center</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-white" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#939cc8] hover:bg-border-dark hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-sm font-medium">Tender Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#939cc8] hover:bg-border-dark hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">badge</span>
+<span class="text-sm font-medium">HR Portal</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#939cc8] hover:bg-border-dark hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-sm font-medium">Power Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#939cc8] hover:bg-border-dark hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">inventory</span>
+<span class="text-sm font-medium">Asset Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#939cc8] hover:bg-border-dark hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">System Settings</span>
+</a>
+</nav>
+<div class="p-6 border-t border-border-dark">
+<div class="flex items-center gap-3 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
+<span class="material-symbols-outlined text-green-500 text-sm">check_circle</span>
+<span class="text-green-500 text-xs font-bold uppercase tracking-widest">System Online</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<!-- Header -->
+<header class="h-16 border-b border-border-dark bg-background-dark/50 backdrop-blur flex items-center justify-between px-8 shrink-0">
+<div class="flex items-center gap-4 w-96">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#939cc8] text-xl">search</span>
+<input class="w-full bg-border-dark border-none rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder:text-[#939cc8] focus:ring-1 focus:ring-primary" placeholder="Search Tenders, Employees, or Logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<button class="size-10 flex items-center justify-center rounded-lg bg-surface-dark text-[#939cc8] hover:text-white transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full ring-2 ring-background-dark"></span>
+</button>
+<button class="size-10 flex items-center justify-center rounded-lg bg-surface-dark text-[#939cc8] hover:text-white transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<div class="h-8 w-px bg-border-dark"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-sm font-bold text-white leading-none">A. Rahman</p>
+<p class="text-xs text-[#939cc8] mt-1">Chief Operations</p>
+</div>
+<div class="size-10 rounded-full bg-cover bg-center ring-2 ring-border-dark" data-alt="Headshot of the administrator in corporate uniform" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDY_2_rxMKHtcHwyzclqV6RBVBpGNHyVogdjTzhyV8i3Fs-y7p_eGWBQsF09XJjltlFWbMC4U3IGX2V4Q8Pw6c9iEVKFiY3bcce153yc9pFOcZnGme63rg4Em-EAmTahvX-clRQWV-nKMeUqHj4PgSBJlPBNiQLAn9wxtmF8Jlby5Ypc9h6Nv5suKPVKUIFezIKLkvOvPdZ_KAQPaajWg8T2P6zPj6_z-1Zf6tYdereZRhdpngxXrVjZajOYng_fiOrQFQNLnFA3kty')"></div>
+</div>
+</div>
+</header>
+<!-- Dashboard Workspace -->
+<div class="flex-1 overflow-y-auto p-8 space-y-8">
+<!-- Quick Stats -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-surface-dark p-6 rounded-xl border border-border-dark">
+<div class="flex justify-between items-start mb-4">
+<span class="text-[#939cc8] text-sm font-medium">Current Output</span>
+<span class="material-symbols-outlined text-primary">electric_bolt</span>
+</div>
+<p class="text-3xl font-bold text-white">1,320 <span class="text-lg font-medium text-[#939cc8]">MW</span></p>
+<div class="mt-2 flex items-center gap-2">
+<span class="text-green-500 text-xs font-bold">+2.4%</span>
+<span class="text-[#939cc8] text-xs">from last hour</span>
+</div>
+</div>
+<div class="bg-surface-dark p-6 rounded-xl border border-border-dark">
+<div class="flex justify-between items-start mb-4">
+<span class="text-[#939cc8] text-sm font-medium">Grid Status</span>
+<span class="material-symbols-outlined text-green-500">sensors</span>
+</div>
+<p class="text-3xl font-bold text-white">Stable</p>
+<div class="mt-2 flex items-center gap-2">
+<span class="text-green-500 text-xs font-bold">50.02 <span class="font-normal">Hz</span></span>
+</div>
+</div>
+<div class="bg-surface-dark p-6 rounded-xl border border-border-dark">
+<div class="flex justify-between items-start mb-4">
+<span class="text-[#939cc8] text-sm font-medium">Active Tenders</span>
+<span class="material-symbols-outlined text-orange-500">assignment</span>
+</div>
+<p class="text-3xl font-bold text-white">24</p>
+<div class="mt-2 flex items-center gap-2">
+<span class="text-orange-500 text-xs font-bold">3 <span class="font-normal">Closing Soon</span></span>
+</div>
+</div>
+<div class="bg-surface-dark p-6 rounded-xl border border-border-dark">
+<div class="flex justify-between items-start mb-4">
+<span class="text-[#939cc8] text-sm font-medium">Manpower Load</span>
+<span class="material-symbols-outlined text-[#939cc8]">group</span>
+</div>
+<p class="text-3xl font-bold text-white">92%</p>
+<div class="mt-2 flex items-center gap-2">
+<span class="text-green-500 text-xs font-bold">+8%</span>
+<span class="text-[#939cc8] text-xs">shift rotation active</span>
+</div>
+</div>
+</div>
+<!-- Chart & Analytics -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 bg-surface-dark rounded-xl border border-border-dark p-6">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="text-lg font-bold text-white">Power Generation Trend</h2>
+<p class="text-sm text-[#939cc8]">Real-time production across all units (24h)</p>
+</div>
+<select class="bg-background-dark border-border-dark text-[#939cc8] text-xs rounded-lg px-3 py-1.5 focus:ring-primary">
+<option>Last 24 Hours</option>
+<option>Last 7 Days</option>
+</select>
+</div>
+<div class="h-64 w-full relative">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 800 200">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#1736cf" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#1736cf" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0 160 C 50 150, 100 180, 150 140 S 250 100, 300 120 S 400 60, 450 80 S 550 140, 600 100 S 700 40, 800 60 V 200 H 0 Z" fill="url(#chartGradient)"></path>
+<path d="M0 160 C 50 150, 100 180, 150 140 S 250 100, 300 120 S 400 60, 450 80 S 550 140, 600 100 S 700 40, 800 60" fill="none" stroke="#1736cf" stroke-width="3"></path>
+</svg>
+<div class="absolute bottom-0 left-0 right-0 flex justify-between px-2 text-[10px] text-[#939cc8] font-bold uppercase tracking-tighter mt-4">
+<span>00:00</span><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:59</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-dark rounded-xl border border-border-dark p-6">
+<h2 class="text-lg font-bold text-white mb-6">Asset Health Monitor</h2>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="text-white font-medium">Unit 01 - Main Turbine</span>
+<span class="text-green-500 font-bold">Optimal</span>
+</div>
+<div class="h-2 bg-background-dark rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[88%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="text-white font-medium">Unit 02 - Cooling System</span>
+<span class="text-green-500 font-bold">Optimal</span>
+</div>
+<div class="h-2 bg-background-dark rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[94%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="text-white font-medium">Grid Interconnect</span>
+<span class="text-orange-500 font-bold">Fluctuating</span>
+</div>
+<div class="h-2 bg-background-dark rounded-full overflow-hidden">
+<div class="h-full bg-orange-500 w-[62%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="text-white font-medium">Fuel Storage A</span>
+<span class="text-white font-medium">78%</span>
+</div>
+<div class="h-2 bg-background-dark rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[78%] rounded-full"></div>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-2.5 bg-border-dark text-white text-sm font-bold rounded-lg hover:bg-primary transition-colors">
+                        View Detailed Maintenance Logs
+                    </button>
+</div>
+</div>
+<!-- Tender Management Table -->
+<div class="bg-surface-dark rounded-xl border border-border-dark overflow-hidden">
+<div class="p-6 border-b border-border-dark flex items-center justify-between bg-white/5">
+<h2 class="text-lg font-bold text-white">Active Tenders &amp; Procurement</h2>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg">
+<span class="material-symbols-outlined text-sm">add</span> New Tender
+                        </button>
+<button class="flex items-center gap-2 px-3 py-1.5 bg-border-dark text-white text-xs font-bold rounded-lg">
+<span class="material-symbols-outlined text-sm">filter_list</span> Filter
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="text-[#939cc8] text-[11px] uppercase tracking-widest bg-background-dark/30">
+<th class="px-6 py-4 font-bold">Tender ID</th>
+<th class="px-6 py-4 font-bold">Subject</th>
+<th class="px-6 py-4 font-bold">Closing Date</th>
+<th class="px-6 py-4 font-bold">Status</th>
+<th class="px-6 py-4 font-bold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-dark text-sm">
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-6 py-4 font-mono text-primary font-bold">BIF-2023-089</td>
+<td class="px-6 py-4 text-white font-medium">Supply of Spare Parts for GE Turbine Unit 1</td>
+<td class="px-6 py-4 text-[#939cc8]">24 Oct 2023</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 bg-green-500/10 text-green-500 text-[10px] font-bold rounded-full uppercase tracking-tighter border border-green-500/20">Active</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-1.5 hover:bg-border-dark rounded-lg text-[#939cc8] hover:text-white"><span class="material-symbols-outlined text-lg">visibility</span></button>
+<button class="p-1.5 hover:bg-border-dark rounded-lg text-[#939cc8] hover:text-white"><span class="material-symbols-outlined text-lg">edit</span></button>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-6 py-4 font-mono text-primary font-bold">BIF-2023-092</td>
+<td class="px-6 py-4 text-white font-medium">Manpower Outsourcing for Security Operations</td>
+<td class="px-6 py-4 text-[#939cc8]">28 Oct 2023</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 bg-orange-500/10 text-orange-500 text-[10px] font-bold rounded-full uppercase tracking-tighter border border-orange-500/20">Closing Soon</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-1.5 hover:bg-border-dark rounded-lg text-[#939cc8] hover:text-white"><span class="material-symbols-outlined text-lg">visibility</span></button>
+<button class="p-1.5 hover:bg-border-dark rounded-lg text-[#939cc8] hover:text-white"><span class="material-symbols-outlined text-lg">edit</span></button>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-6 py-4 font-mono text-primary font-bold">BIF-2023-084</td>
+<td class="px-6 py-4 text-white font-medium">Installation of Smart Grid Monitoring Nodes</td>
+<td class="px-6 py-4 text-[#939cc8]">12 Oct 2023</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 bg-[#242a47] text-[#939cc8] text-[10px] font-bold rounded-full uppercase tracking-tighter border border-border-dark">Evaluation</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-1.5 hover:bg-border-dark rounded-lg text-[#939cc8] hover:text-white"><span class="material-symbols-outlined text-lg">visibility</span></button>
+<button class="p-1.5 hover:bg-border-dark rounded-lg text-[#939cc8] hover:text-white"><span class="material-symbols-outlined text-lg">edit</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- HR Portal Overview -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-12">
+<div class="bg-surface-dark rounded-xl border border-border-dark p-6">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold text-white">Pending HR Requisitions</h2>
+<a class="text-primary text-xs font-bold hover:underline" href="#">View All Portal</a>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 p-4 bg-background-dark/50 rounded-lg border border-border-dark">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Profile photo of engineering applicant" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCis6b4tIM_ZqB2OMlQ3Z1s_8i1hFLsqpvIjadQJCyeWWl7byLwP-p8zOgDLxbMap0HIp0-CgQylxpP_vqvlZIiA1ea3599gt5QrCRF9gMzPa1ZMYzx0u7IQqN7tZj6EQTyISjRxF0lLS3S6c0ypX-buVeVNRBetj1-HGMdhcvZSabUMgwmgy-RbjDxbEaEhUhVEIzuVSX8hGW5jCgFLPhNeiLZEJgFk0y5gyHfJw2OGGm8l52CuZ_e0puIUoCyqXMUunZZFCaLAZvr')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-white truncate">S. M. Kamal - Senior Engineer (Electrical)</p>
+<p class="text-xs text-[#939cc8]">Leave Request - 4 Days</p>
+</div>
+<div class="flex gap-2">
+<button class="p-1 text-green-500 hover:bg-green-500/10 rounded"><span class="material-symbols-outlined">check</span></button>
+<button class="p-1 text-red-500 hover:bg-red-500/10 rounded"><span class="material-symbols-outlined">close</span></button>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 bg-background-dark/50 rounded-lg border border-border-dark">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Profile photo of HR admin applicant" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCkmrLbdTrtmJt2WW0JwW-pl8bX8KqTO03avh8ziQcctdFazEPoEJBncTlA6PpYnehVLNK3Vvw6DjBBvut0iH4R1d8ypLh-FfQ38a3nWNoIfu5KAnaVV-tx68SCu7QH5NvfZJfzp1wqS9_6RctqmyE06PErAL25g0L6731txYSj_nmPWYXmqiOvaKuOKzTBl_QEtU2oIGIxxdjC6ILjTPSuqRRynvHfHSW1PyuqvAVCojJXUygjC69JlOaez9dGgFqNGvhuMVElhHHt')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-white truncate">Fatema Begum - HR Admin</p>
+<p class="text-xs text-[#939cc8]">Medical Reimbursement - BDT 14,500</p>
+</div>
+<div class="flex gap-2">
+<button class="p-1 text-green-500 hover:bg-green-500/10 rounded"><span class="material-symbols-outlined">check</span></button>
+<button class="p-1 text-red-500 hover:bg-red-500/10 rounded"><span class="material-symbols-outlined">close</span></button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-dark rounded-xl border border-border-dark p-6">
+<h2 class="text-lg font-bold text-white mb-6">Shift Schedule Overview</h2>
+<div class="grid grid-cols-3 gap-4">
+<div class="p-4 bg-background-dark/50 rounded-lg text-center border border-border-dark">
+<p class="text-[10px] text-[#939cc8] uppercase font-bold tracking-widest mb-1">Morning Shift</p>
+<p class="text-xl font-bold text-white">42</p>
+<p class="text-[10px] text-green-500 font-bold">On Duty</p>
+</div>
+<div class="p-4 bg-primary/10 rounded-lg text-center border border-primary/20">
+<p class="text-[10px] text-[#939cc8] uppercase font-bold tracking-widest mb-1">Evening Shift</p>
+<p class="text-xl font-bold text-white">38</p>
+<p class="text-[10px] text-primary font-bold">Starting 18:00</p>
+</div>
+<div class="p-4 bg-background-dark/50 rounded-lg text-center border border-border-dark">
+<p class="text-[10px] text-[#939cc8] uppercase font-bold tracking-widest mb-1">Night Shift</p>
+<p class="text-xl font-bold text-white">24</p>
+<p class="text-[10px] text-[#939cc8] font-bold">Standby</p>
+</div>
+</div>
+<div class="mt-6 p-4 rounded-lg bg-border-dark flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">event_repeat</span>
+<span class="text-sm text-white font-medium">Automatic Shift Rotation</span>
+</div>
+<div class="w-10 h-5 bg-primary rounded-full relative">
+<div class="absolute right-1 top-1 size-3 bg-white rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

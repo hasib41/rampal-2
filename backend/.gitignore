@@ -1,0 +1,45 @@
+# Django Backend .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+
+# Django
+*.log
+*.pot
+*.pyc
+db.sqlite3
+*.sqlite3
+staticfiles/
+media/
+
+# Local settings
+local_settings.py
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Coverage
+htmlcov/
+.coverage
+.coverage.*
+.cache
+
+# pytest
+.pytest_cache/
+
+# mypy
+.mypy_cache/

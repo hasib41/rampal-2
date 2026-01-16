@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BIFPCL | Maitree Super Thermal Power Project</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10a24b",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#0a0f18",
+                        "accent-dark": "#162521",
+                        "border-dark": "#1a3324",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-effect {
+            background: rgba(26, 51, 36, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(16, 162, 75, 0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0a0f18;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #10a24b;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 border-b border-white/10 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4">
+<div class="max-w-[1400px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-10">
+<div class="flex items-center gap-3">
+<div class="size-8 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div class="flex flex-col">
+<h2 class="text-white text-lg font-black leading-none tracking-tight">BIFPCL</h2>
+<span class="text-[10px] text-primary font-bold uppercase tracking-widest">Corporate Portal</span>
+</div>
+</div>
+<nav class="hidden lg:flex items-center gap-8">
+<a class="text-white hover:text-primary text-sm font-medium transition-colors" href="#">Projects</a>
+<a class="text-white/60 hover:text-primary text-sm font-medium transition-colors" href="#">Sustainability</a>
+<a class="text-white/60 hover:text-primary text-sm font-medium transition-colors" href="#">Operations</a>
+<a class="text-white/60 hover:text-primary text-sm font-medium transition-colors" href="#">Investors</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-primary transition-colors">search</span>
+<input class="bg-accent-dark border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-primary w-64 text-white" placeholder="Search infrastructure..." type="text"/>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white text-sm font-bold px-5 py-2 rounded-lg transition-all shadow-lg shadow-primary/20">
+                    Portal Login
+                </button>
+</div>
+</div>
+</header>
+<main class="max-w-[1400px] mx-auto px-6 lg:px-20 py-8">
+<!-- Hero Section -->
+<section class="mb-12">
+<div class="relative rounded-2xl overflow-hidden bg-cover bg-center min-h-[500px] flex flex-col justify-end p-8 lg:p-16 border border-white/5" data-alt="Modern power plant industrial structure at sunset" style='background-image: linear-gradient(to top, rgba(10, 15, 24, 0.95) 0%, rgba(10, 15, 24, 0.4) 50%, rgba(10, 15, 24, 0.2) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBQdLImTlyZTzVmWbWwAVzMQlNdjcOglfB3cz7ZtfnVQ5cLpufN-JazpxNmPQXeorXe5SAH6J_GBgWHG52f92KLIp-KlY3Pwf4GHg4RHzP8yZyZ35zvLwmtg0bmypO4M2KnPEHwCKBeDnaj-GBVZHF7Edlh7PGf_ZcLMRo3-C4Y7siQipkhafMzgK4486RSSsPEj5wZn9YL6gJso0UmiuXhxWd8cIEINljEMGX8aN_m9ybWHJrIgDv_HtcoH36haODtEINghBJEE7pF");'>
+<div class="max-w-3xl">
+<div class="flex items-center gap-2 mb-4">
+<span class="px-3 py-1 rounded-full bg-primary/20 text-primary text-[10px] font-bold uppercase tracking-widest border border-primary/30">Active Project</span>
+<span class="px-3 py-1 rounded-full bg-white/10 text-white/80 text-[10px] font-bold uppercase tracking-widest border border-white/10">Joint Venture (BPDB &amp; NTPC)</span>
+</div>
+<h1 class="text-white text-5xl lg:text-6xl font-black mb-6 tracking-tight">
+                        Maitree Super <br/><span class="text-primary">Thermal Power</span> Project
+                    </h1>
+<p class="text-slate-300 text-lg mb-8 leading-relaxed">
+                        The Rampal power station is a 1320 megawatt coal-fired power station at Rampal Upazila of Bagerhat District in Khulna, Bangladesh. 
+                        A milestone in South Asian energy cooperation using Ultra-Supercritical technology.
+                    </p>
+<div class="flex flex-wrap gap-4">
+<button class="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-lg font-bold flex items-center gap-2 transition-transform active:scale-95 shadow-xl shadow-primary/20">
+<span class="material-symbols-outlined">analytics</span>
+                            Live Tech Specs
+                        </button>
+<button class="bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm px-8 py-4 rounded-lg font-bold flex items-center gap-2 transition-all border border-white/10">
+<span class="material-symbols-outlined">download</span>
+                            Impact Reports
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Map and Timeline -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Project Map Section -->
+<div class="bg-accent-dark/30 rounded-2xl border border-border-dark overflow-hidden">
+<div class="p-6 border-b border-border-dark flex justify-between items-center">
+<div>
+<h3 class="text-white font-bold text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+                                Project Location &amp; Logistics
+                            </h3>
+<p class="text-slate-400 text-xs mt-1">Rampal, Bagerhat, Khulna Division</p>
+</div>
+<div class="flex gap-2">
+<button class="size-8 rounded bg-background-dark border border-border-dark flex items-center justify-center text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-sm">fullscreen</span>
+</button>
+</div>
+</div>
+<div class="relative h-[400px] w-full bg-[#1e293b]" data-alt="Satellite map view of the industrial zone" data-location="Rampal, Bangladesh" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDTiM4hBtBifJADB1aKWErpmo4R7W6asKT-1o1kSz9Vuu_cxHrGLVxAXA-z1lYQcYfHbugtg68iNhFuCynQyRpEKQ5kOdyOeGGKtZ3NV-UEHQqBvs6Jclvmbp2vS6BD08d5czHImxYFRtyIw-2nwVgPjuVoUyVdIrS8czPfhzNQpMSeAug9asKy7bGYqxetEcq2TAq_27gEZWUdP2ewhyDNi0urbAtH-VjbbIp1ElFSaSdBT_1VR87dratWxkKSWwkEFhZM7i5w6FkS"); background-size: cover;'>
+<!-- Map Overlays -->
+<div class="absolute inset-0 bg-background-dark/30"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+<div class="relative">
+<div class="size-12 rounded-full bg-primary/20 animate-ping absolute -inset-0"></div>
+<div class="size-6 rounded-full bg-primary border-4 border-white relative z-10 shadow-2xl"></div>
+</div>
+</div>
+<!-- Map Controls -->
+<div class="absolute right-4 bottom-4 flex flex-col gap-2">
+<div class="flex flex-col rounded-lg bg-background-dark border border-border-dark overflow-hidden">
+<button class="p-3 text-white hover:bg-primary border-b border-border-dark"><span class="material-symbols-outlined">add</span></button>
+<button class="p-3 text-white hover:bg-primary"><span class="material-symbols-outlined">remove</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Progress Timeline -->
+<div class="p-6 bg-accent-dark/30 rounded-2xl border border-border-dark">
+<h3 class="text-white font-bold text-lg mb-8">Implementation Timeline</h3>
+<div class="relative flex justify-between">
+<div class="absolute top-[18px] left-0 w-full h-0.5 bg-border-dark"></div>
+<div class="absolute top-[18px] left-0 w-3/4 h-0.5 bg-primary"></div>
+<div class="relative z-10 flex flex-col items-center gap-4 text-center group">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center border-4 border-background-dark outline outline-1 outline-primary">
+<span class="material-symbols-outlined text-white text-sm">check</span>
+</div>
+<div>
+<p class="text-white text-xs font-bold">2012</p>
+<p class="text-slate-400 text-[10px] mt-1">Agreement Signed</p>
+</div>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-4 text-center">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center border-4 border-background-dark outline outline-1 outline-primary">
+<span class="material-symbols-outlined text-white text-sm">check</span>
+</div>
+<div>
+<p class="text-white text-xs font-bold">2017</p>
+<p class="text-slate-400 text-[10px] mt-1">Foundation</p>
+</div>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-4 text-center">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center border-4 border-background-dark outline outline-1 outline-primary">
+<span class="material-symbols-outlined text-white text-sm">rocket_launch</span>
+</div>
+<div>
+<p class="text-white text-xs font-bold">2022</p>
+<p class="text-slate-400 text-[10px] mt-1">Unit-I Operation</p>
+</div>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-4 text-center">
+<div class="size-10 rounded-full bg-accent-dark border border-border-dark flex items-center justify-center border-4 border-background-dark">
+<div class="size-2 rounded-full bg-primary"></div>
+</div>
+<div>
+<p class="text-white/60 text-xs font-bold">2024</p>
+<p class="text-slate-500 text-[10px] mt-1">Full Scale Op</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Specs and Stats -->
+<div class="lg:col-span-4 space-y-8">
+<!-- Quick Metrics Grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="p-5 bg-primary/10 border border-primary/20 rounded-2xl">
+<p class="text-primary text-[10px] font-bold uppercase tracking-widest mb-1">Total Capacity</p>
+<h4 class="text-white text-2xl font-black">1320<span class="text-primary text-sm ml-1">MW</span></h4>
+</div>
+<div class="p-5 bg-accent-dark/30 border border-border-dark rounded-2xl">
+<p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Efficiency</p>
+<h4 class="text-white text-2xl font-black">42.5<span class="text-slate-500 text-sm ml-1">%</span></h4>
+</div>
+</div>
+<!-- Tech Specs List -->
+<div class="bg-accent-dark/30 border border-border-dark rounded-2xl overflow-hidden">
+<div class="p-6 border-b border-border-dark">
+<h3 class="text-white font-bold text-lg">Infrastructure Specs</h3>
+</div>
+<div class="divide-y divide-border-dark">
+<div class="p-6 flex items-start gap-4 hover:bg-white/[0.02] transition-colors">
+<div class="p-2 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">settings_suggest</span>
+</div>
+<div>
+<h5 class="text-white text-sm font-bold">Ultra-Supercritical Tech</h5>
+<p class="text-slate-400 text-xs mt-1 leading-normal">High-efficiency boiler with minimal coal consumption per unit generated.</p>
+</div>
+</div>
+<div class="p-6 flex items-start gap-4 hover:bg-white/[0.02] transition-colors">
+<div class="p-2 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">filter_alt</span>
+</div>
+<div>
+<h5 class="text-white text-sm font-bold">FGD System</h5>
+<p class="text-slate-400 text-xs mt-1 leading-normal">Flue Gas Desulphurization ensures 96%+ sulfur removal for air quality protection.</p>
+</div>
+</div>
+<div class="p-6 flex items-start gap-4 hover:bg-white/[0.02] transition-colors">
+<div class="p-2 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">vertical_align_top</span>
+</div>
+<div>
+<h5 class="text-white text-sm font-bold">275m Stack Height</h5>
+<p class="text-slate-400 text-xs mt-1 leading-normal">Tallest industrial chimney in Bangladesh for optimal emission dispersion.</p>
+</div>
+</div>
+<div class="p-6 flex items-start gap-4 hover:bg-white/[0.02] transition-colors">
+<div class="p-2 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div>
+<h5 class="text-white text-sm font-bold">Zero Liquid Discharge</h5>
+<p class="text-slate-400 text-xs mt-1 leading-normal">Advanced water treatment plant ensuring no untreated water enters the river.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Impact Card -->
+<div class="glass-effect p-6 rounded-2xl">
+<h3 class="text-white font-bold text-lg mb-4">Sustainability Impact</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-xs">
+<span class="text-slate-300">Emission Standard Compliance</span>
+<span class="text-primary font-bold">100%</span>
+</div>
+<div class="w-full h-1.5 bg-background-dark rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full shadow-[0_0_10px_rgba(16,162,75,0.5)]"></div>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-slate-300">Local Employment (Project Phase)</span>
+<span class="text-white font-bold">12,500+</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-slate-300">Green Belt Development</span>
+<span class="text-white font-bold">500,000 Trees</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Documentation & Downloads -->
+<section class="mt-12">
+<h2 class="text-white text-2xl font-black mb-6">Technical Resources</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="p-4 bg-accent-dark/30 border border-border-dark rounded-xl flex items-center justify-between group cursor-pointer hover:border-primary transition-all">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded bg-red-500/10 text-red-500 flex items-center justify-center">
+<span class="material-symbols-outlined">picture_as_pdf</span>
+</div>
+<div>
+<p class="text-white text-xs font-bold">EIA Report 2023</p>
+<p class="text-slate-500 text-[10px]">Environmental Assessment</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary">download</span>
+</div>
+<div class="p-4 bg-accent-dark/30 border border-border-dark rounded-xl flex items-center justify-between group cursor-pointer hover:border-primary transition-all">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded bg-blue-500/10 text-blue-500 flex items-center justify-center">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div>
+<p class="text-white text-xs font-bold">Tech Specs Booklet</p>
+<p class="text-slate-500 text-[10px]">Engineering Data</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary">download</span>
+</div>
+<div class="p-4 bg-accent-dark/30 border border-border-dark rounded-xl flex items-center justify-between group cursor-pointer hover:border-primary transition-all">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">monitoring</span>
+</div>
+<div>
+<p class="text-white text-xs font-bold">AQI Monitoring</p>
+<p class="text-slate-500 text-[10px]">Live Dashboard Export</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary">open_in_new</span>
+</div>
+<div class="p-4 bg-accent-dark/30 border border-border-dark rounded-xl flex items-center justify-between group cursor-pointer hover:border-primary transition-all">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded bg-yellow-500/10 text-yellow-500 flex items-center justify-center">
+<span class="material-symbols-outlined">photo_library</span>
+</div>
+<div>
+<p class="text-white text-xs font-bold">Site Media Kit</p>
+<p class="text-slate-500 text-[10px]">High-Res Imagery</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary">download</span>
+</div>
+</div>
+</section>
+</main>
+<footer class="mt-20 border-t border-border-dark bg-background-dark py-12 px-6 lg:px-20">
+<div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-3 mb-6">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-white text-lg font-black uppercase tracking-tight">BIFPCL</h2>
+</div>
+<p class="text-slate-500 text-xs leading-relaxed">
+                    Bangladesh-India Friendship Power Company (Pvt.) Limited. A 50:50 Joint Venture between BPDB and NTPC Ltd.
+                </p>
+</div>
+<div>
+<h5 class="text-white text-sm font-bold mb-4">Operations</h5>
+<ul class="text-slate-500 text-xs space-y-2">
+<li><a class="hover:text-primary" href="#">Generation Reports</a></li>
+<li><a class="hover:text-primary" href="#">Coal Procurement</a></li>
+<li><a class="hover:text-primary" href="#">Grid Integration</a></li>
+<li><a class="hover:text-primary" href="#">Maintenance</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-white text-sm font-bold mb-4">Governance</h5>
+<ul class="text-slate-500 text-xs space-y-2">
+<li><a class="hover:text-primary" href="#">Board of Directors</a></li>
+<li><a class="hover:text-primary" href="#">Policy &amp; Compliance</a></li>
+<li><a class="hover:text-primary" href="#">Public Disclosures</a></li>
+<li><a class="hover:text-primary" href="#">RTI Portal</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-white text-sm font-bold mb-4">Contact Info</h5>
+<ul class="text-slate-500 text-xs space-y-2">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-[14px]">mail</span> info@bifpcl.com</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-[14px]">call</span> +880 2 1234567</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[14px]">location_on</span> 
+                        Unique Heights, Borak, <br/>117 Kazi Nazrul Islam Avenue, <br/>Dhaka-1217
+                    </li>
+</ul>
+</div>
+</div>
+<div class="max-w-[1400px] mx-auto mt-12 pt-8 border-t border-border-dark flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-slate-600 text-[10px]">© 2024 BIFPCL. All Rights Reserved. Infrastructure Powered by NTPC &amp; BPDB.</p>
+<div class="flex gap-6">
+<a class="text-slate-600 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-slate-600 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">group</span></a>
+<a class="text-slate-600 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">share</span></a>
+</div>
+</div>
+</footer>
+</body></html>

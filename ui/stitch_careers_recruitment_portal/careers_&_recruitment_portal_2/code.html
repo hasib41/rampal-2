@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BIFPCL Careers &amp; Recruitment Portal</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1313ec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101022",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0d0d1b] dark:text-white antialiased font-display">
+<!-- Sticky Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-solid border-[#e7e7f3] dark:border-[#2a2a44] bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="max-w-[1280px] mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<h2 class="text-[#0d0d1b] dark:text-white text-xl font-bold tracking-tight">BIFPCL Careers</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-sm font-medium hover:text-primary transition-colors border-b-2 border-primary py-5" href="#">Openings</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">About Us</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">News</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-4 py-2 text-sm font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+                    Login
+                </button>
+<button class="bg-primary text-white px-5 py-2 rounded-lg text-sm font-bold shadow-lg shadow-primary/20 hover:bg-blue-700 transition-all">
+                    Register
+                </button>
+</div>
+</div>
+</header>
+<main class="max-w-[1280px] mx-auto px-6 py-8">
+<!-- Hero Section -->
+<div class="mb-12 relative overflow-hidden rounded-xl bg-primary h-[320px] flex items-center justify-center text-center p-8">
+<!-- Background Decoration -->
+<div class="absolute inset-0 opacity-20" data-alt="Power plant infrastructure in evening light" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB_B8QpTb2-TcRuOwaTzL_srPCz_OcdtonQmcvK5ftHj5-f0Q4LWVWGL-SU7RohYnshnzG0YR3t3Mp7yD84Z8ZgsH2FnZ7NvOSS9f__b-DXxU88FOv2J-oxqmN1Jk0Dig5Zo7582utFg9F8hW9srzIPrAqVIZoHfNqt9ti4bRcWCURtBH-IH8XxGzDz9Kok7gQprJ8kDf6lZtVBlOheibvtw8xhZkQ2bENcA3XC_OtIRzTON-4p32qxJG3a79Cr7xK_RrO_MtneKtxv"); background-size: cover; background-position: center;'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
+<div class="relative z-10 max-w-2xl">
+<h1 class="text-white text-4xl md:text-5xl font-black leading-tight mb-4 tracking-tight">
+                    Powering the Future of Bangladesh
+                </h1>
+<p class="text-white/90 text-lg mb-8 font-normal">
+                    Join a world-class team at the Maitree Super Thermal Power Project.
+                </p>
+<div class="bg-white p-2 rounded-xl shadow-2xl flex items-center gap-2 max-w-xl mx-auto">
+<span class="material-symbols-outlined text-gray-400 ml-3">search</span>
+<input class="flex-1 border-none focus:ring-0 text-gray-800 placeholder:text-gray-400 text-base" placeholder="Job title, department, or keywords..." type="text"/>
+<button class="bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors">
+                        Search Jobs
+                    </button>
+</div>
+</div>
+</div>
+<div class="flex flex-col lg:flex-row gap-10">
+<!-- Sidebar Filters -->
+<aside class="w-full lg:w-64 space-y-8">
+<div>
+<h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">filter_list</span>
+                        Filters
+                    </h3>
+<!-- Department -->
+<div class="mb-6">
+<p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Department</p>
+<div class="space-y-3">
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+<input checked="" class="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+                                    All Departments
+                                </span>
+<span class="text-xs text-gray-400">24</span>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+<input class="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+                                    Engineering
+                                </span>
+<span class="text-xs text-gray-400">12</span>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+<input class="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+                                    Operations
+                                </span>
+<span class="text-xs text-gray-400">6</span>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+<input class="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+                                    Human Resources
+                                </span>
+<span class="text-xs text-gray-400">3</span>
+</label>
+</div>
+</div>
+<!-- Location -->
+<div class="mb-6">
+<p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Location</p>
+<div class="space-y-3">
+<label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
+<input checked="" class="text-primary focus:ring-primary" name="loc" type="radio"/>
+                                Dhaka
+                            </label>
+<label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
+<input class="text-primary focus:ring-primary" name="loc" type="radio"/>
+                                Rampal
+                            </label>
+</div>
+</div>
+</div>
+</aside>
+<!-- Job Feed -->
+<section class="flex-1 space-y-6">
+<div class="flex items-center justify-between mb-2">
+<h2 class="text-xl font-bold">24 Open Positions</h2>
+<div class="flex gap-2">
+<button class="bg-gray-200 dark:bg-gray-800 p-1.5 rounded-lg text-primary">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="p-1.5 rounded-lg text-gray-400">
+<span class="material-symbols-outlined">view_list</span>
+</button>
+</div>
+</div>
+<!-- Job Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Card 1 -->
+<div class="bg-white dark:bg-[#1b1b35] p-6 rounded-xl border border-[#e7e7f3] dark:border-[#2a2a44] shadow-sm hover:shadow-md hover:border-primary/30 transition-all flex flex-col group">
+<div class="flex items-start justify-between mb-4">
+<div class="size-12 bg-blue-50 dark:bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">engineering</span>
+</div>
+<span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">New</span>
+</div>
+<h3 class="text-lg font-bold group-hover:text-primary transition-colors mb-2">Senior Electrical Engineer</h3>
+<div class="space-y-2 mb-6 text-sm text-[#4c4c9a] dark:text-gray-400">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">domain</span>
+                                Engineering | Grid Maintenance
+                            </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                Rampal Power Plant site
+                            </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                                Deadline: Oct 25, 2023
+                            </div>
+</div>
+<div class="mt-auto pt-4 border-t border-gray-50 dark:border-[#2a2a44] flex items-center justify-between">
+<span class="text-primary font-bold text-sm">$ Competitive</span>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg shadow-primary/10">Apply Now</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white dark:bg-[#1b1b35] p-6 rounded-xl border border-[#e7e7f3] dark:border-[#2a2a44] shadow-sm hover:shadow-md hover:border-primary/30 transition-all flex flex-col group">
+<div class="flex items-start justify-between mb-4">
+<div class="size-12 bg-blue-50 dark:bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">groups</span>
+</div>
+</div>
+<h3 class="text-lg font-bold group-hover:text-primary transition-colors mb-2">HR Manager</h3>
+<div class="space-y-2 mb-6 text-sm text-[#4c4c9a] dark:text-gray-400">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">domain</span>
+                                Human Resources
+                            </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                Dhaka HQ
+                            </div>
+<div class="flex items-center gap-2 text-red-500 font-medium">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                                Deadline: Oct 12, 2023 (Closing soon)
+                            </div>
+</div>
+<div class="mt-auto pt-4 border-t border-gray-50 dark:border-[#2a2a44] flex items-center justify-between">
+<span class="text-primary font-bold text-sm">$ Competitive</span>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg shadow-primary/10">Apply Now</button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white dark:bg-[#1b1b35] p-6 rounded-xl border border-[#e7e7f3] dark:border-[#2a2a44] shadow-sm hover:shadow-md hover:border-primary/30 transition-all flex flex-col group">
+<div class="flex items-start justify-between mb-4">
+<div class="size-12 bg-blue-50 dark:bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">settings_suggest</span>
+</div>
+</div>
+<h3 class="text-lg font-bold group-hover:text-primary transition-colors mb-2">Operations Supervisor</h3>
+<div class="space-y-2 mb-6 text-sm text-[#4c4c9a] dark:text-gray-400">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">domain</span>
+                                Operations
+                            </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                Rampal site
+                            </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                                Deadline: Oct 30, 2023
+                            </div>
+</div>
+<div class="mt-auto pt-4 border-t border-gray-50 dark:border-[#2a2a44] flex items-center justify-between">
+<span class="text-primary font-bold text-sm">$ Competitive</span>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg shadow-primary/10">Apply Now</button>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white dark:bg-[#1b1b35] p-6 rounded-xl border border-[#e7e7f3] dark:border-[#2a2a44] shadow-sm hover:shadow-md hover:border-primary/30 transition-all flex flex-col group">
+<div class="flex items-start justify-between mb-4">
+<div class="size-12 bg-blue-50 dark:bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">security</span>
+</div>
+</div>
+<h3 class="text-lg font-bold group-hover:text-primary transition-colors mb-2">Safety Compliance Officer</h3>
+<div class="space-y-2 mb-6 text-sm text-[#4c4c9a] dark:text-gray-400">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">domain</span>
+                                Health &amp; Safety
+                            </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                Rampal site
+                            </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                                Deadline: Nov 05, 2023
+                            </div>
+</div>
+<div class="mt-auto pt-4 border-t border-gray-50 dark:border-[#2a2a44] flex items-center justify-between">
+<span class="text-primary font-bold text-sm">$ Competitive</span>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg shadow-primary/10">Apply Now</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-[100] bg-[#0d0d1b]/60 backdrop-blur-sm flex items-center justify-center p-4">
+<div class="bg-white dark:bg-[#1b1b35] w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+<!-- Modal Header -->
+<div class="px-8 py-6 border-b border-[#e7e7f3] dark:border-[#2a2a44] flex items-center justify-between bg-white dark:bg-[#1b1b35] sticky top-0">
+<div>
+<h2 class="text-xl font-bold">Apply for Senior Electrical Engineer</h2>
+<p class="text-sm text-[#4c4c9a] dark:text-gray-400">Engineering | Rampal Power Plant</p>
+</div>
+<button class="text-gray-400 hover:text-gray-600 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Modal Content (Scrollable) -->
+<div class="flex-1 overflow-y-auto px-8 py-6">
+<!-- Progress Indicator -->
+<div class="flex items-center gap-4 mb-8">
+<div class="flex items-center gap-2 text-primary">
+<span class="size-6 bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center">1</span>
+<span class="text-sm font-bold">Personal Info</span>
+</div>
+<div class="h-[1px] flex-1 bg-gray-200"></div>
+<div class="flex items-center gap-2 text-gray-400">
+<span class="size-6 bg-gray-100 text-xs font-bold rounded-full flex items-center justify-center">2</span>
+<span class="text-sm font-medium">Experience</span>
+</div>
+<div class="h-[1px] flex-1 bg-gray-200"></div>
+<div class="flex items-center gap-2 text-gray-400">
+<span class="size-6 bg-gray-100 text-xs font-bold rounded-full flex items-center justify-center">3</span>
+<span class="text-sm font-medium">Review</span>
+</div>
+</div>
+<form class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-1">
+<label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Full Name</label>
+<input class="w-full rounded-lg border-[#cfcfe7] focus:border-primary focus:ring-primary text-sm h-11 dark:bg-[#2a2a44] dark:border-none" placeholder="John Doe" type="text"/>
+</div>
+<div class="space-y-1">
+<label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Email Address</label>
+<input class="w-full rounded-lg border-[#cfcfe7] focus:border-primary focus:ring-primary text-sm h-11 dark:bg-[#2a2a44] dark:border-none" placeholder="john@example.com" type="email"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-1">
+<label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Phone Number</label>
+<input class="w-full rounded-lg border-[#cfcfe7] focus:border-primary focus:ring-primary text-sm h-11 dark:bg-[#2a2a44] dark:border-none" placeholder="+880 1XXX-XXXXXX" type="tel"/>
+</div>
+<div class="space-y-1">
+<label class="text-sm font-semibold text-gray-700 dark:text-gray-300">LinkedIn Profile (URL)</label>
+<input class="w-full rounded-lg border-[#cfcfe7] focus:border-primary focus:ring-primary text-sm h-11 dark:bg-[#2a2a44] dark:border-none" placeholder="linkedin.com/in/username" type="url"/>
+</div>
+</div>
+<div class="space-y-1">
+<label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Resume / CV</label>
+<div class="mt-1 border-2 border-dashed border-[#cfcfe7] dark:border-[#2a2a44] rounded-xl p-8 text-center bg-gray-50 dark:bg-primary/5 hover:bg-gray-100 dark:hover:bg-primary/10 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-4xl text-gray-400 group-hover:text-primary transition-colors">cloud_upload</span>
+<p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+<span class="text-primary font-bold">Click to upload</span> or drag and drop
+                            </p>
+<p class="text-xs text-gray-400 mt-1">PDF, DOC, DOCX up to 5MB</p>
+<!-- File Success State Example (Hidden by default in static mockup) -->
+<div class="mt-4 hidden flex items-center justify-center gap-2 text-green-600 bg-green-50 p-2 rounded-lg">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span class="text-xs font-bold">Resume_John_Doe.pdf uploaded</span>
+</div>
+</div>
+</div>
+<div class="space-y-1">
+<label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Brief Cover Letter</label>
+<textarea class="w-full rounded-lg border-[#cfcfe7] focus:border-primary focus:ring-primary text-sm dark:bg-[#2a2a44] dark:border-none" placeholder="Tell us why you are a good fit for BIFPCL..." rows="4"></textarea>
+</div>
+</form>
+</div>
+<!-- Modal Footer -->
+<div class="px-8 py-6 border-t border-[#e7e7f3] dark:border-[#2a2a44] flex items-center justify-between bg-gray-50 dark:bg-background-dark/50">
+<button class="px-6 py-2 text-sm font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900 transition-colors">Cancel</button>
+<div class="flex gap-4">
+<button class="bg-primary text-white px-8 py-2.5 rounded-lg text-sm font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform">
+                        Next Step
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-20 border-t border-[#e7e7f3] dark:border-[#2a2a44] bg-white dark:bg-[#0d0d1b] py-12">
+<div class="max-w-[1280px] mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-3 mb-6">
+<div class="size-7 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+</div>
+<h2 class="text-lg font-bold">BIFPCL</h2>
+</div>
+<p class="text-sm text-gray-500 leading-relaxed">
+                    Bangladesh-India Friendship Power Company (Pvt.) Limited. A mega-scale joint venture powering the nation's progress.
+                </p>
+</div>
+<div>
+<h4 class="font-bold mb-6">Quick Links</h4>
+<ul class="space-y-4 text-sm text-gray-500">
+<li><a class="hover:text-primary transition-colors" href="#">Career FAQ</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Company Culture</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Sustainability</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Investor Relations</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6">Legal</h4>
+<ul class="space-y-4 text-sm text-gray-500">
+<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Compliance</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6">Connect</h4>
+<div class="flex gap-4 mb-6">
+<a class="size-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">public</span>
+</a>
+<a class="size-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">share</span>
+</a>
+<a class="size-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</a>
+</div>
+<p class="text-xs text-gray-400">© 2023 BIFPCL. All rights reserved.</p>
+</div>
+</div>
+</footer>
+</body></html>

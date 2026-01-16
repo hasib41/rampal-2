@@ -1,0 +1,28 @@
+/* Google Fonts - MUST be first */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Tailwind */
+@import "tailwindcss";
+
+/* Custom Theme - Tailwind v4 */
+@theme {
+  --color-primary: #0066CC;
+  --color-primary-dark: #004999;
+  --color-primary-light: #3399FF;
+  --color-secondary: #1a1a2e;
+  --color-secondary-dark: #0f0f1a;
+  --color-secondary-light: #2a2a4e;
+  --color-accent-blue: #3b82f6;
+  --color-accent-green: #22c55e;
+  --color-accent-orange: #f97316;
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+}
+
+/* Base Styles */
+body {
+  font-family: var(--font-family-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-secondary-dark);
+  color: white;
+}
