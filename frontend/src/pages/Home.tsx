@@ -1,9 +1,41 @@
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, Users, Leaf, MapPin, FileText, Calendar, ChevronRight, ArrowRight } from 'lucide-react';
+import { Zap, Users, Leaf, MapPin, FileText, Calendar, ChevronRight, ArrowRight, ChevronLeft } from 'lucide-react';
 import { Button, Stat, SectionTitle, Card, LoadingSpinner } from '../components/ui';
 import { useDirectors, useCSRInitiatives, useNotices } from '../hooks/useApi';
 
+// Hero slides data
+const heroSlides = [
+    {
+        image: '/hero-bg.jpg',
+        title: 'Energy for',
+        highlight: 'Growth',
+        description: 'A symbol of Indo-Bangladesh Friendship, powering the future of millions with sustainable and efficient power generation.',
+    },
+    {
+        image: '/projects-hero.jpg',
+        title: 'Powering',
+        highlight: 'Progress',
+        description: 'State-of-the-art Ultra-Supercritical technology delivering 1320MW of clean, efficient power to Bangladesh.',
+    },
+    {
+        image: '/sustainability-bg.jpg',
+        title: 'Committed to',
+        highlight: 'Sustainability',
+        description: 'Leading environmental stewardship with world-class emission controls and community development programs.',
+    },
+    {
+        image: '/contact-hero.jpg',
+        title: 'Building a',
+        highlight: 'Future Together',
+        description: 'Join us in our mission to transform the energy landscape of Bangladesh through innovation and collaboration.',
+    },
+];
+
 export function HomePage() {
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
     const { data: directors, isLoading: directorsLoading } = useDirectors();
     const { data: csrInitiatives, isLoading: csrLoading } = useCSRInitiatives();
     const { data: notices, isLoading: noticesLoading } = useNotices();
@@ -16,19 +48,63 @@ export function HomePage() {
         recruitment: 'bg-accent-green/10 text-accent-green border-accent-green/30',
     };
 
+    // Auto-play functionality
+    const nextSlide = useCallback(() => {
+        setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, []);
+
+    const prevSlide = useCallback(() => {
+        setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+    }, []);
+
+    const goToSlide = useCallback((index: number) => {
+        setCurrentSlide(index);
+        setIsAutoPlaying(false);
+        // Resume auto-play after 10 seconds of inactivity
+        setTimeout(() => setIsAutoPlaying(true), 10000);
+    }, []);
+
+    useEffect(() => {
+        if (!isAutoPlaying) return;
+        const interval = setInterval(nextSlide, 5000);
+        return () => clearInterval(interval);
+    }, [isAutoPlaying, nextSlide]);
+
     return (
         <>
-            {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center bg-gradient-to-br from-secondary-dark via-secondary to-secondary-dark">
-                <div className="absolute inset-0 bg-[url('/hero-bg.jpg')] bg-cover bg-center opacity-30" />
-                <div className="relative max-w-7xl mx-auto px-4 py-32">
-                    <h1 className="text-5xl md:text-7xl font-bold text-white max-w-3xl leading-tight">
-                        Energy for <span className="text-primary-light">Growth</span>
-                    </h1>
-                    <p className="mt-6 text-xl text-gray-300 max-w-2xl">
-                        A symbol of Indo-Bangladesh Friendship, powering the future of millions with sustainable
-                        and efficient power generation.
-                    </p>
+            {/* Hero Section with Slider */}
+            <section className="relative min-h-screen flex items-center bg-gradient-to-br from-secondary-dark via-secondary to-secondary-dark overflow-hidden">
+                {/* Slide Backgrounds */}
+                {heroSlides.map((slide, index) => (
+                    <div
+                        key={index}
+                        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-30' : 'opacity-0'
+                            }`}
+                        style={{ backgroundImage: `url('${slide.image}')` }}
+                    />
+                ))}
+
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-secondary-dark/80 via-transparent to-secondary-dark/60" />
+
+                {/* Content */}
+                <div className="relative max-w-7xl mx-auto px-4 py-32 z-10">
+                    {heroSlides.map((slide, index) => (
+                        <div
+                            key={index}
+                            className={`transition-all duration-700 ease-in-out ${index === currentSlide
+                                    ? 'opacity-100 translate-y-0'
+                                    : 'opacity-0 translate-y-8 absolute inset-0 pointer-events-none'
+                                }`}
+                        >
+                            <h1 className="text-5xl md:text-7xl font-bold text-white max-w-3xl leading-tight">
+                                {slide.title} <span className="text-primary-light">{slide.highlight}</span>
+                            </h1>
+                            <p className="mt-6 text-xl text-gray-300 max-w-2xl">
+                                {slide.description}
+                            </p>
+                        </div>
+                    ))}
                     <div className="mt-8 flex flex-wrap gap-4">
                         <Link to="/projects">
                             <Button>Explore Projects</Button>
@@ -37,6 +113,47 @@ export function HomePage() {
                             <Button variant="secondary">View Active Tenders</Button>
                         </Link>
                     </div>
+                </div>
+
+                {/* Navigation Arrows */}
+                <button
+                    onClick={prevSlide}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 group"
+                    aria-label="Previous slide"
+                >
+                    <ChevronLeft size={24} className="group-hover:-translate-x-0.5 transition-transform" />
+                </button>
+                <button
+                    onClick={nextSlide}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 group"
+                    aria-label="Next slide"
+                >
+                    <ChevronRight size={24} className="group-hover:translate-x-0.5 transition-transform" />
+                </button>
+
+                {/* Slide Indicators */}
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
+                    {heroSlides.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => goToSlide(index)}
+                            className={`transition-all duration-300 ${index === currentSlide
+                                    ? 'w-8 h-2 bg-primary-light rounded-full'
+                                    : 'w-2 h-2 bg-white/40 hover:bg-white/60 rounded-full'
+                                }`}
+                            aria-label={`Go to slide ${index + 1}`}
+                        />
+                    ))}
+                </div>
+
+                {/* Progress Bar */}
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10 z-20">
+                    <div
+                        className="h-full bg-primary-light transition-all duration-300"
+                        style={{
+                            width: `${((currentSlide + 1) / heroSlides.length) * 100}%`,
+                        }}
+                    />
                 </div>
             </section>
 
