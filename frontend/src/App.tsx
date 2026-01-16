@@ -12,6 +12,7 @@ import {
   SustainabilityPage,
   TendersPage,
   MediaPage,
+  MediaDetailPage,
   NoticesPage,
   NoticeDetailPage,
 } from './pages';
@@ -51,6 +52,7 @@ export default function App() {
             <Route path="sustainability" element={<SustainabilityPage />} />
             <Route path="tenders" element={<TendersPage />} />
             <Route path="media" element={<MediaPage />} />
+            <Route path="media/:slug" element={<MediaDetailPage />} />
             <Route path="notices" element={<NoticesPage />} />
             <Route path="notices/:slug" element={<NoticeDetailPage />} />
           </Route>

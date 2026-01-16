@@ -7,6 +7,8 @@ export { ContactPage } from './Contact';
 export { SustainabilityPage } from './Sustainability';
 export { TendersPage } from './Tenders';
 export { MediaPage } from './Media';
+export { MediaDetailPage } from './MediaDetail';
 export { NoticesPage } from './Notices';
 export { NoticeDetailPage } from './NoticeDetail';
+
 
