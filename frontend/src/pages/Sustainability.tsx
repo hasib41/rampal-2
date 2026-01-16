@@ -16,7 +16,12 @@ export function SustainabilityPage() {
         <div className="min-h-screen">
             {/* Hero with green theme */}
             <section className="relative py-24 pt-32 bg-gradient-to-r from-green-800 to-green-600">
-                <div className="max-w-7xl mx-auto px-4">
+                <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ backgroundImage: `url('/sustainability-bg.jpg')` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-green-900/90 via-green-800/70 to-green-900/80" />
+                <div className="relative max-w-7xl mx-auto px-4">
                     <h1 className="text-4xl md:text-5xl font-bold text-white">
                         Powering Growth,<br />
                         <span className="text-green-200">Preserving Nature</span>

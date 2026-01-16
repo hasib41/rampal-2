@@ -155,12 +155,22 @@ interface PageHeaderProps {
     title: string;
     subtitle?: string;
     bgColor?: string;
+    bgImage?: string;
 }
 
-export function PageHeader({ title, subtitle, bgColor = 'from-primary to-primary-dark' }: PageHeaderProps) {
+export function PageHeader({ title, subtitle, bgColor = 'from-primary to-primary-dark', bgImage }: PageHeaderProps) {
     return (
         <section className={`relative py-24 pt-32 bg-gradient-to-r ${bgColor}`}>
-            <div className="max-w-7xl mx-auto px-4">
+            {bgImage && (
+                <>
+                    <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: `url('${bgImage}')` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-secondary-dark/90 via-secondary/70 to-secondary-dark/80" />
+                </>
+            )}
+            <div className="relative max-w-7xl mx-auto px-4">
                 <h1 className="text-4xl md:text-5xl font-bold text-white">{title}</h1>
                 {subtitle && <p className="mt-4 text-xl text-white/80 max-w-2xl">{subtitle}</p>}
             </div>

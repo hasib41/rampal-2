@@ -55,6 +55,7 @@ export function CareersPage() {
             <PageHeader
                 title="Careers at BIFPCL"
                 subtitle="Join our team and be part of Bangladesh's energy future."
+                bgImage="/careers-hero.jpg"
             />
 
             <section className="py-16">
