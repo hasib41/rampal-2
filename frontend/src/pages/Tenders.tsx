@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Download, Calendar, ExternalLink, Eye, Filter, UserPlus, LogIn } from 'lucide-react';
+import { Search, Download, Calendar, Eye, Filter, UserPlus, LogIn } from 'lucide-react';
 import { Card, Select, LoadingSpinner, Button } from '../components/ui';
 import { useTenders } from '../hooks/useApi';
 
@@ -80,14 +80,24 @@ export function TendersPage() {
                         <div className="flex flex-wrap gap-4 items-end">
                             <div className="flex-1 min-w-[200px]">
                                 <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                    <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                                        <Search className="text-gray-400" size={20} />
+                                    </div>
                                     <input
                                         type="text"
                                         placeholder="Search by Tender ID, keyword, or title..."
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
-                                        className="input-field pl-10"
+                                        className="w-full pl-12 pr-10 py-3 bg-secondary-dark border-2 border-gray-700 rounded-xl text-gray-200 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-600"
                                     />
+                                    {search && (
+                                        <button
+                                            onClick={() => setSearch('')}
+                                            className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500 hover:text-gray-300 transition-colors text-xl"
+                                        >
+                                            ×
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                             <Select
@@ -178,7 +188,7 @@ export function TendersPage() {
                                                         </span>
                                                     </td>
                                                     <td className="px-4 py-4 text-gray-400 text-sm">
-                                                        {new Date(tender.created_at).toLocaleDateString()}
+                                                        {new Date(tender.publication_date).toLocaleDateString()}
                                                     </td>
                                                     <td className="px-4 py-4">
                                                         <div className="flex items-center gap-2 text-sm">

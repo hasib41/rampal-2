@@ -163,8 +163,8 @@ export function AdminNews() {
                         <div
                             key={category}
                             className={`p-4 rounded-xl border cursor-pointer transition-all ${categoryFilter === category
-                                    ? 'bg-primary/10 border-primary'
-                                    : 'bg-secondary border-gray-700 hover:border-gray-600'
+                                ? 'bg-primary/10 border-primary'
+                                : 'bg-secondary border-gray-700 hover:border-gray-600'
                                 }`}
                             onClick={() => setCategoryFilter(category)}
                         >
@@ -180,16 +180,26 @@ export function AdminNews() {
                 })}
             </div>
 
-            {/* Search */}
-            <div className="relative max-w-md">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+            {/* Search Bar - Enhanced */}
+            <div className="relative max-w-lg">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                    <Search className="text-gray-400" size={20} />
+                </div>
                 <input
                     type="text"
                     placeholder="Search articles..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-secondary border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:border-primary"
+                    className="w-full pl-12 pr-4 py-3 bg-secondary-dark border-2 border-gray-700 rounded-xl text-gray-200 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-600"
                 />
+                {searchTerm && (
+                    <button
+                        onClick={() => setSearchTerm('')}
+                        className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500 hover:text-gray-300 transition-colors"
+                    >
+                        ×
+                    </button>
+                )}
             </div>
 
             {/* Table */}

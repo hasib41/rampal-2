@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { Calendar, ArrowLeft, Share2, Download, ExternalLink, Clock, Tag, Newspaper, TrendingUp, User } from 'lucide-react';
+import { Calendar, ArrowLeft, Share2, Download, Clock, Tag, Newspaper, TrendingUp, User } from 'lucide-react';
 import { Button, LoadingSpinner, Card } from '../components/ui';
 import { useNews } from '../hooks/useApi';
 import { newsApi } from '../services/api';

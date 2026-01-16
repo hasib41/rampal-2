@@ -148,8 +148,8 @@ export function MediaPage() {
                                         key={cat.key}
                                         onClick={() => setActiveCategory(cat.key)}
                                         className={`whitespace-nowrap px-4 py-2 text-sm font-medium transition-all rounded-lg flex items-center gap-2 ${activeCategory === cat.key
-                                                ? 'bg-primary text-white shadow-lg shadow-primary/30'
-                                                : 'text-gray-400 hover:text-white hover:bg-secondary-dark'
+                                            ? 'bg-primary text-white shadow-lg shadow-primary/30'
+                                            : 'text-gray-400 hover:text-white hover:bg-secondary-dark'
                                             }`}
                                     >
                                         <Icon size={16} />
@@ -161,14 +161,24 @@ export function MediaPage() {
 
                         {/* Search */}
                         <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                                <Search className="text-gray-400" size={20} />
+                            </div>
                             <input
                                 type="text"
                                 placeholder="Search news..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full md:w-64 pl-10 pr-4 py-2.5 bg-secondary-dark border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:border-primary"
+                                className="w-full md:w-72 pl-12 pr-10 py-3 bg-secondary-dark border-2 border-gray-700 rounded-xl text-gray-200 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-600"
                             />
+                            {searchTerm && (
+                                <button
+                                    onClick={() => setSearchTerm('')}
+                                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500 hover:text-gray-300 transition-colors text-xl"
+                                >
+                                    ×
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>

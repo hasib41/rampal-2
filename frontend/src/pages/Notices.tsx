@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FileText, Calendar, Download, ExternalLink, Search, Star, Bell, Briefcase, AlertCircle } from 'lucide-react';
-import { Button, LoadingSpinner } from '../components/ui';
+import { LoadingSpinner } from '../components/ui';
 import { useNotices } from '../hooks/useApi';
 import type { Notice } from '../types';
 
@@ -58,15 +58,25 @@ export function NoticesPage() {
                 <div className="max-w-7xl mx-auto px-4 py-4">
                     <div className="flex flex-col md:flex-row items-center gap-4">
                         {/* Search */}
-                        <div className="relative w-full md:w-80">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                        <div className="relative w-full md:w-96">
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                                <Search className="text-gray-400" size={20} />
+                            </div>
                             <input
                                 type="text"
                                 placeholder="Search notices..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 bg-secondary-dark border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:border-primary transition-colors"
+                                className="w-full pl-12 pr-10 py-3 bg-secondary-dark border-2 border-gray-700 rounded-xl text-gray-200 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-600"
                             />
+                            {searchTerm && (
+                                <button
+                                    onClick={() => setSearchTerm('')}
+                                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500 hover:text-gray-300 transition-colors text-xl"
+                                >
+                                    ×
+                                </button>
+                            )}
                         </div>
 
                         {/* Category Tabs */}
@@ -76,8 +86,8 @@ export function NoticesPage() {
                                     key={cat.key}
                                     onClick={() => setActiveCategory(cat.key)}
                                     className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${activeCategory === cat.key
-                                            ? 'bg-primary text-white'
-                                            : 'bg-secondary-dark text-gray-400 hover:text-white hover:bg-secondary-light'
+                                        ? 'bg-primary text-white'
+                                        : 'bg-secondary-dark text-gray-400 hover:text-white hover:bg-secondary-light'
                                         }`}
                                 >
                                     {cat.label}
@@ -139,8 +149,8 @@ function NoticeCard({ notice, featured = false }: { notice: Notice; featured?: b
         <Link
             to={`/notices/${notice.slug}`}
             className={`block rounded-xl border transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 group ${featured
-                    ? 'bg-gradient-to-br from-secondary to-secondary-dark border-yellow-500/30'
-                    : 'bg-secondary border-gray-700'
+                ? 'bg-gradient-to-br from-secondary to-secondary-dark border-yellow-500/30'
+                : 'bg-secondary border-gray-700'
                 }`}
         >
             <div className="p-6">
