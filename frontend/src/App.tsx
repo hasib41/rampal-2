@@ -12,6 +12,8 @@ import {
   SustainabilityPage,
   TendersPage,
   MediaPage,
+  NoticesPage,
+  NoticeDetailPage,
 } from './pages';
 import {
   AdminDashboard,
@@ -49,6 +51,8 @@ export default function App() {
             <Route path="sustainability" element={<SustainabilityPage />} />
             <Route path="tenders" element={<TendersPage />} />
             <Route path="media" element={<MediaPage />} />
+            <Route path="notices" element={<NoticesPage />} />
+            <Route path="notices/:slug" element={<NoticeDetailPage />} />
           </Route>
 
           {/* Admin Routes */}

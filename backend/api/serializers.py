@@ -77,10 +77,21 @@ class CSRInitiativeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class NoticeSerializer(serializers.ModelSerializer):
+class NoticeListSerializer(serializers.ModelSerializer):
     category_display = serializers.CharField(source='get_category_display', read_only=True)
     
     class Meta:
         model = Notice
-        fields = ['id', 'title', 'category', 'category_display', 'published_date', 'document', 'link']
+        fields = ['id', 'title', 'slug', 'category', 'category_display', 'excerpt', 
+                  'published_date', 'document', 'attachment_name', 'is_featured']
+
+
+class NoticeDetailSerializer(serializers.ModelSerializer):
+    category_display = serializers.CharField(source='get_category_display', read_only=True)
+    
+    class Meta:
+        model = Notice
+        fields = ['id', 'title', 'slug', 'category', 'category_display', 'excerpt',
+                  'content', 'published_date', 'document', 'attachment_name', 'link',
+                  'is_featured', 'created_at', 'updated_at']
 

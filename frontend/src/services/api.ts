@@ -64,7 +64,10 @@ export const csrApi = {
 
 // Notices
 export const noticesApi = {
-    getAll: () => api.get<PaginatedResponse<Notice>>('/notices/').then(getResults),
+    getAll: (params?: Record<string, string>) =>
+        api.get<PaginatedResponse<Notice>>('/notices/', { params }).then(getResults),
+    getBySlug: (slug: string) => api.get<Notice>(`/notices/${slug}/`).then(res => res.data),
+    getFeatured: () => api.get<Notice[]>('/notices/featured/').then(res => res.data),
 };
 
 // Contact

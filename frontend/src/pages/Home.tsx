@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, Users, Leaf, MapPin, FileText, Calendar, ChevronRight, ArrowRight, ChevronLeft } from 'lucide-react';
+import { Zap, Users, Leaf, MapPin, FileText, Calendar, ChevronRight, ArrowRight, ChevronLeft, AlertCircle, Briefcase, UserPlus, Star } from 'lucide-react';
 import { Button, Stat, SectionTitle, Card, LoadingSpinner } from '../components/ui';
 import { useDirectors, useCSRInitiatives, useNotices } from '../hooks/useApi';
 
@@ -93,8 +93,8 @@ export function HomePage() {
                         <div
                             key={index}
                             className={`transition-all duration-700 ease-in-out ${index === currentSlide
-                                    ? 'opacity-100 translate-y-0'
-                                    : 'opacity-0 translate-y-8 absolute inset-0 pointer-events-none'
+                                ? 'opacity-100 translate-y-0'
+                                : 'opacity-0 translate-y-8 absolute inset-0 pointer-events-none'
                                 }`}
                         >
                             <h1 className="text-5xl md:text-7xl font-bold text-white max-w-3xl leading-tight">
@@ -138,8 +138,8 @@ export function HomePage() {
                             key={index}
                             onClick={() => goToSlide(index)}
                             className={`transition-all duration-300 ${index === currentSlide
-                                    ? 'w-8 h-2 bg-primary-light rounded-full'
-                                    : 'w-2 h-2 bg-white/40 hover:bg-white/60 rounded-full'
+                                ? 'w-8 h-2 bg-primary-light rounded-full'
+                                : 'w-2 h-2 bg-white/40 hover:bg-white/60 rounded-full'
                                 }`}
                             aria-label={`Go to slide ${index + 1}`}
                         />
@@ -166,65 +166,112 @@ export function HomePage() {
                 </div>
             </section>
 
-            {/* Notice Board Section - Dark Theme */}
-            <section className="bg-secondary-dark py-16">
+            {/* Notice Board Section - Redesigned */}
+            <section className="bg-secondary-dark py-20">
                 <div className="max-w-7xl mx-auto px-4">
-                    <Card dark className="overflow-hidden">
-                        {/* Header */}
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700 bg-gradient-to-r from-primary/10 to-transparent">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center">
-                                    <FileText className="text-primary-light" size={22} />
+                    {/* Section Header */}
+                    <div className="flex items-center justify-between mb-10">
+                        <div>
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg shadow-primary/20">
+                                    <FileText className="text-white" size={24} />
                                 </div>
-                                <h2 className="text-xl font-bold text-white">Notice Board</h2>
+                                <h2 className="text-3xl font-bold text-white">Notice Board</h2>
                             </div>
-                            <Link to="/notices" className="text-primary-light hover:text-primary text-sm flex items-center gap-1 transition-colors">
-                                View All <ArrowRight size={16} />
-                            </Link>
+                            <p className="text-gray-400 mt-1">Latest announcements and important updates</p>
                         </div>
+                        <Link
+                            to="/notices"
+                            className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-primary/10 hover:bg-primary/20 text-primary-light rounded-lg transition-all border border-primary/30"
+                        >
+                            View All Notices <ArrowRight size={16} />
+                        </Link>
+                    </div>
 
-                        {/* Notices List */}
-                        {noticesLoading ? (
-                            <LoadingSpinner />
-                        ) : (
-                            <div className="divide-y divide-gray-700/50">
-                                {notices?.slice(0, 5).map((notice) => (
-                                    <div
-                                        key={notice.id}
-                                        className="flex items-start gap-4 px-6 py-4 hover:bg-secondary/50 transition-colors cursor-pointer group"
-                                    >
-                                        <div className="flex-shrink-0 mt-1.5">
-                                            <div className="w-2 h-2 rounded-full bg-primary-light" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-gray-200 font-medium group-hover:text-primary-light transition-colors line-clamp-1">
-                                                {notice.title}
-                                            </p>
-                                            <div className="flex items-center gap-3 mt-2">
-                                                <span className="flex items-center gap-1 text-gray-500 text-sm">
-                                                    <Calendar size={12} />
-                                                    {new Date(notice.published_date).toLocaleDateString('en-US', {
-                                                        month: 'short',
-                                                        day: '2-digit',
-                                                        year: 'numeric'
-                                                    })}
-                                                </span>
-                                                <span className={`px-2 py-0.5 text-xs font-medium rounded border ${categoryColors[notice.category] || categoryColors.general}`}>
-                                                    {notice.category_display}
-                                                </span>
+                    {/* Notices Grid */}
+                    {noticesLoading ? (
+                        <LoadingSpinner />
+                    ) : (
+                        <>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {notices?.slice(0, 6).map((notice, index) => {
+                                    const isFirst = index === 0 && notice.is_featured;
+                                    const categoryStyle = categoryColors[notice.category] || categoryColors.general;
+
+                                    return (
+                                        <Link
+                                            key={notice.id}
+                                            to={`/notices/${notice.slug}`}
+                                            className={`group relative rounded-xl border transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 ${isFirst
+                                                ? 'md:col-span-2 lg:col-span-2 bg-gradient-to-br from-primary/10 via-secondary to-secondary border-primary/30'
+                                                : 'bg-secondary border-gray-700'
+                                                }`}
+                                        >
+                                            <div className="p-6">
+                                                {/* Category & Date Row */}
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${categoryStyle}`}>
+                                                        {notice.category === 'urgent' && <AlertCircle size={12} />}
+                                                        {notice.category === 'tender' && <Briefcase size={12} />}
+                                                        {notice.category === 'recruitment' && <UserPlus size={12} />}
+                                                        {notice.category === 'general' && <FileText size={12} />}
+                                                        {notice.category_display}
+                                                    </span>
+                                                    {notice.is_featured && (
+                                                        <span className="px-2 py-1 rounded bg-yellow-500/20 text-yellow-400 text-xs font-medium flex items-center gap-1">
+                                                            <Star size={10} fill="currentColor" /> Featured
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                {/* Title */}
+                                                <h3 className={`font-semibold text-white group-hover:text-primary-light transition-colors mb-3 ${isFirst ? 'text-xl line-clamp-2' : 'text-lg line-clamp-2'
+                                                    }`}>
+                                                    {notice.title}
+                                                </h3>
+
+                                                {/* Excerpt (only for featured) */}
+                                                {isFirst && notice.excerpt && (
+                                                    <p className="text-gray-400 text-sm line-clamp-2 mb-4">
+                                                        {notice.excerpt}
+                                                    </p>
+                                                )}
+
+                                                {/* Footer */}
+                                                <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-700/50">
+                                                    <span className="flex items-center gap-2 text-gray-500 text-sm">
+                                                        <Calendar size={14} />
+                                                        {new Date(notice.published_date).toLocaleDateString('en-US', {
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                            year: 'numeric'
+                                                        })}
+                                                    </span>
+                                                    <span className="flex items-center gap-1 text-primary-light text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        Read More <ChevronRight size={14} />
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <ChevronRight className="text-gray-600 group-hover:text-primary-light transition-colors flex-shrink-0" size={18} />
-                                    </div>
-                                ))}
-                                {(!notices || notices.length === 0) && (
-                                    <div className="px-6 py-12 text-center text-gray-500">
-                                        No notices available at this time.
-                                    </div>
-                                )}
+                                        </Link>
+                                    );
+                                })}
                             </div>
-                        )}
-                    </Card>
+
+                            {(!notices || notices.length === 0) && (
+                                <div className="text-center py-16 bg-secondary rounded-xl border border-gray-700">
+                                    <FileText className="mx-auto text-gray-600 mb-4" size={48} />
+                                    <p className="text-gray-500">No notices available at this time.</p>
+                                </div>
+                            )}
+
+                            {/* Mobile View All Button */}
+                            <div className="mt-8 text-center md:hidden">
+                                <Link to="/notices">
+                                    <Button>View All Notices</Button>
+                                </Link>
+                            </div>
+                        </>
+                    )}
                 </div>
             </section>
 

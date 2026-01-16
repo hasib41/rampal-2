@@ -420,45 +420,231 @@ The plant's advanced Flue Gas Desulfurization (FGD) system and Electrostatic Pre
         notices_data = [
             {
                 'title': 'Board of Directors Meeting - Q1 2026 Schedule Announced',
+                'slug': 'board-meeting-q1-2026',
                 'category': 'general',
+                'excerpt': 'The Board of Directors has announced the schedule for Q1 2026 meetings. All stakeholders are requested to take note.',
+                'content': '''The Board of Directors of Bangladesh-India Friendship Power Company (Pvt.) Limited has finalized the meeting schedule for the first quarter of 2026.
+
+**Meeting Dates:**
+- January 28, 2026 - Regular Board Meeting
+- February 25, 2026 - Finance Committee Meeting
+- March 28, 2026 - Annual Strategy Review
+
+**Venue:** BIFPCL Corporate Office, Dhaka
+
+All board members and relevant stakeholders are requested to mark their calendars and prepare necessary documents for the meetings.
+
+For any queries, please contact the Company Secretary.''',
                 'published_date': today - timedelta(days=3),
                 'is_active': True,
+                'is_featured': True,
                 'order': 1,
             },
             {
-                'title': 'Environmental Compliance Report 2025 - Now Available for Download',
+                'title': 'Environmental Compliance Report 2025 - Now Available',
+                'slug': 'environmental-report-2025',
                 'category': 'general',
+                'excerpt': 'Our annual environmental compliance report shows all emissions 28% below prescribed limits.',
+                'content': '''BIFPCL is pleased to announce the publication of its Annual Environmental Compliance Report for 2025.
+
+**Key Highlights:**
+- SO2 emissions: 28% below prescribed limits
+- Particulate matter: 35% below limits
+- NOx emissions: 22% below limits
+- Water quality: Exceeds all standards
+- Zero environmental incidents recorded
+
+The report demonstrates our commitment to environmental stewardship and sustainable power generation. The full report is available for download.
+
+Our Flue Gas Desulfurization (FGD) and Electrostatic Precipitator (ESP) systems continue to perform above design specifications.''',
                 'published_date': today - timedelta(days=7),
                 'is_active': True,
+                'is_featured': False,
                 'order': 2,
             },
             {
-                'title': 'Annual Power Generation Report Released - Record Output Achieved',
-                'category': 'general',
-                'published_date': today - timedelta(days=14),
+                'title': 'URGENT: Plant Shutdown Scheduled for Annual Maintenance',
+                'slug': 'plant-shutdown-maintenance-2026',
+                'category': 'urgent',
+                'excerpt': 'Unit-1 will undergo scheduled maintenance from February 15-28, 2026. All stakeholders please take note.',
+                'content': '''This is to inform all stakeholders that Unit-1 of the Maitree Super Thermal Power Project will undergo scheduled annual maintenance.
+
+**Shutdown Details:**
+- Unit: Unit-1 (660 MW)
+- Start Date: February 15, 2026
+- End Date: February 28, 2026 (tentative)
+- Duration: 14 days
+
+**Impact:**
+- Generation capacity will be reduced by approximately 50%
+- Unit-2 will continue normal operations
+- Grid support arrangements have been coordinated with BPDB
+
+**Maintenance Activities:**
+1. Boiler inspection and cleaning
+2. Turbine overhauling
+3. Generator maintenance
+4. Safety systems testing
+5. Instrumentation calibration
+
+All contractors and service providers are requested to coordinate with the O&M department.''',
+                'published_date': today - timedelta(days=1),
                 'is_active': True,
+                'is_featured': True,
                 'order': 3,
             },
             {
                 'title': 'Recruitment Drive 2026 - Multiple Positions Available',
+                'slug': 'recruitment-drive-2026',
                 'category': 'recruitment',
+                'excerpt': 'BIFPCL is hiring! Multiple engineering and management positions available across departments.',
+                'content': '''BIFPCL announces its Annual Recruitment Drive for 2026!
+
+**Open Positions:**
+1. Senior Mechanical Engineer (2 positions)
+2. Environmental Engineer (1 position)
+3. Electrical Maintenance Engineer (2 positions)
+4. IT Systems Administrator (1 position)
+5. Finance Manager (1 position)
+6. HR Executive (1 position)
+
+**Benefits:**
+- Competitive salary packages
+- Medical insurance for family
+- Housing allowance
+- Annual performance bonus
+- Training and development opportunities
+
+**How to Apply:**
+Visit the Careers section of our website or send your CV to careers@bifpcl.com.
+
+**Application Deadline:** February 28, 2026
+
+BIFPCL is an equal opportunity employer.''',
                 'published_date': today - timedelta(days=2),
                 'is_active': True,
+                'is_featured': False,
                 'order': 4,
             },
             {
-                'title': 'Tender Notice: Coal Supply Contract - Deadline Extended',
+                'title': 'Tender Notice: Coal Supply Contract 2026-2027',
+                'slug': 'tender-coal-supply-2026',
                 'category': 'tender',
+                'excerpt': 'Inviting bids for annual coal supply contract. Estimated quantity: 3 million MT.',
+                'content': '''BIFPCL invites sealed tenders from eligible bidders for the supply of imported coal.
+
+**Tender Reference:** BIFPCL/PROC/2026/COAL-001
+
+**Scope of Supply:**
+- Coal Type: High-grade thermal coal
+- Quantity: 3 million metric tons (approx.)
+- Duration: April 2026 - March 2027
+- Delivery: CIF Mongla Port
+
+**Coal Specifications:**
+- Gross Calorific Value: Min 5,500 Kcal/Kg
+- Total Moisture: Max 12%
+- Ash Content: Max 15%
+- Sulphur: Max 0.6%
+
+**Important Dates:**
+- Pre-bid Meeting: January 25, 2026
+- Last Date for Queries: February 5, 2026
+- Submission Deadline: February 20, 2026, 3:00 PM
+- Technical Bid Opening: February 20, 2026, 4:00 PM
+
+Download tender documents from our website or contact procurement@bifpcl.com.''',
                 'published_date': today - timedelta(days=5),
                 'is_active': True,
+                'is_featured': False,
                 'order': 5,
+            },
+            {
+                'title': 'Holiday Notice - National Mourning Day',
+                'slug': 'holiday-mourning-day-2026',
+                'category': 'general',
+                'excerpt': 'Office will remain closed on August 15, 2026 for National Mourning Day.',
+                'content': '''This is to inform all employees and visitors that BIFPCL offices will remain closed on August 15, 2026 (Saturday) on account of National Mourning Day.
+
+Regular operations will resume on August 16, 2026.
+
+For any urgent matters, please contact the 24x7 control room.
+
+Emergency Contact: +880-1XXX-XXXXXX''',
+                'published_date': today - timedelta(days=10),
+                'is_active': True,
+                'is_featured': False,
+                'order': 6,
+            },
+            {
+                'title': 'Tender Notice: Security Services Contract',
+                'slug': 'tender-security-services-2026',
+                'category': 'tender',
+                'excerpt': 'Annual security services contract for plant premises. Bidders must have Grade-A BFSIA license.',
+                'content': '''BIFPCL invites proposals from reputed security service providers.
+
+**Tender Reference:** BIFPCL/PROC/2026/SEC-001
+
+**Scope:**
+- 24x7 security coverage for plant premises
+- Access control management
+- CCTV monitoring
+- Patrol services
+- Emergency response
+
+**Requirements:**
+- Valid BFSIA Grade-A license
+- Minimum 5 years experience in industrial security
+- ISO 9001 certification preferred
+- Past experience with power plants advantageous
+
+**Contract Duration:** 2 years (extendable)
+
+**Submission Deadline:** February 28, 2026''',
+                'published_date': today - timedelta(days=8),
+                'is_active': True,
+                'is_featured': False,
+                'order': 7,
+            },
+            {
+                'title': 'Walk-in Interview for Graduate Engineers',
+                'slug': 'walk-in-interview-jan-2026',
+                'category': 'recruitment',
+                'excerpt': 'Walk-in interview for fresh graduate engineers (Mechanical/Electrical) on January 30, 2026.',
+                'content': '''BIFPCL conducts Walk-in Interview for Fresh Graduate Engineers
+
+**Positions:** Graduate Engineer Trainee (GET)
+**Branches:** Mechanical / Electrical Engineering
+
+**Date:** January 30, 2026
+**Time:** 9:00 AM - 4:00 PM
+**Venue:** BIFPCL Corporate Office, Dhaka
+
+**Eligibility:**
+- B.Sc. in Mechanical/Electrical Engineering
+- Graduated in 2024 or 2025
+- CGPA 3.0 or above
+- Age below 28 years
+
+**Bring:**
+- Updated CV
+- All academic certificates (original + photocopy)
+- National ID card
+- Passport size photographs (2)
+
+Selected candidates will undergo 1-year training at plant site.''',
+                'published_date': today - timedelta(days=4),
+                'is_active': True,
+                'is_featured': False,
+                'order': 8,
             },
         ]
 
+        # Clear existing notices and create new ones
+        Notice.objects.all().delete()
+        
         for data in notices_data:
-            Notice.objects.update_or_create(
-                title=data['title'],
-                defaults=data
-            )
+            Notice.objects.create(**data)
         
         self.stdout.write('  ✓ Notices created')
+

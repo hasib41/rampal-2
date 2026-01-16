@@ -221,17 +221,36 @@ class Notice(models.Model):
     ]
 
     title = models.CharField(max_length=500)
+    slug = models.SlugField(unique=True, max_length=500, blank=True)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='general')
+    excerpt = models.TextField(max_length=300, blank=True, help_text="Short summary for list view")
+    content = models.TextField(blank=True, help_text="Full notice content")
     published_date = models.DateField()
     document = models.FileField(upload_to='notices/', blank=True)
+    attachment_name = models.CharField(max_length=200, blank=True, help_text="Display name for attachment")
     link = models.URLField(blank=True)
     is_active = models.BooleanField(default=True)
+    is_featured = models.BooleanField(default=False, help_text="Show in featured section")
     order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-published_date', 'order']
+        ordering = ['-is_featured', '-published_date', 'order']
         verbose_name = "Notice"
         verbose_name_plural = "Notices"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            base_slug = slugify(self.title)[:450]
+            slug = base_slug
+            counter = 1
+            while Notice.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

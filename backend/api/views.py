@@ -10,7 +10,8 @@ from .serializers import (
     CompanyInfoSerializer, ProjectListSerializer, ProjectDetailSerializer,
     DirectorSerializer, NewsListSerializer, NewsDetailSerializer,
     CareerListSerializer, CareerDetailSerializer, JobApplicationSerializer,
-    TenderSerializer, ContactInquirySerializer, CSRInitiativeSerializer, NoticeSerializer
+    TenderSerializer, ContactInquirySerializer, CSRInitiativeSerializer,
+    NoticeListSerializer, NoticeDetailSerializer
 )
 
 
@@ -95,5 +96,19 @@ class CSRInitiativeViewSet(viewsets.ReadOnlyModelViewSet):
 class NoticeViewSet(viewsets.ReadOnlyModelViewSet):
     """List and retrieve notices for Notice Board"""
     queryset = Notice.objects.filter(is_active=True)
-    serializer_class = NoticeSerializer
+    lookup_field = 'slug'
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['category', 'is_featured']
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return NoticeDetailSerializer
+        return NoticeListSerializer
+
+    @action(detail=False, methods=['get'])
+    def featured(self, request):
+        """Get featured notices"""
+        featured = self.queryset.filter(is_featured=True)[:5]
+        serializer = NoticeListSerializer(featured, many=True)
+        return Response(serializer.data)
 

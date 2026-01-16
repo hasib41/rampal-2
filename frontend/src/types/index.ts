@@ -102,10 +102,17 @@ export interface JobApplicationData {
 export interface Notice {
     id: number;
     title: string;
+    slug: string;
     category: 'general' | 'urgent' | 'tender' | 'recruitment';
     category_display: string;
+    excerpt: string;
+    content: string;
     published_date: string;
     document?: string;
+    attachment_name?: string;
     link?: string;
+    is_featured: boolean;
+    created_at?: string;
+    updated_at?: string;
 }
 

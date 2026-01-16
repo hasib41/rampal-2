@@ -37,6 +37,12 @@ export const useTenders = (params?: Record<string, string>) =>
 export const useCSRInitiatives = () =>
     useQuery({ queryKey: ['csr'], queryFn: csrApi.getAll });
 
-export const useNotices = () =>
-    useQuery({ queryKey: ['notices'], queryFn: noticesApi.getAll });
+export const useNotices = (params?: Record<string, string>) =>
+    useQuery({ queryKey: ['notices', params], queryFn: () => noticesApi.getAll(params) });
+
+export const useNotice = (slug: string) =>
+    useQuery({ queryKey: ['notice', slug], queryFn: () => noticesApi.getBySlug(slug), enabled: !!slug });
+
+export const useFeaturedNotices = () =>
+    useQuery({ queryKey: ['notices', 'featured'], queryFn: noticesApi.getFeatured });
 
