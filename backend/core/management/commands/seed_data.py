@@ -206,7 +206,7 @@ The program will provide:
 This initiative is part of BIFPCL's commitment to community development and creating long-term value for the local population.''',
                 'published_date': today - timedelta(days=12),
                 'is_featured': False,
-                'image': None,
+                'image': 'news/scholarship.png',
             },
             {
                 'title': 'Environmental Monitoring Report Shows Excellent Compliance',
@@ -224,7 +224,25 @@ Key findings:
 The plant's advanced Flue Gas Desulfurization (FGD) system and Electrostatic Precipitators (ESP) continue to perform above specifications.''',
                 'published_date': today - timedelta(days=20),
                 'is_featured': False,
-                'image': None,
+                'image': 'news/environment.png',
+            },
+            {
+                'title': 'BIFPCL Hosts India-Bangladesh Energy Summit 2025',
+                'slug': 'india-bangladesh-energy-summit-2025',
+                'category': 'in_the_news',
+                'excerpt': 'Senior officials from both nations gathered at the Maitree Power Project for discussions on expanding bilateral energy cooperation.',
+                'content': '''BIFPCL successfully hosted the India-Bangladesh Energy Summit 2025 at the Maitree Super Thermal Power Project facility.
+
+The summit brought together senior government officials, industry leaders, and energy experts from both countries to discuss:
+- Future joint venture opportunities in renewable energy
+- Grid connectivity enhancement between the two nations
+- Technology transfer and capacity building
+- Sustainable development goals in the energy sector
+
+The event was attended by the Energy Ministers of both countries and marked a significant milestone in Indo-Bangladesh energy cooperation.''',
+                'published_date': today - timedelta(days=8),
+                'is_featured': False,
+                'image': 'news/event.png',
             },
         ]
 
@@ -234,7 +252,8 @@ The plant's advanced Flue Gas Desulfurization (FGD) system and Electrostatic Pre
                 slug=data['slug'],
                 defaults=data
             )
-            if image_file and created:
+            # Always update image if provided (for both new and existing records)
+            if image_file:
                 image_path = self.get_image_path('', image_file)
                 if os.path.exists(image_path):
                     with open(image_path, 'rb') as f:

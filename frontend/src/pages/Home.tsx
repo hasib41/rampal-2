@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, Users, Leaf, MapPin, FileText, Calendar, ChevronRight, ArrowRight, ChevronLeft, AlertCircle, Briefcase, UserPlus, Star } from 'lucide-react';
+import { Zap, Users, Leaf, MapPin, FileText, Calendar, ChevronRight, ArrowRight, ChevronLeft, AlertCircle, Briefcase, UserPlus, Star, Newspaper, Clock, ExternalLink, TrendingUp } from 'lucide-react';
 import { Button, Stat, SectionTitle, Card, LoadingSpinner } from '../components/ui';
-import { useDirectors, useCSRInitiatives, useNotices } from '../hooks/useApi';
+import { useDirectors, useCSRInitiatives, useNotices, useNews, useTenders } from '../hooks/useApi';
 
 // Hero slides data
 const heroSlides = [
@@ -39,13 +39,34 @@ export function HomePage() {
     const { data: directors, isLoading: directorsLoading } = useDirectors();
     const { data: csrInitiatives, isLoading: csrLoading } = useCSRInitiatives();
     const { data: notices, isLoading: noticesLoading } = useNotices();
+    const { data: news, isLoading: newsLoading } = useNews();
+    const { data: tenders, isLoading: tendersLoading } = useTenders();
+
     const topDirectors = directors?.slice(0, 3);
+    const recentNews = news?.slice(0, 4);
+    const openTenders = tenders?.filter(t => t.status === 'open').slice(0, 3);
 
     const categoryColors: Record<string, string> = {
         general: 'bg-primary/10 text-primary border-primary/30',
         urgent: 'bg-red-500/10 text-red-400 border-red-500/30',
         tender: 'bg-accent-orange/10 text-accent-orange border-accent-orange/30',
         recruitment: 'bg-accent-green/10 text-accent-green border-accent-green/30',
+    };
+
+    const newsCategoryConfig: Record<string, { label: string; icon: typeof Newspaper; color: string; bgColor: string }> = {
+        press: { label: 'Press Release', icon: Newspaper, color: 'text-primary-light', bgColor: 'bg-primary/20' },
+        event: { label: 'Event', icon: Calendar, color: 'text-accent-green', bgColor: 'bg-accent-green/20' },
+        in_the_news: { label: 'In The News', icon: TrendingUp, color: 'text-accent-orange', bgColor: 'bg-accent-orange/20' },
+        update: { label: 'Update', icon: Clock, color: 'text-purple-400', bgColor: 'bg-purple-500/20' },
+    };
+
+    // Helper function to calculate days remaining
+    const getDaysRemaining = (deadline: string) => {
+        const today = new Date();
+        const deadlineDate = new Date(deadline);
+        const diffTime = deadlineDate.getTime() - today.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays;
     };
 
     // Auto-play functionality
@@ -272,6 +293,298 @@ export function HomePage() {
                             </div>
                         </>
                     )}
+                </div>
+            </section>
+
+            {/* Latest News/Media Section */}
+            <section className="bg-secondary py-20">
+                <div className="max-w-7xl mx-auto px-4">
+                    {/* Section Header */}
+                    <div className="flex items-center justify-between mb-10">
+                        <div>
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-orange to-orange-600 flex items-center justify-center shadow-lg shadow-accent-orange/20">
+                                    <Newspaper className="text-white" size={24} />
+                                </div>
+                                <h2 className="text-3xl font-bold text-white">Latest News</h2>
+                            </div>
+                            <p className="text-gray-400 mt-1">Stay updated with our latest announcements and media coverage</p>
+                        </div>
+                        <Link
+                            to="/media"
+                            className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-accent-orange/10 hover:bg-accent-orange/20 text-accent-orange rounded-lg transition-all border border-accent-orange/30"
+                        >
+                            View All News <ArrowRight size={16} />
+                        </Link>
+                    </div>
+
+                    {/* News Grid */}
+                    {newsLoading ? (
+                        <LoadingSpinner />
+                    ) : (
+                        <>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {recentNews?.map((article, index) => {
+                                    const config = newsCategoryConfig[article.category] || newsCategoryConfig.update;
+                                    const Icon = config.icon;
+                                    const isFirst = index === 0;
+
+                                    return (
+                                        <Link
+                                            key={article.id}
+                                            to={`/media/${article.slug}`}
+                                            className={`group rounded-xl border border-gray-700 overflow-hidden bg-secondary-dark hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 ${isFirst ? 'lg:col-span-2' : ''
+                                                }`}
+                                        >
+                                            {/* Image */}
+                                            <div className={`relative overflow-hidden bg-gray-800 ${isFirst ? 'h-56' : 'h-44'}`}>
+                                                {article.image ? (
+                                                    <img
+                                                        src={article.image}
+                                                        alt={article.title}
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                    />
+                                                ) : (
+                                                    <div className={`w-full h-full flex items-center justify-center ${config.bgColor}`}>
+                                                        <Icon className={config.color} size={isFirst ? 48 : 32} />
+                                                    </div>
+                                                )}
+                                                <div className="absolute top-3 left-3">
+                                                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${config.bgColor} ${config.color}`}>
+                                                        <Icon size={12} />
+                                                        {config.label}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* Content */}
+                                            <div className="p-4">
+                                                <h3 className={`font-semibold text-white group-hover:text-primary-light transition-colors line-clamp-2 ${isFirst ? 'text-lg' : 'text-sm'}`}>
+                                                    {article.title}
+                                                </h3>
+                                                {isFirst && article.excerpt && (
+                                                    <p className="text-gray-400 text-sm mt-2 line-clamp-2">{article.excerpt}</p>
+                                                )}
+                                                <div className="flex items-center gap-2 mt-3 text-gray-500 text-xs">
+                                                    <Calendar size={12} />
+                                                    {new Date(article.published_date).toLocaleDateString('en-US', {
+                                                        month: 'short',
+                                                        day: 'numeric',
+                                                        year: 'numeric'
+                                                    })}
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+
+                            {(!recentNews || recentNews.length === 0) && (
+                                <div className="text-center py-16 bg-secondary-dark rounded-xl border border-gray-700">
+                                    <Newspaper className="mx-auto text-gray-600 mb-4" size={48} />
+                                    <p className="text-gray-500">No news articles available.</p>
+                                </div>
+                            )}
+
+                            {/* Mobile View All Button */}
+                            <div className="mt-8 text-center md:hidden">
+                                <Link to="/media">
+                                    <Button>View All News</Button>
+                                </Link>
+                            </div>
+                        </>
+                    )}
+                </div>
+            </section>
+
+            {/* Open Tenders Section */}
+            <section className="bg-secondary-dark py-20 border-t border-gray-700/50">
+                <div className="max-w-7xl mx-auto px-4">
+                    {/* Section Header */}
+                    <div className="flex items-center justify-between mb-10">
+                        <div>
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-green to-green-600 flex items-center justify-center shadow-lg shadow-accent-green/20">
+                                    <Briefcase className="text-white" size={24} />
+                                </div>
+                                <h2 className="text-3xl font-bold text-white">Open Tenders</h2>
+                            </div>
+                            <p className="text-gray-400 mt-1">Active procurement opportunities for vendors and contractors</p>
+                        </div>
+                        <Link
+                            to="/tenders"
+                            className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-accent-green/10 hover:bg-accent-green/20 text-accent-green rounded-lg transition-all border border-accent-green/30"
+                        >
+                            View All Tenders <ArrowRight size={16} />
+                        </Link>
+                    </div>
+
+                    {/* Tenders Grid */}
+                    {tendersLoading ? (
+                        <LoadingSpinner />
+                    ) : (
+                        <>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {openTenders?.map((tender) => {
+                                    const daysRemaining = getDaysRemaining(tender.deadline);
+                                    const isUrgent = daysRemaining <= 7;
+
+                                    return (
+                                        <Card
+                                            key={tender.id}
+                                            dark
+                                            className="p-6 hover:border-accent-green/50 transition-all duration-300 group relative overflow-hidden"
+                                        >
+                                            {/* Urgency Badge */}
+                                            {isUrgent && (
+                                                <div className="absolute top-0 right-0">
+                                                    <div className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+                                                        URGENT
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* Tender ID */}
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <span className="px-2 py-1 bg-primary/20 text-primary-light text-xs font-mono rounded">
+                                                    {tender.tender_id}
+                                                </span>
+                                                <span className="px-2 py-1 bg-gray-700 text-gray-400 text-xs rounded capitalize">
+                                                    {tender.category}
+                                                </span>
+                                            </div>
+
+                                            {/* Title */}
+                                            <h3 className="text-white font-semibold line-clamp-2 mb-4 group-hover:text-accent-green transition-colors">
+                                                {tender.title}
+                                            </h3>
+
+                                            {/* Deadline Info */}
+                                            <div className={`flex items-center gap-3 p-3 rounded-lg ${isUrgent ? 'bg-red-500/10 border border-red-500/30' : 'bg-gray-800'}`}>
+                                                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isUrgent ? 'bg-red-500/20' : 'bg-accent-green/20'}`}>
+                                                    <Clock className={isUrgent ? 'text-red-400' : 'text-accent-green'} size={20} />
+                                                </div>
+                                                <div>
+                                                    <p className={`text-sm font-semibold ${isUrgent ? 'text-red-400' : 'text-white'}`}>
+                                                        {daysRemaining > 0 ? `${daysRemaining} days remaining` : 'Deadline passed'}
+                                                    </p>
+                                                    <p className="text-gray-500 text-xs">
+                                                        Due: {new Date(tender.deadline).toLocaleDateString('en-US', {
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                            year: 'numeric'
+                                                        })}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            {/* Action */}
+                                            <Link
+                                                to="/tenders"
+                                                className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 bg-accent-green/10 hover:bg-accent-green/20 text-accent-green rounded-lg transition-colors text-sm font-medium border border-accent-green/30"
+                                            >
+                                                <ExternalLink size={16} />
+                                                View Details
+                                            </Link>
+                                        </Card>
+                                    );
+                                })}
+                            </div>
+
+                            {(!openTenders || openTenders.length === 0) && (
+                                <div className="text-center py-16 bg-secondary rounded-xl border border-gray-700">
+                                    <Briefcase className="mx-auto text-gray-600 mb-4" size={48} />
+                                    <p className="text-gray-500">No open tenders at this time.</p>
+                                    <Link to="/tenders" className="inline-flex items-center gap-2 text-primary-light mt-3 hover:underline">
+                                        View all tenders <ArrowRight size={14} />
+                                    </Link>
+                                </div>
+                            )}
+
+                            {/* Mobile View All Button */}
+                            <div className="mt-8 text-center md:hidden">
+                                <Link to="/tenders">
+                                    <Button className="bg-accent-green hover:bg-accent-green/80">View All Tenders</Button>
+                                </Link>
+                            </div>
+                        </>
+                    )}
+                </div>
+            </section>
+
+            {/* Project Location Map Section */}
+            <section className="bg-secondary py-20 border-t border-gray-700/50">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        {/* Map Image */}
+                        <div className="relative group rounded-2xl overflow-hidden shadow-2xl">
+                            <img
+                                src="/project-map.png"
+                                alt="Rampal Power Station Location Map"
+                                className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
+                            />
+                            {/* Overlay on hover */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-secondary-dark/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                                <div>
+                                    <p className="text-white font-semibold">Rampal Power Station</p>
+                                    <p className="text-gray-300 text-sm">Bagerhat, Bangladesh</p>
+                                </div>
+                            </div>
+                            {/* Location Pin Animation */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                                <div className="relative">
+                                    <div className="w-8 h-8 bg-primary rounded-full animate-ping absolute inset-0 opacity-50" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Info Content */}
+                        <div>
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
+                                    <MapPin className="text-white" size={24} />
+                                </div>
+                                <h2 className="text-3xl font-bold text-white">Project Location</h2>
+                            </div>
+
+                            <p className="text-gray-400 mb-6 leading-relaxed">
+                                The Maitree Super Thermal Power Project is strategically located in Rampal Upazila, Bagerhat District,
+                                approximately 14 kilometers from the Sundarbans, the world's largest mangrove forest. The location
+                                was carefully selected to ensure minimal environmental impact while maximizing efficiency.
+                            </p>
+
+                            {/* Location Details */}
+                            <div className="space-y-4 mb-8">
+                                <div className="flex items-center gap-4 p-4 bg-secondary-dark rounded-xl">
+                                    <MapPin className="text-primary-light" size={24} />
+                                    <div>
+                                        <p className="text-white font-semibold">Rampal, Bagerhat</p>
+                                        <p className="text-gray-500 text-sm">Khulna Division, Bangladesh</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-4 p-4 bg-secondary-dark rounded-xl">
+                                    <Zap className="text-accent-orange" size={24} />
+                                    <div>
+                                        <p className="text-white font-semibold">1320 MW Capacity</p>
+                                        <p className="text-gray-500 text-sm">2 x 660 MW Ultra-Supercritical Units</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-4 p-4 bg-secondary-dark rounded-xl">
+                                    <Leaf className="text-accent-green" size={24} />
+                                    <div>
+                                        <p className="text-white font-semibold">Environmental Compliance</p>
+                                        <p className="text-gray-500 text-sm">World-class emission controls and monitoring</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Link to="/projects">
+                                <Button>
+                                    View Project Details <ArrowRight size={16} className="ml-2" />
+                                </Button>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
             </section>
 
