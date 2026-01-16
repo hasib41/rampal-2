@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Layout } from './components/layout';
+import { AdminLayout } from './components/admin';
 import {
   HomePage,
   ProjectsPage,
@@ -12,6 +13,16 @@ import {
   TendersPage,
   MediaPage,
 } from './pages';
+import {
+  AdminDashboard,
+  AdminNotices,
+  AdminTenders,
+  AdminDirectors,
+  AdminProjects,
+  AdminNews,
+  AdminCareers,
+  AdminSettings
+} from './pages/admin';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,6 +38,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="projects" element={<ProjectsPage />} />
@@ -37,6 +49,18 @@ export default function App() {
             <Route path="sustainability" element={<SustainabilityPage />} />
             <Route path="tenders" element={<TendersPage />} />
             <Route path="media" element={<MediaPage />} />
+          </Route>
+
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="notices" element={<AdminNotices />} />
+            <Route path="projects" element={<AdminProjects />} />
+            <Route path="directors" element={<AdminDirectors />} />
+            <Route path="news" element={<AdminNews />} />
+            <Route path="careers" element={<AdminCareers />} />
+            <Route path="tenders" element={<AdminTenders />} />
+            <Route path="settings" element={<AdminSettings />} />
           </Route>
         </Routes>
       </BrowserRouter>
