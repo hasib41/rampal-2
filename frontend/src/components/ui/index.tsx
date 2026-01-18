@@ -5,7 +5,7 @@ import { Loader2, AlertCircle, CheckCircle, Info, X } from 'lucide-react';
 // ============================================================================
 // BUTTON
 // ============================================================================
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success' | 'outline' | 'warning';
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -23,6 +23,8 @@ const buttonVariants: Record<ButtonVariant, string> = {
     ghost: 'hover:bg-white/5 text-gray-400 hover:text-white',
     danger: 'bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 hover:border-red-500/30',
     success: 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20',
+    outline: 'bg-transparent hover:bg-white/5 text-gray-200 border border-white/20 hover:border-white/30',
+    warning: 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 hover:border-amber-500/30',
 };
 
 const buttonSizes: Record<ButtonSize, string> = {
@@ -383,6 +385,8 @@ interface CardProps {
     className?: string;
     hover?: boolean;
     padding?: 'none' | 'sm' | 'md' | 'lg';
+    dark?: boolean;
+    onClick?: () => void;
 }
 
 const cardPadding = {
@@ -392,12 +396,14 @@ const cardPadding = {
     lg: 'p-6',
 };
 
-export function Card({ children, className = '', hover = false, padding = 'md' }: CardProps) {
+export function Card({ children, className = '', hover = false, padding = 'md', dark = false, onClick }: CardProps) {
     return (
         <div
+            onClick={onClick}
             className={`
-                bg-white/[0.02] backdrop-blur-sm border border-white/[0.05] rounded-2xl
-                ${hover ? 'hover:bg-white/[0.04] hover:border-white/10 transition-all duration-200 cursor-pointer' : ''}
+                ${dark ? 'bg-secondary-dark border-gray-700' : 'bg-white/[0.02] border-white/[0.05]'}
+                backdrop-blur-sm border rounded-2xl
+                ${hover || onClick ? 'hover:bg-white/[0.04] hover:border-white/10 transition-all duration-200 cursor-pointer' : ''}
                 ${cardPadding[padding]}
                 ${className}
             `}
@@ -451,14 +457,34 @@ export function StatCard({ title, value, change, trend, icon, iconColor = 'bg-pr
 interface PageHeaderProps {
     title: string;
     description?: string;
+    subtitle?: string;
+    bgImage?: string;
     action?: ReactNode;
 }
 
-export function PageHeader({ title, description, action }: PageHeaderProps) {
+export function PageHeader({ title, description, subtitle, bgImage, action }: PageHeaderProps) {
+    if (bgImage) {
+        return (
+            <div
+                className="relative py-24 pt-32 bg-cover bg-center"
+                style={{ backgroundImage: `url('${bgImage}')` }}
+            >
+                <div className="absolute inset-0 bg-gradient-to-r from-secondary/95 via-secondary/80 to-secondary/60" />
+                <div className="relative max-w-7xl mx-auto px-4">
+                    <h1 className="text-4xl md:text-5xl font-bold text-white">{title}</h1>
+                    {subtitle && <p className="mt-4 text-xl text-white/80 max-w-2xl">{subtitle}</p>}
+                    {description && <p className="text-gray-300 mt-2">{description}</p>}
+                    {action && <div className="mt-6">{action}</div>}
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h1 className="text-2xl font-bold text-white">{title}</h1>
+                {subtitle && <p className="text-xl text-white/80 mt-1">{subtitle}</p>}
                 {description && <p className="text-gray-400 mt-1">{description}</p>}
             </div>
             {action && <div className="flex-shrink-0">{action}</div>}
@@ -971,13 +997,16 @@ interface StatProps {
     value: string;
     label: string;
     icon?: ReactNode;
+    suffix?: string;
 }
 
-export function Stat({ value, label, icon }: StatProps) {
+export function Stat({ value, label, icon, suffix }: StatProps) {
     return (
         <div className="text-center">
             {icon && <div className="flex justify-center mb-2 text-primary">{icon}</div>}
-            <div className="text-3xl md:text-4xl font-bold text-white">{value}</div>
+            <div className="text-3xl md:text-4xl font-bold text-white">
+                {value}{suffix && <span className="text-primary-light">{suffix}</span>}
+            </div>
             <div className="text-gray-400 mt-1">{label}</div>
         </div>
     );
