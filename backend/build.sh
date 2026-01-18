@@ -28,7 +28,7 @@ if username and password:
         print(f'Superuser {username} already exists.');
 "
 
-"
+
 
 echo "==> Seeding database..."
 python manage.py seed_data
