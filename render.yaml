@@ -37,11 +37,12 @@ services:
       - key: FRONTEND_URL
         value: "https://bifpcl-frontend.onrender.com"
 
-# ==========================================================================
-# React Frontend (Static Site)
-# ==========================================================================
-staticSites:
-  - name: bifpcl-frontend
+  # ==========================================================================
+  # React Frontend (Static Site)
+  # ==========================================================================
+  - type: web
+    name: bifpcl-frontend
+    runtime: static
     region: singapore
     rootDir: frontend
     buildCommand: npm ci && npm run build
