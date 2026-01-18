@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus, Edit2, Trash2, MapPin, Zap, ExternalLink } from 'lucide-react';
 import { useProjects } from '../../hooks/useApi';
-import { projectsApi } from '../../services/api';
+import { projectsApi, getMediaUrl } from '../../services/api';
 import type { Project } from '../../types';
 import {
     Card,
@@ -183,7 +183,7 @@ export function AdminProjects() {
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-10 h-10 rounded bg-white/5 overflow-hidden flex-shrink-0">
                                                         {project.hero_image ? (
-                                                            <img src={project.hero_image} alt="" className="w-full h-full object-cover" />
+                                                            <img src={getMediaUrl(project.hero_image)} alt="" className="w-full h-full object-cover" />
                                                         ) : (
                                                             <div className="w-full h-full flex items-center justify-center">
                                                                 <Zap size={16} className="text-gray-500" />

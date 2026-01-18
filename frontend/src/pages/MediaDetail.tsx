@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Calendar, ArrowLeft, Share2, Download, Clock, Tag, Newspaper, TrendingUp, User, Copy, Check, ChevronRight, Eye } from 'lucide-react';
 import { Button, LoadingSpinner, Card } from '../components/ui';
 import { useNews } from '../hooks/useApi';
-import { newsApi } from '../services/api';
+import { newsApi, getMediaUrl } from '../services/api';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -103,7 +103,7 @@ export function MediaDetailPage() {
                     {article.image ? (
                         <div
                             className="absolute inset-0 bg-cover bg-center"
-                            style={{ backgroundImage: `url('${article.image}')` }}
+                            style={{ backgroundImage: `url('${getMediaUrl(article.image)}')` }}
                         />
                     ) : (
                         <div className={`absolute inset-0 bg-gradient-to-br ${config.gradient}`} />
@@ -171,7 +171,7 @@ export function MediaDetailPage() {
                                 {article.image && (
                                     <div className="aspect-video w-full overflow-hidden">
                                         <img
-                                            src={article.image}
+                                            src={getMediaUrl(article.image)}
                                             alt={article.title}
                                             className="w-full h-full object-cover"
                                         />
@@ -260,7 +260,7 @@ export function MediaDetailPage() {
                                     <div className="space-y-3">
                                         {article.attachment && (
                                             <a
-                                                href={article.attachment}
+                                                href={getMediaUrl(article.attachment)}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="flex items-center justify-center gap-3 w-full px-4 py-3.5 bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white rounded-xl transition-all font-medium shadow-lg shadow-primary/20"
@@ -307,7 +307,7 @@ export function MediaDetailPage() {
                                                         <div className="flex gap-4 p-3 -mx-3 rounded-xl hover:bg-secondary-dark/50 transition-colors">
                                                             {related.image ? (
                                                                 <img
-                                                                    src={related.image}
+                                                                    src={getMediaUrl(related.image)}
                                                                     alt={related.title}
                                                                     className="w-20 h-20 rounded-xl object-cover flex-shrink-0"
                                                                 />
@@ -376,7 +376,7 @@ export function MediaDetailPage() {
                                             <div className="h-48 overflow-hidden bg-secondary-dark relative">
                                                 {newsItem.image ? (
                                                     <img
-                                                        src={newsItem.image}
+                                                        src={getMediaUrl(newsItem.image)}
                                                         alt={newsItem.title}
                                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                     />

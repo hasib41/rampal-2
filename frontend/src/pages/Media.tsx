@@ -3,6 +3,7 @@ import { Calendar, ArrowRight, Download, FileText, Search, Newspaper, Video, Ima
 import { Link } from 'react-router-dom';
 import { Card, Button, LoadingSpinner } from '../components/ui';
 import { useNews } from '../hooks/useApi';
+import { getMediaUrl } from '../services/api';
 
 const categoryConfig: Record<string, { label: string; icon: typeof Newspaper; color: string; bgColor: string }> = {
     press: { label: 'Press Release', icon: Newspaper, color: 'text-primary-light', bgColor: 'bg-primary/20' },
@@ -50,7 +51,7 @@ export function MediaPage() {
                 {featuredNews?.image && (
                     <div
                         className="absolute inset-0 bg-cover bg-center opacity-20"
-                        style={{ backgroundImage: `url('${featuredNews.image}')` }}
+                        style={{ backgroundImage: `url('${getMediaUrl(featuredNews.image)}')` }}
                     />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-r from-secondary-dark via-secondary-dark/80 to-transparent" />
@@ -97,7 +98,7 @@ export function MediaPage() {
                                     {featuredNews.image && (
                                         <div className="h-56 overflow-hidden">
                                             <img
-                                                src={featuredNews.image}
+                                                src={getMediaUrl(featuredNews.image)}
                                                 alt={featuredNews.title}
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                             />
@@ -210,7 +211,7 @@ export function MediaPage() {
                                                     <div className="h-52 overflow-hidden relative bg-gradient-to-br from-secondary to-secondary-dark">
                                                         {article.image ? (
                                                             <img
-                                                                src={article.image}
+                                                                src={getMediaUrl(article.image)}
                                                                 alt={article.title}
                                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                             />
@@ -233,7 +234,7 @@ export function MediaPage() {
                                                         {/* Download Button */}
                                                         {article.attachment && (
                                                             <a
-                                                                href={article.attachment}
+                                                                href={getMediaUrl(article.attachment)}
                                                                 onClick={(e) => e.stopPropagation()}
                                                                 className="absolute top-4 right-4 p-2.5 bg-secondary/90 backdrop-blur-sm rounded-lg hover:bg-primary transition-colors"
                                                                 title="Download"

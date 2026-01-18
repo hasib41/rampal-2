@@ -27,3 +27,9 @@ tzdata==2025.3
 gunicorn==23.0.0
 whitenoise[brotli]==6.9.0
 django-jazzmin==3.0.0
+
+# =============================================================================
+# Cloud Media Storage (Cloudinary)
+# =============================================================================
+cloudinary==1.40.0
+django-cloudinary-storage==0.3.0

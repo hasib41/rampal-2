@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus, Edit2, Trash2, Users, Shield, User } from 'lucide-react';
 import { useDirectors } from '../../hooks/useApi';
-import { directorsApi } from '../../services/api';
+import { directorsApi, getMediaUrl } from '../../services/api';
 import type { Director } from '../../types';
 import {
     Card,
@@ -185,7 +185,7 @@ export function AdminDirectors() {
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 rounded-full bg-white/5 overflow-hidden flex-shrink-0">
                                                     {director.photo ? (
-                                                        <img src={director.photo} alt={director.name} className="w-full h-full object-cover" />
+                                                        <img src={getMediaUrl(director.photo)} alt={director.name} className="w-full h-full object-cover" />
                                                     ) : (
                                                         <div className="w-full h-full flex items-center justify-center text-gray-500">
                                                             <User size={20} />

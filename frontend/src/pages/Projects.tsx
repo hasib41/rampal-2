@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { MapPin, Zap, ExternalLink, BarChart3 } from 'lucide-react';
 import { Card, Button, LoadingSpinner } from '../components/ui';
 import { useProjects } from '../hooks/useApi';
+import { getMediaUrl } from '../services/api';
 
 const statusColors: Record<string, string> = {
     operational: 'bg-accent-green',
@@ -74,7 +75,7 @@ export function ProjectsPage() {
                                     <div className="relative h-52 overflow-hidden bg-gradient-to-br from-gray-700 to-gray-800">
                                         {project.hero_image ? (
                                             <img
-                                                src={project.hero_image}
+                                                src={getMediaUrl(project.hero_image)}
                                                 alt={project.name}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                             />

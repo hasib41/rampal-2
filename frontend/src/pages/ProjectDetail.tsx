@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, MapPin, Zap, Gauge, Calendar } from 'lucide-react';
 import { Button, Card, LoadingSpinner } from '../components/ui';
 import { useProject } from '../hooks/useApi';
+import { getMediaUrl } from '../services/api';
 
 export function ProjectDetailPage() {
     const { slug } = useParams<{ slug: string }>();
@@ -34,7 +35,7 @@ export function ProjectDetailPage() {
             <section className="relative h-[60vh] min-h-[400px]">
                 <div className="absolute inset-0 bg-gradient-to-r from-secondary-dark via-secondary/80 to-transparent z-10" />
                 {project.hero_image && (
-                    <img src={project.hero_image} alt={project.name} className="absolute inset-0 w-full h-full object-cover" />
+                    <img src={getMediaUrl(project.hero_image)} alt={project.name} className="absolute inset-0 w-full h-full object-cover" />
                 )}
                 <div className="relative z-20 h-full flex items-end">
                     <div className="max-w-7xl mx-auto px-4 pb-12 w-full">

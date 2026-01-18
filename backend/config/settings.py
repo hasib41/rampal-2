@@ -54,12 +54,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
+    'cloudinary_storage',  # Cloudinary storage
+    'cloudinary',          # Cloudinary
     # Local
     'core',
     'api',
 ]
-
-# ... (keep existing middleware) ...
 
 # Jazzmin Settings
 JAZZMIN_SETTINGS = {
@@ -147,24 +147,50 @@ USE_I18N = True
 USE_TZ = True
 
 # =============================================================================
-# STATIC & MEDIA FILES
+# STATIC FILES
 # =============================================================================
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Django 4.2+ uses STORAGES instead of STATICFILES_STORAGE
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+# =============================================================================
+# MEDIA FILES & CLOUDINARY CONFIGURATION
+# =============================================================================
+# Check if Cloudinary is configured (for production)
+CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
 
-# Media files
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+if CLOUDINARY_URL:
+    # Production: Use Cloudinary for media storage
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+        'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+    }
+    
+    # Configure storage backends
+    STORAGES = {
+        "default": {
+            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+    
+    # Media URL will be Cloudinary URL (automatically handled)
+    MEDIA_URL = '/media/'
+else:
+    # Development: Use local file storage
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+    
+    MEDIA_URL = 'media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

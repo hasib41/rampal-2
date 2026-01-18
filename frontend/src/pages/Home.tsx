@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Zap, Users, Leaf, MapPin, FileText, Calendar, ChevronRight, ArrowRight, ChevronLeft, AlertCircle, Briefcase, UserPlus, Star, Newspaper, Clock, ExternalLink, TrendingUp } from 'lucide-react';
 import { Button, Stat, SectionTitle, Card, LoadingSpinner } from '../components/ui';
 import { useDirectors, useCSRInitiatives, useNotices, useNews, useTenders } from '../hooks/useApi';
+import { getMediaUrl } from '../services/api';
 
 // Hero slides data
 const heroSlides = [
@@ -340,7 +341,7 @@ export function HomePage() {
                                             <div className={`relative overflow-hidden bg-gray-800 ${isFirst ? 'h-56' : 'h-44'}`}>
                                                 {article.image ? (
                                                     <img
-                                                        src={article.image}
+                                                        src={getMediaUrl(article.image)}
                                                         alt={article.title}
                                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                     />
@@ -628,7 +629,7 @@ export function HomePage() {
                                 <Card key={director.id} dark className="text-center p-6">
                                     <div className="w-32 h-32 mx-auto rounded-full overflow-hidden bg-gray-700">
                                         {director.photo ? (
-                                            <img src={director.photo} alt={director.name} className="w-full h-full object-cover" />
+                                            <img src={getMediaUrl(director.photo)} alt={director.name} className="w-full h-full object-cover" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center text-gray-400">
                                                 <Users size={48} />

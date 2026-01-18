@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus, Edit2, Trash2, FileText, Star, AlertCircle, Briefcase, Bell, Download, ExternalLink } from 'lucide-react';
 import { useNotices } from '../../hooks/useApi';
-import { noticesApi } from '../../services/api';
+import { noticesApi, getMediaUrl } from '../../services/api';
 import type { Notice } from '../../types';
 import {
     Card,
@@ -230,7 +230,7 @@ export function AdminNotices() {
                                             <td className="py-3.5 px-5">
                                                 <div className="flex items-center justify-end gap-1">
                                                     {notice.document && (
-                                                        <IconButton icon={<Download size={16} />} size="sm" tooltip="Download" onClick={() => window.open(notice.document, '_blank')} />
+                                                        <IconButton icon={<Download size={16} />} size="sm" tooltip="Download" onClick={() => window.open(getMediaUrl(notice.document), '_blank')} />
                                                     )}
                                                     {notice.link && (
                                                         <IconButton icon={<ExternalLink size={16} />} size="sm" tooltip="Open Link" onClick={() => window.open(notice.link, '_blank')} />

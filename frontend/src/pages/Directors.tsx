@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { X, Users, Download, ChevronRight } from 'lucide-react';
 import { Card, Button, LoadingSpinner } from '../components/ui';
 import { useDirectors } from '../hooks/useApi';
+import { getMediaUrl } from '../services/api';
 import type { Director } from '../types';
 
 export function DirectorsPage() {
@@ -49,7 +50,7 @@ export function DirectorsPage() {
                                     <div className="relative h-56 bg-gradient-to-br from-gray-700 to-gray-800 overflow-hidden">
                                         {director.photo ? (
                                             <img
-                                                src={director.photo}
+                                                src={getMediaUrl(director.photo)}
                                                 alt={director.name}
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                             />
@@ -105,7 +106,7 @@ export function DirectorsPage() {
                                 {/* Photo */}
                                 <div className="w-36 h-44 flex-shrink-0 rounded-xl overflow-hidden bg-gray-700 ring-2 ring-primary/30">
                                     {selectedDirector.photo ? (
-                                        <img src={selectedDirector.photo} alt={selectedDirector.name} className="w-full h-full object-cover" />
+                                        <img src={getMediaUrl(selectedDirector.photo)} alt={selectedDirector.name} className="w-full h-full object-cover" />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center text-gray-500">
                                             <Users size={48} />

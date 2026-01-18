@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus, Edit2, Trash2, FileText, Download, CheckCircle } from 'lucide-react';
 import { useTenders } from '../../hooks/useApi';
-import { tendersApi } from '../../services/api';
+import { tendersApi, getMediaUrl } from '../../services/api';
 import type { Tender } from '../../types';
 import {
     Card,
@@ -219,7 +219,7 @@ export function AdminTenders() {
                                             <td className="py-3.5 px-5">
                                                 <div className="flex items-center justify-end gap-1">
                                                     {tender.document && (
-                                                        <IconButton icon={<Download size={16} />} size="sm" tooltip="Download" onClick={() => window.open(tender.document, '_blank')} />
+                                                        <IconButton icon={<Download size={16} />} size="sm" tooltip="Download" onClick={() => window.open(getMediaUrl(tender.document), '_blank')} />
                                                     )}
                                                     <IconButton icon={<Edit2 size={16} />} size="sm" tooltip="Edit" onClick={() => handleEdit(tender)} />
                                                     <IconButton icon={<Trash2 size={16} />} size="sm" tooltip="Delete" variant="danger" onClick={() => { setSelectedTender(tender); setIsDeleteOpen(true); }} />

@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { FileText, Calendar, Download, ExternalLink, ArrowLeft, Share2, Bell, Briefcase, AlertCircle, Clock } from 'lucide-react';
 import { Button, LoadingSpinner, Card } from '../components/ui';
 import { useNotice, useNotices } from '../hooks/useApi';
+import { getMediaUrl } from '../services/api';
 
 const categoryConfig: Record<string, { icon: typeof FileText; color: string; bgColor: string }> = {
     general: { icon: FileText, color: 'text-primary-light', bgColor: 'bg-primary/20' },
@@ -161,7 +162,7 @@ export function NoticeDetailPage() {
                                 <div className="space-y-3">
                                     {notice.document && (
                                         <a
-                                            href={notice.document}
+                                            href={getMediaUrl(notice.document)}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="flex items-center gap-3 w-full px-4 py-3 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors"

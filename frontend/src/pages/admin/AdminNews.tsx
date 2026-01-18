@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus, Edit2, Trash2, Image, Star, Newspaper } from 'lucide-react';
 import { useNews } from '../../hooks/useApi';
-import { newsApi } from '../../services/api';
+import { newsApi, getMediaUrl } from '../../services/api';
 import type { NewsArticle } from '../../types';
 import {
     Card,
@@ -194,7 +194,7 @@ export function AdminNews() {
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-12 h-12 rounded bg-white/5 overflow-hidden flex-shrink-0">
                                                         {article.image ? (
-                                                            <img src={article.image} alt="" className="w-full h-full object-cover" />
+                                                            <img src={getMediaUrl(article.image)} alt="" className="w-full h-full object-cover" />
                                                         ) : (
                                                             <div className="w-full h-full flex items-center justify-center text-gray-500">
                                                                 <Image size={18} />

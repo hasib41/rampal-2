@@ -4,9 +4,29 @@ import type {
     Career, Tender, CSRInitiative, ContactFormData, Notice
 } from '../types';
 
+// API Base URL (without /api suffix for media URLs)
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const BACKEND_URL = API_BASE.replace('/api', '');
+
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+    baseURL: API_BASE,
 });
+
+// =============================================================================
+// IMAGE URL HELPER
+// =============================================================================
+/**
+ * Resolves image/media URLs to full URLs
+ * - If URL is already absolute (http/https), returns as-is
+ * - If URL is relative, prepends the backend URL
+ * - If URL is null/undefined, returns empty string
+ */
+export function getMediaUrl(url: string | null | undefined): string {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    // Handle relative URLs - prepend backend URL
+    return `${BACKEND_URL}${url.startsWith('/') ? '' : '/'}${url}`;
+}
 
 // Type for paginated responses from Django REST Framework
 interface PaginatedResponse<T> {
@@ -105,4 +125,3 @@ export const noticesApi = {
 export const contactApi = {
     submit: (data: ContactFormData) => api.post('/contact/', data),
 };
-

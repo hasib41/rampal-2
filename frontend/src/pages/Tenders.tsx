@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Search, Download, Calendar, Eye, Filter, UserPlus, LogIn } from 'lucide-react';
 import { Card, Select, LoadingSpinner, Button } from '../components/ui';
 import { useTenders } from '../hooks/useApi';
+import { getMediaUrl } from '../services/api';
 
 const statusColors: Record<string, string> = {
     open: 'bg-accent-green',
@@ -204,7 +205,7 @@ export function TendersPage() {
                                                                 <Eye size={18} />
                                                             </button>
                                                             {tender.document && (
-                                                                <a href={tender.document} className="text-gray-400 hover:text-primary-light transition-colors" title="Download Document">
+                                                                <a href={getMediaUrl(tender.document)} className="text-gray-400 hover:text-primary-light transition-colors" title="Download Document">
                                                                     <Download size={18} />
                                                                 </a>
                                                             )}
