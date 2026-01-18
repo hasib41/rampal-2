@@ -36,6 +36,12 @@ services:
         value: "3.12.0"
       - key: FRONTEND_URL
         value: "https://bifpcl-frontend.onrender.com"
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: "admin"
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: "admin@example.com"
+      - key: DJANGO_SUPERUSER_PASSWORD
+        generateValue: true
 
   # ==========================================================================
   # React Frontend (Static Site)
