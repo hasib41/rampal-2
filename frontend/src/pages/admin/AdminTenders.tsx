@@ -1,29 +1,42 @@
 import { useState } from 'react';
-import { Plus, Edit2, Trash2, Search, FileText, Calendar, DollarSign, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, FileText, Download, CheckCircle } from 'lucide-react';
 import { useTenders } from '../../hooks/useApi';
 import { tendersApi } from '../../services/api';
 import type { Tender } from '../../types';
-import { Button, Input, Select, Textarea, Modal, ConfirmModal } from '../../components/ui';
+import {
+    Card,
+    Button,
+    Input,
+    Select,
+    Textarea,
+    Modal,
+    ConfirmModal,
+    PageHeader,
+    SearchInput,
+    Badge,
+    IconButton,
+    EmptyState,
+    LoadingState
+} from '../../components/ui';
 
 export function AdminTenders() {
     const { data: tenders, isLoading, refetch } = useTenders();
     const [searchTerm, setSearchTerm] = useState('');
+    const [filterStatus, setFilterStatus] = useState('all');
 
-    // Modal States
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [editingTender, setEditingTender] = useState<Tender | null>(null);
     const [selectedTender, setSelectedTender] = useState<Tender | null>(null);
     const [formLoading, setFormLoading] = useState(false);
 
-    // Form State
     const [formData, setFormData] = useState({
         tender_id: '',
         title: '',
         category: 'mechanical',
         description: '',
         status: 'open',
-        publication_date: '',
+        publication_date: new Date().toISOString().split('T')[0],
         deadline: '',
         value_range: '',
         document: null as File | null
@@ -31,15 +44,8 @@ export function AdminTenders() {
 
     const resetForm = () => {
         setFormData({
-            tender_id: '',
-            title: '',
-            category: 'mechanical',
-            description: '',
-            status: 'open',
-            publication_date: '',
-            deadline: '',
-            value_range: '',
-            document: null
+            tender_id: '', title: '', category: 'mechanical', description: '', status: 'open',
+            publication_date: new Date().toISOString().split('T')[0], deadline: '', value_range: '', document: null
         });
         setEditingTender(null);
     };
@@ -69,7 +75,6 @@ export function AdminTenders() {
             setIsDeleteOpen(false);
         } catch (error) {
             console.error('Failed to delete tender:', error);
-            alert('Failed to delete tender');
         } finally {
             setFormLoading(false);
             setSelectedTender(null);
@@ -79,155 +84,174 @@ export function AdminTenders() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setFormLoading(true);
-
         const data = new FormData();
-        data.append('tender_id', formData.tender_id);
-        data.append('title', formData.title);
-        data.append('category', formData.category);
-        data.append('description', formData.description);
-        data.append('status', formData.status);
-        data.append('publication_date', formData.publication_date);
-        data.append('deadline', formData.deadline);
-        data.append('value_range', formData.value_range);
-        if (formData.document) {
-            data.append('document', formData.document);
-        }
-
+        Object.entries(formData).forEach(([key, value]) => {
+            if (value !== null && value !== '') data.append(key, value);
+        });
         try {
-            if (editingTender) {
-                await tendersApi.update(editingTender.id, data);
-            } else {
-                await tendersApi.create(data);
-            }
+            if (editingTender) await tendersApi.update(editingTender.id, data);
+            else await tendersApi.create(data);
             await refetch();
             setIsFormOpen(false);
             resetForm();
         } catch (error) {
             console.error('Failed to save tender:', error);
-            alert('Failed to save tender');
         } finally {
             setFormLoading(false);
         }
     };
 
-    const filteredTenders = tenders?.filter(tender =>
-        tender.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        tender.tender_id.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredTenders = tenders?.filter(tender => {
+        const matchesSearch = tender.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            tender.tender_id.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesStatus = filterStatus === 'all' || tender.status === filterStatus;
+        return matchesSearch && matchesStatus;
+    });
 
-    const statusColors: Record<string, string> = {
-        open: 'bg-accent-green/20 text-accent-green',
-        evaluation: 'bg-accent-orange/20 text-accent-orange',
-        awarded: 'bg-primary/20 text-primary-light',
-        closed: 'bg-red-500/20 text-red-500',
+    const statusConfig: Record<string, { variant: 'success' | 'warning' | 'primary' | 'danger' }> = {
+        open: { variant: 'success' },
+        evaluation: { variant: 'warning' },
+        awarded: { variant: 'primary' },
+        closed: { variant: 'danger' },
     };
 
+    const openCount = tenders?.filter(t => t.status === 'open').length || 0;
+
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-white">Tenders</h1>
-                    <p className="text-gray-400 mt-1">Manage procurement tenders</p>
+        <div className="space-y-5">
+            <PageHeader
+                title="Tenders"
+                description="Manage procurement tenders"
+                action={
+                    <Button size="sm" leftIcon={<Plus size={16} />} onClick={() => { resetForm(); setIsFormOpen(true); }}>
+                        New Tender
+                    </Button>
+                }
+            />
+
+            {/* Stats */}
+            <div className="flex gap-4">
+                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg">
+                    <FileText size={16} className="text-primary-light" />
+                    <span className="text-gray-400">Total:</span>
+                    <span className="text-white font-medium">{tenders?.length || 0}</span>
                 </div>
-                <Button onClick={() => { resetForm(); setIsFormOpen(true); }}>
-                    <Plus size={18} className="mr-2" />
-                    New Tender
-                </Button>
+                <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-lg">
+                    <CheckCircle size={16} className="text-emerald-400" />
+                    <span className="text-gray-400">Open:</span>
+                    <span className="text-white font-medium">{openCount}</span>
+                </div>
             </div>
 
-            {/* Search Bar - Enhanced */}
-            <div className="relative max-w-lg">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                    <Search className="text-gray-400" size={20} />
+            {/* Filters */}
+            <div className="flex gap-3">
+                <div className="w-72">
+                    <SearchInput
+                        placeholder="Search tenders..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onClear={() => setSearchTerm('')}
+                    />
                 </div>
-                <input
-                    type="text"
-                    placeholder="Search tenders..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-10 py-3 bg-secondary-dark border-2 border-gray-700 rounded-xl text-gray-200 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-600"
+                <Select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    options={[
+                        { value: 'all', label: 'All Status' },
+                        { value: 'open', label: 'Open' },
+                        { value: 'evaluation', label: 'Evaluation' },
+                        { value: 'awarded', label: 'Awarded' },
+                        { value: 'closed', label: 'Closed' },
+                    ]}
+                    className="w-40"
                 />
-                {searchTerm && (
-                    <button
-                        onClick={() => setSearchTerm('')}
-                        className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500 hover:text-gray-300 transition-colors text-xl"
-                    >
-                        <X size={18} />
-                    </button>
-                )}
             </div>
 
-            {/* Tenders Grid */}
-            <div className="space-y-4">
+            {/* Table */}
+            <Card padding="none">
                 {isLoading ? (
-                    <div className="col-span-full text-center py-8 text-gray-500">Loading...</div>
+                    <LoadingState text="Loading tenders..." />
                 ) : filteredTenders?.length === 0 ? (
-                    <div className="col-span-full text-center py-8 text-gray-500">No tenders found</div>
+                    <EmptyState
+                        icon={<FileText size={36} />}
+                        title="No tenders found"
+                        action={<Button size="sm" onClick={() => { resetForm(); setIsFormOpen(true); }} leftIcon={<Plus size={16} />}>New Tender</Button>}
+                    />
                 ) : (
-                    filteredTenders?.map((tender) => (
-                        <div
-                            key={tender.id}
-                            className="bg-secondary rounded-xl border border-gray-700 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-gray-600 transition-colors group"
-                        >
-                            <div className="flex-1">
-                                <div className="flex items-center justify-between md:justify-start gap-4 mb-2">
-                                    <span className="text-sm font-mono text-gray-500 bg-gray-800 px-2 py-1 rounded">
-                                        {tender.tender_id}
-                                    </span>
-                                    <span className={`px-2 py-1 rounded text-xs font-medium capitalize ${statusColors[tender.status]}`}>
-                                        {tender.status}
-                                    </span>
-                                </div>
-                                <h3 className="text-lg font-bold text-white mb-2">{tender.title}</h3>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-400">
-                                    <div className="flex items-center gap-2">
-                                        <DollarSign size={16} />
-                                        {tender.value_range}
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Calendar size={16} />
-                                        Deadline: {tender.deadline}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button className="p-2 text-gray-400 hover:text-primary-light hover:bg-primary/10 rounded transition-colors">
-                                    <FileText size={18} />
-                                </button>
-                                <button
-                                    onClick={() => handleEdit(tender)}
-                                    className="p-2 text-gray-400 hover:text-primary-light hover:bg-primary/10 rounded transition-colors"
-                                >
-                                    <Edit2 size={18} />
-                                </button>
-                                <button
-                                    onClick={() => { setSelectedTender(tender); setIsDeleteOpen(true); }}
-                                    className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
-                                >
-                                    <Trash2 size={18} />
-                                </button>
-                            </div>
-                        </div>
-                    ))
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="border-b border-white/10 bg-white/[0.02]">
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">ID</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Title</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Category</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Deadline</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Value</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Status</th>
+                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/5">
+                                {filteredTenders?.map((tender) => {
+                                    const status = statusConfig[tender.status] || statusConfig.open;
+                                    return (
+                                        <tr key={tender.id} className="hover:bg-white/[0.02]">
+                                            <td className="py-3.5 px-5">
+                                                <span className="font-mono text-gray-500 bg-white/5 px-2 py-1 rounded">{tender.tender_id}</span>
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <span className="text-white truncate block max-w-xs">{tender.title}</span>
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <span className="text-gray-400 capitalize">{tender.category}</span>
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <span className="text-gray-400">
+                                                    {new Date(tender.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                </span>
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <span className="text-gray-400">{tender.value_range || '-'}</span>
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <Badge variant={status.variant}>{tender.status}</Badge>
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <div className="flex items-center justify-end gap-1">
+                                                    {tender.document && (
+                                                        <IconButton icon={<Download size={16} />} size="sm" tooltip="Download" onClick={() => window.open(tender.document, '_blank')} />
+                                                    )}
+                                                    <IconButton icon={<Edit2 size={16} />} size="sm" tooltip="Edit" onClick={() => handleEdit(tender)} />
+                                                    <IconButton icon={<Trash2 size={16} />} size="sm" tooltip="Delete" variant="danger" onClick={() => { setSelectedTender(tender); setIsDeleteOpen(true); }} />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
-            </div>
+            </Card>
 
-            {/* Add/Edit Modal */}
+            {/* Modal */}
             <Modal
                 isOpen={isFormOpen}
                 onClose={() => setIsFormOpen(false)}
                 title={editingTender ? "Edit Tender" : "New Tender"}
+                size="lg"
+                footer={
+                    <>
+                        <Button variant="ghost" onClick={() => setIsFormOpen(false)}>Cancel</Button>
+                        <Button onClick={handleSubmit} isLoading={formLoading}>
+                            {editingTender ? 'Update' : 'Create'}
+                        </Button>
+                    </>
+                }
             >
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
-                        <Input
-                            label="Tender ID"
-                            value={formData.tender_id}
-                            onChange={(e) => setFormData({ ...formData, tender_id: e.target.value })}
-                            required
-                        />
+                        <Input label="Tender ID" value={formData.tender_id} onChange={(e) => setFormData({ ...formData, tender_id: e.target.value })} placeholder="BIFPCL/2024/001" required />
                         <Select
                             label="Category"
                             value={formData.category}
@@ -240,40 +264,14 @@ export function AdminTenders() {
                             ]}
                         />
                     </div>
-                    <Input
-                        label="Tender Title"
-                        value={formData.title}
-                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                        required
-                    />
-                    <Textarea
-                        label="Description"
-                        value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        required
-                    />
+                    <Input label="Title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} required />
+                    <Textarea label="Description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={3} required />
                     <div className="grid grid-cols-2 gap-4">
-                        <Input
-                            label="Publication Date"
-                            type="date"
-                            value={formData.publication_date}
-                            onChange={(e) => setFormData({ ...formData, publication_date: e.target.value })}
-                            required
-                        />
-                        <Input
-                            label="Deadline"
-                            type="date"
-                            value={formData.deadline}
-                            onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                            required
-                        />
+                        <Input label="Publication Date" type="date" value={formData.publication_date} onChange={(e) => setFormData({ ...formData, publication_date: e.target.value })} required />
+                        <Input label="Deadline" type="date" value={formData.deadline} onChange={(e) => setFormData({ ...formData, deadline: e.target.value })} required />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
-                        <Input
-                            label="Value Range"
-                            value={formData.value_range}
-                            onChange={(e) => setFormData({ ...formData, value_range: e.target.value })}
-                        />
+                        <Input label="Value Range" value={formData.value_range} onChange={(e) => setFormData({ ...formData, value_range: e.target.value })} placeholder="$100k - $500k" />
                         <Select
                             label="Status"
                             value={formData.status}
@@ -287,38 +285,21 @@ export function AdminTenders() {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1">Tender Document (PDF)</label>
-                        <input
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) setFormData({ ...formData, document: file });
-                            }}
-                            className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-dark cursor-pointer"
-                        />
-                        {editingTender?.document && !formData.document && (
-                            <p className="text-xs text-gray-500 mt-1">Current: {editingTender.document}</p>
-                        )}
-                    </div>
-                    <div className="flex justify-end gap-3 mt-6">
-                        <Button type="button" variant="secondary" onClick={() => setIsFormOpen(false)}>
-                            Cancel
-                        </Button>
-                        <Button type="submit" disabled={formLoading}>
-                            {formLoading ? 'Saving...' : 'Save Tender'}
-                        </Button>
+                        <label className="block text-sm font-medium text-gray-300 mb-1.5">Document (PDF)</label>
+                        <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => { const f = e.target.files?.[0]; if (f) setFormData({ ...formData, document: f }); }}
+                            className="text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-medium file:bg-primary file:text-white cursor-pointer" />
                     </div>
                 </form>
             </Modal>
 
-            {/* Delete Confirmation Modal */}
             <ConfirmModal
                 isOpen={isDeleteOpen}
                 onClose={() => setIsDeleteOpen(false)}
                 onConfirm={handleDelete}
                 title="Delete Tender"
-                message={`Are you sure you want to delete "${selectedTender?.tender_id}"?`}
+                message={`Delete "${selectedTender?.tender_id}"? This cannot be undone.`}
+                confirmText="Delete"
+                variant="danger"
                 isLoading={formLoading}
             />
         </div>

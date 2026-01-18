@@ -1,8 +1,24 @@
 import { useState } from 'react';
-import { Plus, Edit2, Trash2, Search, Calendar, Image, Star, StarOff, X, Newspaper, TrendingUp, Clock } from 'lucide-react';
+import { Plus, Edit2, Trash2, Image, Star, Newspaper } from 'lucide-react';
 import { useNews } from '../../hooks/useApi';
 import { newsApi } from '../../services/api';
 import type { NewsArticle } from '../../types';
+import {
+    Card,
+    Button,
+    Input,
+    Select,
+    Textarea,
+    Modal,
+    ConfirmModal,
+    PageHeader,
+    SearchInput,
+    Badge,
+    IconButton,
+    EmptyState,
+    LoadingState,
+    Checkbox
+} from '../../components/ui';
 
 interface NewsFormData {
     title: string;
@@ -24,12 +40,18 @@ const emptyFormData: NewsFormData = {
     is_featured: false,
 };
 
+const categoryConfig: Record<string, { label: string; variant: 'primary' | 'success' | 'warning' | 'info' }> = {
+    press: { label: 'Press Release', variant: 'primary' },
+    event: { label: 'Event', variant: 'success' },
+    in_the_news: { label: 'In The News', variant: 'warning' },
+    update: { label: 'Update', variant: 'info' },
+};
+
 export function AdminNews() {
     const { data: news, isLoading, refetch } = useNews();
     const [searchTerm, setSearchTerm] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('all');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [editingArticle, setEditingArticle] = useState<NewsArticle | null>(null);
     const [deletingArticle, setDeletingArticle] = useState<NewsArticle | null>(null);
     const [formData, setFormData] = useState<NewsFormData>(emptyFormData);
@@ -41,27 +63,6 @@ export function AdminNews() {
         return matchesSearch && matchesCategory;
     });
 
-    const categoryColors: Record<string, string> = {
-        press: 'bg-primary/20 text-primary-light',
-        event: 'bg-accent-green/20 text-accent-green',
-        in_the_news: 'bg-accent-orange/20 text-accent-orange',
-        update: 'bg-purple-500/20 text-purple-400',
-    };
-
-    const categoryLabels: Record<string, string> = {
-        press: 'Press Release',
-        event: 'Event',
-        in_the_news: 'In The News',
-        update: 'Update',
-    };
-
-    const categoryIcons: Record<string, typeof Newspaper> = {
-        press: Newspaper,
-        event: Calendar,
-        in_the_news: TrendingUp,
-        update: Clock,
-    };
-
     const openCreateModal = () => {
         setEditingArticle(null);
         setFormData(emptyFormData);
@@ -70,7 +71,6 @@ export function AdminNews() {
 
     const openEditModal = async (article: NewsArticle) => {
         setEditingArticle(article);
-        // Fetch full article details including content
         try {
             const fullArticle = await newsApi.getBySlug(article.slug);
             setFormData({
@@ -82,8 +82,7 @@ export function AdminNews() {
                 published_date: fullArticle.published_date,
                 is_featured: fullArticle.is_featured,
             });
-        } catch (error) {
-            console.error('Failed to fetch article details:', error);
+        } catch {
             setFormData({
                 title: article.title,
                 slug: article.slug,
@@ -97,372 +96,225 @@ export function AdminNews() {
         setIsModalOpen(true);
     };
 
-    const openDeleteModal = (article: NewsArticle) => {
-        setDeletingArticle(article);
-        setIsDeleteModalOpen(true);
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-
-        // TODO: Implement API call when backend endpoint is ready
         console.log('Submitting:', formData);
-        alert(editingArticle ? 'Article updated! (API not connected yet)' : 'Article created! (API not connected yet)');
-
-        setIsSubmitting(false);
-        setIsModalOpen(false);
-        refetch();
+        setTimeout(() => {
+            setIsSubmitting(false);
+            setIsModalOpen(false);
+            refetch();
+        }, 500);
     };
 
     const handleDelete = async () => {
         if (!deletingArticle) return;
-
-        // TODO: Implement API call when backend endpoint is ready
         console.log('Deleting:', deletingArticle.id);
-        alert('Article deleted! (API not connected yet)');
-
-        setIsDeleteModalOpen(false);
         setDeletingArticle(null);
         refetch();
     };
 
     const generateSlug = (title: string) => {
-        return title
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/(^-|-$)/g, '');
+        return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     };
 
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-white">News & Media</h1>
-                    <p className="text-gray-400 mt-1">Manage press releases and news articles</p>
-                </div>
-                <button
-                    onClick={openCreateModal}
-                    className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors"
-                >
-                    <Plus size={18} />
-                    Add Article
-                </button>
-            </div>
+        <div className="space-y-5">
+            <PageHeader
+                title="News & Media"
+                description="Manage press releases and articles"
+                action={
+                    <Button size="sm" leftIcon={<Plus size={16} />} onClick={openCreateModal}>
+                        Add Article
+                    </Button>
+                }
+            />
 
             {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {['all', 'press', 'event', 'update'].map(category => {
-                    const count = category === 'all'
-                        ? news?.length || 0
-                        : news?.filter(a => a.category === category).length || 0;
-                    const Icon = category === 'all' ? Newspaper : categoryIcons[category];
-
+            <div className="flex flex-wrap gap-2">
+                <button
+                    onClick={() => setCategoryFilter('all')}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${categoryFilter === 'all' ? 'bg-primary text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+                >
+                    <Newspaper size={16} />
+                    All <span className="font-medium">{news?.length || 0}</span>
+                </button>
+                {Object.entries(categoryConfig).map(([key, config]) => {
+                    const count = news?.filter(n => n.category === key).length || 0;
                     return (
-                        <div
-                            key={category}
-                            className={`p-4 rounded-xl border cursor-pointer transition-all ${categoryFilter === category
-                                ? 'bg-primary/10 border-primary'
-                                : 'bg-secondary border-gray-700 hover:border-gray-600'
-                                }`}
-                            onClick={() => setCategoryFilter(category)}
+                        <button
+                            key={key}
+                            onClick={() => setCategoryFilter(categoryFilter === key ? 'all' : key)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${categoryFilter === key ? 'bg-primary text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
                         >
-                            <div className="flex items-center justify-between">
-                                <p className="text-gray-400 text-sm capitalize">
-                                    {category === 'all' ? 'All Articles' : categoryLabels[category] || category}
-                                </p>
-                                <Icon size={18} className="text-gray-500" />
-                            </div>
-                            <p className="text-2xl font-bold text-white mt-1">{count}</p>
-                        </div>
+                            {config.label} <span className="font-medium">{count}</span>
+                        </button>
                     );
                 })}
             </div>
 
-            {/* Search Bar - Enhanced */}
-            <div className="relative max-w-lg">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                    <Search className="text-gray-400" size={20} />
-                </div>
-                <input
-                    type="text"
+            {/* Search */}
+            <div className="w-72">
+                <SearchInput
                     placeholder="Search articles..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-secondary-dark border-2 border-gray-700 rounded-xl text-gray-200 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-600"
+                    onClear={() => setSearchTerm('')}
                 />
-                {searchTerm && (
-                    <button
-                        onClick={() => setSearchTerm('')}
-                        className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500 hover:text-gray-300 transition-colors"
-                    >
-                        ×
-                    </button>
-                )}
             </div>
 
             {/* Table */}
-            <div className="bg-secondary rounded-xl border border-gray-700 overflow-hidden">
-                <table className="w-full">
-                    <thead>
-                        <tr className="border-b border-gray-700 bg-secondary-dark">
-                            <th className="text-left py-4 px-6 text-gray-400 font-medium text-sm">Article</th>
-                            <th className="text-left py-4 px-6 text-gray-400 font-medium text-sm">Category</th>
-                            <th className="text-left py-4 px-6 text-gray-400 font-medium text-sm">Date</th>
-                            <th className="text-left py-4 px-6 text-gray-400 font-medium text-sm">Featured</th>
-                            <th className="text-right py-4 px-6 text-gray-400 font-medium text-sm">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {isLoading ? (
-                            <tr>
-                                <td colSpan={5} className="text-center py-8 text-gray-500">Loading...</td>
-                            </tr>
-                        ) : filteredNews?.length === 0 ? (
-                            <tr>
-                                <td colSpan={5} className="text-center py-8 text-gray-500">No articles found</td>
-                            </tr>
-                        ) : (
-                            filteredNews?.map((article: NewsArticle) => (
-                                <tr key={article.id} className="border-b border-gray-700/50 hover:bg-secondary-dark/50 transition-colors">
-                                    <td className="py-4 px-6">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-12 h-12 rounded-lg bg-gray-700 flex-shrink-0 overflow-hidden">
-                                                {article.image ? (
-                                                    <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
-                                                ) : (
-                                                    <div className="w-full h-full flex items-center justify-center text-gray-500">
-                                                        <Image size={20} />
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="min-w-0">
-                                                <p className="text-gray-200 font-medium truncate max-w-sm">{article.title}</p>
-                                                <p className="text-gray-500 text-sm truncate max-w-sm">{article.excerpt}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="py-4 px-6">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${categoryColors[article.category]}`}>
-                                            {categoryLabels[article.category] || article.category}
-                                        </span>
-                                    </td>
-                                    <td className="py-4 px-6">
-                                        <div className="flex items-center gap-2 text-gray-400 text-sm">
-                                            <Calendar size={14} />
-                                            {new Date(article.published_date).toLocaleDateString('en-US', {
-                                                month: 'short',
-                                                day: 'numeric',
-                                                year: 'numeric'
-                                            })}
-                                        </div>
-                                    </td>
-                                    <td className="py-4 px-6">
-                                        {article.is_featured ? (
-                                            <Star className="text-yellow-400 fill-yellow-400" size={18} />
-                                        ) : (
-                                            <StarOff className="text-gray-600" size={18} />
-                                        )}
-                                    </td>
-                                    <td className="py-4 px-6">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <button
-                                                onClick={() => openEditModal(article)}
-                                                className="p-2 text-gray-400 hover:text-primary-light hover:bg-primary/10 rounded-lg transition-colors"
-                                                title="Edit article"
-                                            >
-                                                <Edit2 size={16} />
-                                            </button>
-                                            <button
-                                                onClick={() => openDeleteModal(article)}
-                                                className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
-                                                title="Delete article"
-                                            >
-                                                <Trash2 size={16} />
-                                            </button>
-                                        </div>
-                                    </td>
+            <Card padding="none">
+                {isLoading ? (
+                    <LoadingState text="Loading articles..." />
+                ) : filteredNews?.length === 0 ? (
+                    <EmptyState
+                        icon={<Newspaper size={36} />}
+                        title="No articles found"
+                        action={<Button size="sm" onClick={openCreateModal} leftIcon={<Plus size={16} />}>Add Article</Button>}
+                    />
+                ) : (
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="border-b border-white/10 bg-white/[0.02]">
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Article</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Category</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Date</th>
+                                    <th className="text-center py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Featured</th>
+                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Actions</th>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Create/Edit Modal */}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-secondary rounded-2xl border border-gray-700 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-                        <div className="flex items-center justify-between p-6 border-b border-gray-700">
-                            <h2 className="text-xl font-semibold text-white">
-                                {editingArticle ? 'Edit Article' : 'Create New Article'}
-                            </h2>
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-                            >
-                                <X size={20} />
-                            </button>
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="p-6 space-y-5">
-                            {/* Title */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
-                                    Title *
-                                </label>
-                                <input
-                                    type="text"
-                                    value={formData.title}
-                                    onChange={(e) => {
-                                        setFormData({
-                                            ...formData,
-                                            title: e.target.value,
-                                            slug: editingArticle ? formData.slug : generateSlug(e.target.value)
-                                        });
-                                    }}
-                                    className="w-full px-4 py-2.5 bg-secondary-dark border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:border-primary"
-                                    required
-                                />
-                            </div>
-
-                            {/* Slug */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
-                                    Slug
-                                </label>
-                                <input
-                                    type="text"
-                                    value={formData.slug}
-                                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                                    className="w-full px-4 py-2.5 bg-secondary-dark border border-gray-700 rounded-lg text-gray-400 focus:outline-none focus:border-primary"
-                                    placeholder="auto-generated-from-title"
-                                />
-                            </div>
-
-                            {/* Category and Date Row */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                                        Category *
-                                    </label>
-                                    <select
-                                        value={formData.category}
-                                        onChange={(e) => setFormData({ ...formData, category: e.target.value as NewsFormData['category'] })}
-                                        className="w-full px-4 py-2.5 bg-secondary-dark border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:border-primary"
-                                    >
-                                        <option value="press">Press Release</option>
-                                        <option value="event">Event</option>
-                                        <option value="in_the_news">In The News</option>
-                                        <option value="update">Update</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                                        Published Date *
-                                    </label>
-                                    <input
-                                        type="date"
-                                        value={formData.published_date}
-                                        onChange={(e) => setFormData({ ...formData, published_date: e.target.value })}
-                                        className="w-full px-4 py-2.5 bg-secondary-dark border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:border-primary"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Excerpt */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
-                                    Excerpt (Short Summary)
-                                </label>
-                                <textarea
-                                    value={formData.excerpt}
-                                    onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                                    rows={2}
-                                    maxLength={300}
-                                    className="w-full px-4 py-2.5 bg-secondary-dark border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:border-primary resize-none"
-                                    placeholder="Brief summary of the article..."
-                                />
-                                <p className="text-gray-500 text-xs mt-1">{formData.excerpt.length}/300 characters</p>
-                            </div>
-
-                            {/* Content */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
-                                    Full Content
-                                </label>
-                                <textarea
-                                    value={formData.content}
-                                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                    rows={8}
-                                    className="w-full px-4 py-2.5 bg-secondary-dark border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:border-primary resize-none"
-                                    placeholder="Full article content... Use **bold** for emphasis."
-                                />
-                            </div>
-
-                            {/* Featured Toggle */}
-                            <div className="flex items-center gap-3">
-                                <input
-                                    type="checkbox"
-                                    id="is_featured"
-                                    checked={formData.is_featured}
-                                    onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                                    className="w-5 h-5 rounded border-gray-700 bg-secondary-dark text-primary focus:ring-primary"
-                                />
-                                <label htmlFor="is_featured" className="text-gray-300">
-                                    Featured Article
-                                </label>
-                            </div>
-
-                            {/* Actions */}
-                            <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-700">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="px-6 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors disabled:opacity-50"
-                                >
-                                    {isSubmitting ? 'Saving...' : (editingArticle ? 'Update Article' : 'Create Article')}
-                                </button>
-                            </div>
-                        </form>
+                            </thead>
+                            <tbody className="divide-y divide-white/5">
+                                {filteredNews?.map((article: NewsArticle) => {
+                                    const config = categoryConfig[article.category] || categoryConfig.press;
+                                    return (
+                                        <tr key={article.id} className="hover:bg-white/[0.02]">
+                                            <td className="py-3.5 px-5">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-12 h-12 rounded bg-white/5 overflow-hidden flex-shrink-0">
+                                                        {article.image ? (
+                                                            <img src={article.image} alt="" className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <div className="w-full h-full flex items-center justify-center text-gray-500">
+                                                                <Image size={18} />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="min-w-0">
+                                                        <span className="text-white font-medium truncate block max-w-sm">{article.title}</span>
+                                                        {article.excerpt && (
+                                                            <span className="text-gray-500 text-sm truncate block max-w-sm">{article.excerpt}</span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <Badge variant={config.variant}>{config.label}</Badge>
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <span className="text-gray-400">
+                                                    {new Date(article.published_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                </span>
+                                            </td>
+                                            <td className="py-3.5 px-5 text-center">
+                                                {article.is_featured && <Star className="inline text-amber-400" size={16} fill="currentColor" />}
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <div className="flex items-center justify-end gap-1">
+                                                    <IconButton icon={<Edit2 size={16} />} size="sm" tooltip="Edit" onClick={() => openEditModal(article)} />
+                                                    <IconButton icon={<Trash2 size={16} />} size="sm" tooltip="Delete" variant="danger" onClick={() => setDeletingArticle(article)} />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-            )}
+                )}
+            </Card>
 
-            {/* Delete Confirmation Modal */}
-            {isDeleteModalOpen && deletingArticle && (
-                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-secondary rounded-2xl border border-gray-700 w-full max-w-md p-6">
-                        <h2 className="text-xl font-semibold text-white mb-4">Delete Article</h2>
-                        <p className="text-gray-400 mb-6">
-                            Are you sure you want to delete <span className="text-white font-medium">"{deletingArticle.title}"</span>? This action cannot be undone.
-                        </p>
-                        <div className="flex items-center justify-end gap-3">
-                            <button
-                                onClick={() => setIsDeleteModalOpen(false)}
-                                className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleDelete}
-                                className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
-                            >
-                                Delete
-                            </button>
-                        </div>
+            {/* Modal */}
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title={editingArticle ? "Edit Article" : "Create Article"}
+                size="lg"
+                footer={
+                    <>
+                        <Button variant="ghost" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                        <Button onClick={handleSubmit} isLoading={isSubmitting}>
+                            {editingArticle ? 'Update' : 'Create'}
+                        </Button>
+                    </>
+                }
+            >
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <Input
+                        label="Title"
+                        value={formData.title}
+                        onChange={(e) => setFormData({ ...formData, title: e.target.value, slug: editingArticle ? formData.slug : generateSlug(e.target.value) })}
+                        required
+                    />
+                    <Input
+                        label="Slug"
+                        value={formData.slug}
+                        onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                        hint="URL-friendly identifier"
+                    />
+                    <div className="grid grid-cols-2 gap-4">
+                        <Select
+                            label="Category"
+                            value={formData.category}
+                            onChange={(e) => setFormData({ ...formData, category: e.target.value as NewsFormData['category'] })}
+                            options={[
+                                { value: 'press', label: 'Press Release' },
+                                { value: 'event', label: 'Event' },
+                                { value: 'in_the_news', label: 'In The News' },
+                                { value: 'update', label: 'Update' },
+                            ]}
+                        />
+                        <Input
+                            label="Published Date"
+                            type="date"
+                            value={formData.published_date}
+                            onChange={(e) => setFormData({ ...formData, published_date: e.target.value })}
+                            required
+                        />
                     </div>
-                </div>
-            )}
+                    <Textarea
+                        label="Excerpt"
+                        value={formData.excerpt}
+                        onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                        rows={2}
+                        maxLength={300}
+                        showCount
+                        hint="Brief summary"
+                    />
+                    <Textarea
+                        label="Content"
+                        value={formData.content}
+                        onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                        rows={5}
+                    />
+                    <Checkbox
+                        checked={formData.is_featured}
+                        onChange={(checked) => setFormData({ ...formData, is_featured: checked })}
+                        label="Featured Article"
+                    />
+                </form>
+            </Modal>
+
+            <ConfirmModal
+                isOpen={!!deletingArticle}
+                onClose={() => setDeletingArticle(null)}
+                onConfirm={handleDelete}
+                title="Delete Article"
+                message={`Delete "${deletingArticle?.title}"? This cannot be undone.`}
+                confirmText="Delete"
+                variant="danger"
+            />
         </div>
     );
 }

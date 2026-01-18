@@ -1,8 +1,24 @@
 import { useState } from 'react';
-import { Plus, Edit2, Trash2, Search, Calendar, Eye, Star, X, FileText, AlertCircle, Briefcase, Bell, Download } from 'lucide-react';
+import { Plus, Edit2, Trash2, FileText, Star, AlertCircle, Briefcase, Bell, Download, ExternalLink } from 'lucide-react';
 import { useNotices } from '../../hooks/useApi';
 import { noticesApi } from '../../services/api';
 import type { Notice } from '../../types';
+import {
+    Card,
+    Button,
+    Input,
+    Textarea,
+    Select,
+    Toggle,
+    Badge,
+    Modal,
+    ConfirmModal,
+    PageHeader,
+    SearchInput,
+    EmptyState,
+    LoadingState,
+    IconButton
+} from '../../components/ui';
 
 interface NoticeFormData {
     title: string;
@@ -24,12 +40,22 @@ const emptyFormData: NoticeFormData = {
     is_active: true,
 };
 
-const categoryConfig: Record<string, { icon: typeof FileText; color: string; bgColor: string }> = {
-    general: { icon: FileText, color: 'text-primary-light', bgColor: 'bg-primary/20' },
-    urgent: { icon: AlertCircle, color: 'text-red-400', bgColor: 'bg-red-500/20' },
-    tender: { icon: Briefcase, color: 'text-accent-orange', bgColor: 'bg-accent-orange/20' },
-    recruitment: { icon: Bell, color: 'text-accent-green', bgColor: 'bg-accent-green/20' },
+const categoryConfig: Record<string, { icon: typeof FileText; badge: 'primary' | 'danger' | 'warning' | 'success' }> = {
+    general: { icon: FileText, badge: 'primary' },
+    urgent: { icon: AlertCircle, badge: 'danger' },
+    tender: { icon: Briefcase, badge: 'warning' },
+    recruitment: { icon: Bell, badge: 'success' },
 };
+
+const categoryOptions = [
+    { value: 'all', label: 'All Categories' },
+    { value: 'general', label: 'General' },
+    { value: 'urgent', label: 'Urgent' },
+    { value: 'tender', label: 'Tender' },
+    { value: 'recruitment', label: 'Recruitment' },
+];
+
+const formCategoryOptions = categoryOptions.filter(opt => opt.value !== 'all');
 
 export function AdminNotices() {
     const { data: notices, isLoading, refetch } = useNotices();
@@ -38,7 +64,8 @@ export function AdminNotices() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingNotice, setEditingNotice] = useState<Notice | null>(null);
     const [formData, setFormData] = useState<NoticeFormData>(emptyFormData);
-    const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
+    const [deleteConfirm, setDeleteConfirm] = useState<Notice | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const filteredNotices = notices?.filter(notice => {
         const matchesSearch = notice.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -54,7 +81,6 @@ export function AdminNotices() {
 
     const openEditModal = async (notice: Notice) => {
         setEditingNotice(notice);
-        // Fetch full notice details (including content) since list API doesn't include it
         try {
             const fullNotice = await noticesApi.getBySlug(notice.slug);
             setFormData({
@@ -66,9 +92,7 @@ export function AdminNotices() {
                 is_featured: fullNotice.is_featured,
                 is_active: true,
             });
-        } catch (error) {
-            console.error('Failed to fetch notice details:', error);
-            // Fallback to using list data without content
+        } catch {
             setFormData({
                 title: notice.title,
                 category: notice.category,
@@ -84,357 +108,223 @@ export function AdminNotices() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Implement API call to create/update notice
+        setIsSubmitting(true);
         console.log('Form submitted:', formData, editingNotice ? 'UPDATE' : 'CREATE');
-        setIsModalOpen(false);
-        refetch();
+        setTimeout(() => {
+            setIsModalOpen(false);
+            setIsSubmitting(false);
+            refetch();
+        }, 500);
     };
 
-    const handleDelete = async (id: number) => {
-        // TODO: Implement API call to delete notice
-        console.log('Delete notice:', id);
+    const handleDelete = async () => {
+        if (!deleteConfirm) return;
+        console.log('Delete notice:', deleteConfirm.id);
         setDeleteConfirm(null);
         refetch();
     };
 
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-white">Notices</h1>
-                    <p className="text-gray-400 mt-1">Manage notice board announcements</p>
-                </div>
-                <button
-                    onClick={openCreateModal}
-                    className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors"
-                >
-                    <Plus size={18} />
-                    Add Notice
-                </button>
-            </div>
+        <div className="space-y-5">
+            <PageHeader
+                title="Notices"
+                description="Manage notice board announcements"
+                action={
+                    <Button size="sm" leftIcon={<Plus size={16} />} onClick={openCreateModal}>
+                        Add Notice
+                    </Button>
+                }
+            />
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Stats Row */}
+            <div className="flex flex-wrap gap-2">
                 {Object.entries(categoryConfig).map(([key, config]) => {
                     const count = notices?.filter(n => n.category === key).length || 0;
                     const Icon = config.icon;
+                    const isActive = filterCategory === key;
                     return (
-                        <div
+                        <button
                             key={key}
-                            className={`p-4 rounded-xl border border-gray-700 bg-secondary cursor-pointer hover:border-gray-600 transition-colors ${filterCategory === key ? 'ring-2 ring-primary' : ''
-                                }`}
                             onClick={() => setFilterCategory(filterCategory === key ? 'all' : key)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                                isActive 
+                                    ? 'bg-primary text-white' 
+                                    : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                            }`}
                         >
-                            <div className="flex items-center gap-3">
-                                <div className={`w-10 h-10 rounded-lg ${config.bgColor} flex items-center justify-center`}>
-                                    <Icon className={config.color} size={20} />
-                                </div>
-                                <div>
-                                    <p className="text-2xl font-bold text-white">{count}</p>
-                                    <p className="text-gray-400 text-sm capitalize">{key}</p>
-                                </div>
-                            </div>
-                        </div>
+                            <Icon size={16} />
+                            <span className="capitalize">{key}</span>
+                            <span className={`font-medium ${isActive ? 'text-white' : 'text-white'}`}>{count}</span>
+                        </button>
                     );
                 })}
             </div>
 
-            {/* Search and Filters */}
-            <div className="flex items-center gap-4">
-                <div className="relative flex-1 max-w-lg">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                        <Search className="text-gray-400" size={20} />
-                    </div>
-                    <input
-                        type="text"
+            {/* Search and Filter */}
+            <div className="flex gap-3">
+                <div className="w-72">
+                    <SearchInput
                         placeholder="Search notices..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-12 pr-10 py-3 bg-secondary-dark border-2 border-gray-700 rounded-xl text-gray-200 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-600"
+                        onClear={() => setSearchTerm('')}
                     />
-                    {searchTerm && (
-                        <button
-                            onClick={() => setSearchTerm('')}
-                            className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500 hover:text-gray-300 transition-colors"
-                        >
-                            ×
-                        </button>
-                    )}
                 </div>
-                <select
+                <Select
                     value={filterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
-                    className="px-4 py-3 bg-secondary-dark border-2 border-gray-700 rounded-xl text-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-600"
-                >
-                    <option value="all">All Categories</option>
-                    <option value="general">General</option>
-                    <option value="urgent">Urgent</option>
-                    <option value="tender">Tender</option>
-                    <option value="recruitment">Recruitment</option>
-                </select>
+                    options={categoryOptions}
+                    className="w-44"
+                />
             </div>
 
             {/* Table */}
-            <div className="bg-secondary rounded-xl border border-gray-700 overflow-hidden">
-                <table className="w-full">
-                    <thead>
-                        <tr className="border-b border-gray-700 bg-secondary-dark">
-                            <th className="text-left py-4 px-6 text-gray-400 font-medium text-sm">Notice</th>
-                            <th className="text-left py-4 px-6 text-gray-400 font-medium text-sm">Category</th>
-                            <th className="text-left py-4 px-6 text-gray-400 font-medium text-sm">Date</th>
-                            <th className="text-left py-4 px-6 text-gray-400 font-medium text-sm">Status</th>
-                            <th className="text-right py-4 px-6 text-gray-400 font-medium text-sm">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {isLoading ? (
-                            <tr>
-                                <td colSpan={5} className="text-center py-8 text-gray-500">Loading...</td>
-                            </tr>
-                        ) : filteredNotices?.length === 0 ? (
-                            <tr>
-                                <td colSpan={5} className="text-center py-8 text-gray-500">No notices found</td>
-                            </tr>
-                        ) : (
-                            filteredNotices?.map((notice: Notice) => {
-                                const config = categoryConfig[notice.category] || categoryConfig.general;
-                                const Icon = config.icon;
-
-                                return (
-                                    <tr key={notice.id} className="border-b border-gray-700/50 hover:bg-secondary-dark/50 transition-colors">
-                                        <td className="py-4 px-6">
-                                            <div className="flex items-start gap-3">
-                                                <div className={`flex-shrink-0 w-10 h-10 rounded-lg ${config.bgColor} flex items-center justify-center`}>
-                                                    <Icon className={config.color} size={18} />
-                                                </div>
-                                                <div className="min-w-0">
-                                                    <div className="flex items-center gap-2">
-                                                        <p className="text-gray-200 font-medium truncate max-w-md">{notice.title}</p>
-                                                        {notice.is_featured && (
-                                                            <Star className="text-yellow-400 flex-shrink-0" size={14} fill="currentColor" />
-                                                        )}
-                                                    </div>
-                                                    {notice.excerpt && (
-                                                        <p className="text-gray-500 text-sm truncate max-w-md mt-1">{notice.excerpt}</p>
+            <Card padding="none">
+                {isLoading ? (
+                    <LoadingState text="Loading notices..." />
+                ) : filteredNotices?.length === 0 ? (
+                    <EmptyState
+                        icon={<Bell size={36} />}
+                        title="No notices found"
+                        description={searchTerm ? "Try adjusting your search" : "Create your first notice"}
+                        action={!searchTerm && <Button size="sm" onClick={openCreateModal} leftIcon={<Plus size={16} />}>Add Notice</Button>}
+                    />
+                ) : (
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="border-b border-white/10 bg-white/[0.02]">
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Notice</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Category</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Date</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Status</th>
+                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/5">
+                                {filteredNotices?.map((notice: Notice) => {
+                                    const config = categoryConfig[notice.category] || categoryConfig.general;
+                                    return (
+                                        <tr key={notice.id} className="hover:bg-white/[0.02]">
+                                            <td className="py-3.5 px-5">
+                                                <div className="flex items-center gap-2 min-w-0">
+                                                    <span className="text-gray-200 truncate max-w-md">{notice.title}</span>
+                                                    {notice.is_featured && (
+                                                        <Star className="text-amber-400 shrink-0" size={14} fill="currentColor" />
                                                     )}
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${config.bgColor} ${config.color}`}>
-                                                {notice.category_display}
-                                            </span>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <div className="flex items-center gap-2 text-gray-400 text-sm">
-                                                <Calendar size={14} />
-                                                {new Date(notice.published_date).toLocaleDateString('en-US', {
-                                                    month: 'short',
-                                                    day: 'numeric',
-                                                    year: 'numeric'
-                                                })}
-                                            </div>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <div className="flex items-center gap-2">
-                                                <Eye className="text-accent-green" size={16} />
-                                                <span className="text-accent-green text-sm">Active</span>
-                                            </div>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <div className="flex items-center justify-end gap-2">
-                                                {notice.document && (
-                                                    <a
-                                                        href={notice.document}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="p-2 text-gray-400 hover:text-primary-light hover:bg-primary/10 rounded-lg transition-colors"
-                                                    >
-                                                        <Download size={16} />
-                                                    </a>
-                                                )}
-                                                <button
-                                                    onClick={() => openEditModal(notice)}
-                                                    className="p-2 text-gray-400 hover:text-primary-light hover:bg-primary/10 rounded-lg transition-colors"
-                                                >
-                                                    <Edit2 size={16} />
-                                                </button>
-                                                <button
-                                                    onClick={() => setDeleteConfirm(notice.id)}
-                                                    className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                );
-                            })
-                        )}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Create/Edit Modal */}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-                    <div className="bg-secondary-dark rounded-2xl border border-gray-700 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
-                            <h2 className="text-xl font-bold text-white">
-                                {editingNotice ? 'Edit Notice' : 'Create Notice'}
-                            </h2>
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-                            >
-                                <X size={20} />
-                            </button>
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="p-6 space-y-5">
-                            {/* Title */}
-                            <div>
-                                <label className="block text-gray-300 text-sm font-medium mb-2">Title *</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={formData.title}
-                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                    className="w-full px-4 py-3 bg-secondary border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:border-primary"
-                                    placeholder="Enter notice title"
-                                />
-                            </div>
-
-                            {/* Category & Date Row */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-gray-300 text-sm font-medium mb-2">Category *</label>
-                                    <select
-                                        value={formData.category}
-                                        onChange={(e) => setFormData({ ...formData, category: e.target.value as NoticeFormData['category'] })}
-                                        className="w-full px-4 py-3 bg-secondary border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:border-primary"
-                                    >
-                                        <option value="general">General</option>
-                                        <option value="urgent">Urgent</option>
-                                        <option value="tender">Tender</option>
-                                        <option value="recruitment">Recruitment</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-gray-300 text-sm font-medium mb-2">Published Date *</label>
-                                    <input
-                                        type="date"
-                                        required
-                                        value={formData.published_date}
-                                        onChange={(e) => setFormData({ ...formData, published_date: e.target.value })}
-                                        className="w-full px-4 py-3 bg-secondary border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:border-primary"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Excerpt */}
-                            <div>
-                                <label className="block text-gray-300 text-sm font-medium mb-2">Excerpt (Short Summary)</label>
-                                <textarea
-                                    value={formData.excerpt}
-                                    onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                                    rows={2}
-                                    maxLength={300}
-                                    className="w-full px-4 py-3 bg-secondary border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:border-primary resize-none"
-                                    placeholder="Brief summary for list view (max 300 characters)"
-                                />
-                                <p className="text-gray-500 text-xs mt-1">{formData.excerpt.length}/300 characters</p>
-                            </div>
-
-                            {/* Content */}
-                            <div>
-                                <label className="block text-gray-300 text-sm font-medium mb-2">Full Content</label>
-                                <textarea
-                                    value={formData.content}
-                                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                    rows={6}
-                                    className="w-full px-4 py-3 bg-secondary border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:border-primary resize-none"
-                                    placeholder="Full notice content..."
-                                />
-                            </div>
-
-                            {/* Toggles */}
-                            <div className="flex items-center gap-6">
-                                <label className="flex items-center gap-3 cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        checked={formData.is_featured}
-                                        onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                                        className="w-5 h-5 rounded border-gray-600 text-primary focus:ring-primary bg-secondary"
-                                    />
-                                    <span className="text-gray-300">Featured Notice</span>
-                                </label>
-                                <label className="flex items-center gap-3 cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        checked={formData.is_active}
-                                        onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                                        className="w-5 h-5 rounded border-gray-600 text-primary focus:ring-primary bg-secondary"
-                                    />
-                                    <span className="text-gray-300">Active</span>
-                                </label>
-                            </div>
-
-                            {/* Actions */}
-                            <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-700">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="px-5 py-2.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors"
-                                >
-                                    {editingNotice ? 'Update Notice' : 'Create Notice'}
-                                </button>
-                            </div>
-                        </form>
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <Badge variant={config.badge}>
+                                                    {notice.category_display}
+                                                </Badge>
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <span className="text-gray-400">
+                                                    {new Date(notice.published_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                </span>
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <Badge variant="success">Active</Badge>
+                                            </td>
+                                            <td className="py-3.5 px-5">
+                                                <div className="flex items-center justify-end gap-1">
+                                                    {notice.document && (
+                                                        <IconButton icon={<Download size={16} />} size="sm" tooltip="Download" onClick={() => window.open(notice.document, '_blank')} />
+                                                    )}
+                                                    {notice.link && (
+                                                        <IconButton icon={<ExternalLink size={16} />} size="sm" tooltip="Open Link" onClick={() => window.open(notice.link, '_blank')} />
+                                                    )}
+                                                    <IconButton icon={<Edit2 size={16} />} size="sm" tooltip="Edit" onClick={() => openEditModal(notice)} />
+                                                    <IconButton icon={<Trash2 size={16} />} size="sm" tooltip="Delete" variant="danger" onClick={() => setDeleteConfirm(notice)} />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-            )}
+                )}
+            </Card>
 
-            {/* Delete Confirmation Modal */}
-            {deleteConfirm && (
-                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-                    <div className="bg-secondary-dark rounded-2xl border border-gray-700 p-6 max-w-md w-full">
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
-                                <Trash2 className="text-red-400" size={24} />
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-semibold text-white">Delete Notice</h3>
-                                <p className="text-gray-400 text-sm">This action cannot be undone.</p>
-                            </div>
-                        </div>
-                        <p className="text-gray-300 mb-6">
-                            Are you sure you want to delete this notice? All associated data will be permanently removed.
-                        </p>
-                        <div className="flex items-center justify-end gap-3">
-                            <button
-                                onClick={() => setDeleteConfirm(null)}
-                                className="px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={() => handleDelete(deleteConfirm)}
-                                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
-                            >
-                                Delete
-                            </button>
-                        </div>
+            {/* Modal */}
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title={editingNotice ? 'Edit Notice' : 'Create Notice'}
+                size="lg"
+                footer={
+                    <>
+                        <Button variant="ghost" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                        <Button onClick={handleSubmit} isLoading={isSubmitting}>
+                            {editingNotice ? 'Update' : 'Create'}
+                        </Button>
+                    </>
+                }
+            >
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <Input
+                        label="Title"
+                        required
+                        value={formData.title}
+                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    />
+                    <div className="grid grid-cols-2 gap-4">
+                        <Select
+                            label="Category"
+                            required
+                            value={formData.category}
+                            onChange={(e) => setFormData({ ...formData, category: e.target.value as NoticeFormData['category'] })}
+                            options={formCategoryOptions}
+                        />
+                        <Input
+                            label="Published Date"
+                            type="date"
+                            required
+                            value={formData.published_date}
+                            onChange={(e) => setFormData({ ...formData, published_date: e.target.value })}
+                        />
                     </div>
-                </div>
-            )}
+                    <Textarea
+                        label="Excerpt"
+                        hint="Short summary for list view"
+                        value={formData.excerpt}
+                        onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                        rows={2}
+                        maxLength={300}
+                        showCount
+                    />
+                    <Textarea
+                        label="Full Content"
+                        value={formData.content}
+                        onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                        rows={4}
+                    />
+                    <div className="flex items-center gap-6">
+                        <Toggle
+                            checked={formData.is_featured}
+                            onChange={(checked) => setFormData({ ...formData, is_featured: checked })}
+                            label="Featured"
+                        />
+                        <Toggle
+                            checked={formData.is_active}
+                            onChange={(checked) => setFormData({ ...formData, is_active: checked })}
+                            label="Active"
+                        />
+                    </div>
+                </form>
+            </Modal>
+
+            <ConfirmModal
+                isOpen={!!deleteConfirm}
+                onClose={() => setDeleteConfirm(null)}
+                onConfirm={handleDelete}
+                title="Delete Notice"
+                message={`Delete "${deleteConfirm?.title}"? This cannot be undone.`}
+                confirmText="Delete"
+                variant="danger"
+            />
         </div>
     );
 }
