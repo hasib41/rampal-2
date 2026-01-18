@@ -20,7 +20,7 @@ services:
     region: singapore
     plan: free
     rootDir: backend
-    buildCommand: chmod +x build.sh && ./build.sh
+    buildCommand: sed -i 's/\r$//' build.sh && chmod +x build.sh && ./build.sh
     startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --threads 2 --worker-class gthread --log-file -
     healthCheckPath: /api/health/
     envVars:
