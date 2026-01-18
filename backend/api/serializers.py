@@ -14,7 +14,7 @@ class CompanyInfoSerializer(serializers.ModelSerializer):
 class ProjectListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ['id', 'name', 'slug', 'location', 'capacity_mw', 'status', 'hero_image']
+        fields = '__all__'
 
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
@@ -32,7 +32,7 @@ class DirectorSerializer(serializers.ModelSerializer):
 class NewsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsArticle
-        fields = ['id', 'title', 'slug', 'category', 'excerpt', 'image', 'published_date', 'is_featured']
+        fields = '__all__'
 
 
 class NewsDetailSerializer(serializers.ModelSerializer):
@@ -44,7 +44,7 @@ class NewsDetailSerializer(serializers.ModelSerializer):
 class CareerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Career
-        fields = ['id', 'title', 'department', 'location', 'employment_type', 'salary_range', 'deadline']
+        fields = '__all__'
 
 
 class CareerDetailSerializer(serializers.ModelSerializer):

@@ -12,9 +12,18 @@ class CompanyInfoAdmin(admin.ModelAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ['name', 'location', 'capacity_mw', 'status']
-    list_filter = ['status']
+    list_display = ['name', 'location', 'capacity_mw', 'status', 'preview_image']
+    list_filter = ['status', 'technology']
+    search_fields = ['name', 'location', 'description']
     prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ['preview_image']
+
+    def preview_image(self, obj):
+        if obj.hero_image:
+            from django.utils.html import mark_safe
+            return mark_safe(f'<img src="{obj.hero_image.url}" style="height: 50px; border-radius: 5px;" />')
+        return "No Image"
+    preview_image.short_description = "Image Preview"
 
 
 @admin.register(Director)

@@ -28,11 +28,25 @@ export const companyApi = {
 export const projectsApi = {
     getAll: () => api.get<PaginatedResponse<Project>>('/projects/').then(getResults),
     getBySlug: (slug: string) => api.get<Project>(`/projects/${slug}/`).then(res => res.data),
+    create: (data: FormData) => api.post<Project>('/projects/', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
+    update: (id: number, data: FormData) => api.patch<Project>(`/projects/${id}/`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
+    delete: (id: number) => api.delete(`/projects/${id}/`),
 };
 
 // Directors
 export const directorsApi = {
     getAll: () => api.get<PaginatedResponse<Director>>('/directors/').then(getResults),
+    create: (data: FormData) => api.post<Director>('/directors/', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
+    update: (id: number, data: FormData) => api.patch<Director>(`/directors/${id}/`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
+    delete: (id: number) => api.delete(`/directors/${id}/`),
 };
 
 // News
@@ -40,6 +54,13 @@ export const newsApi = {
     getAll: () => api.get<PaginatedResponse<NewsArticle>>('/news/').then(getResults),
     getFeatured: () => api.get<NewsArticle[]>('/news/featured/').then(res => res.data),
     getBySlug: (slug: string) => api.get<NewsArticle>(`/news/${slug}/`).then(res => res.data),
+    create: (data: FormData) => api.post<NewsArticle>('/news/', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
+    update: (id: number, data: FormData) => api.patch<NewsArticle>(`/news/${id}/`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
+    delete: (id: number) => api.delete(`/news/${id}/`),
 };
 
 // Careers
@@ -49,12 +70,22 @@ export const careersApi = {
     apply: (data: FormData) => api.post('/apply/', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
     }),
+    create: (data: Career) => api.post<Career>('/careers/', data).then(res => res.data),
+    update: (id: number, data: Career) => api.patch<Career>(`/careers/${id}/`, data).then(res => res.data),
+    delete: (id: number) => api.delete(`/careers/${id}/`),
 };
 
 // Tenders
 export const tendersApi = {
     getAll: (params?: Record<string, string>) =>
         api.get<PaginatedResponse<Tender>>('/tenders/', { params }).then(getResults),
+    create: (data: FormData) => api.post<Tender>('/tenders/', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
+    update: (id: number, data: FormData) => api.patch<Tender>(`/tenders/${id}/`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
+    delete: (id: number) => api.delete(`/tenders/${id}/`),
 };
 
 // CSR

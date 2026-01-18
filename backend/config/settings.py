@@ -43,6 +43,7 @@ if CUSTOM_DOMAIN:
 # APPLICATION DEFINITION
 # =============================================================================
 INSTALLED_APPS = [
+    'jazzmin',  # Jazzmin must be before admin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,6 +58,23 @@ INSTALLED_APPS = [
     'core',
     'api',
 ]
+
+# ... (keep existing middleware) ...
+
+# Jazzmin Settings
+JAZZMIN_SETTINGS = {
+    "site_title": "BIFPCL Admin",
+    "site_header": "BIFPCL Administration",
+    "site_brand": "BIFPCL",
+    "welcome_sign": "Welcome to BIFPCL Admin Panel",
+    "copyright": "BIFPCL Ltd",
+    "search_model": ["core.Project", "core.NewsArticle"],
+    "topmenu_links": [
+        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "View Site", "url": "/", "new_window": True},
+    ],
+    "show_ui_builder": False,
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
