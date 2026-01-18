@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Search, ChevronDown, Zap, Leaf, Users, Building2, FileText, HelpCircle } from 'lucide-react';
-import { Card, Input } from '../components/ui';
+import { Card } from '../components/ui';
 
 interface FAQItem {
     question: string;
