@@ -14,6 +14,8 @@ import {
     Zap,
     ChevronRight
 } from 'lucide-react';
+import { useAuth } from '../../contexts';
+import { AdminLogin } from './AdminLogin';
 
 const navItems = [
     { path: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
@@ -30,10 +32,20 @@ export function AdminLayout() {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
+    const { isAuthenticated, logout } = useAuth();
+
+    // Show login if not authenticated
+    if (!isAuthenticated) {
+        return <AdminLogin />;
+    }
 
     const isActive = (path: string, exact?: boolean) => {
         if (exact) return location.pathname === path;
         return location.pathname.startsWith(path);
+    };
+
+    const handleLogout = () => {
+        logout();
     };
 
     return (
@@ -116,7 +128,7 @@ export function AdminLayout() {
                 </nav>
 
                 {/* Bottom Section */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700">
+                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700 space-y-1">
                     <Link
                         to="/"
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-secondary-dark hover:text-white transition-colors
@@ -126,6 +138,15 @@ export function AdminLayout() {
                         <LogOut size={20} />
                         {sidebarOpen && <span>Back to Website</span>}
                     </Link>
+                    <button
+                        onClick={handleLogout}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors
+                            ${!sidebarOpen && 'justify-center'}
+                        `}
+                    >
+                        <LogOut size={20} />
+                        {sidebarOpen && <span>Logout</span>}
+                    </button>
                 </div>
             </aside>
 
