@@ -44,6 +44,8 @@ export interface NewsArticle {
     image: string;
     published_date: string;
     is_featured: boolean;
+    attachment?: string;
+    author?: string;
 }
 
 export interface Career {
