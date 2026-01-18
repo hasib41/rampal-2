@@ -1,38 +1,52 @@
 """
 Django management command to seed the database with sample data.
 Run with: python manage.py seed_data
-Use --with-images to download and upload images from URLs
+Use --with-images to upload images (local files or download from URLs)
 """
 from django.core.management.base import BaseCommand
 from django.core.files.base import ContentFile
+from django.core.files import File
+from django.conf import settings
 from core.models import (
     CompanyInfo, Project, Director, NewsArticle,
     Career, Tender, CSRInitiative, Notice
 )
 from datetime import date, timedelta
 import requests
-from io import BytesIO
+import os
 
 
-# Image URLs from Unsplash (free to use)
+# Local file paths (relative to MEDIA_ROOT)
+LOCAL_IMAGES = {
+    'projects/maitree': 'projects/maitree.png',
+    'projects/hero': 'projects/hero.png',
+    'directors/chairman': 'directors/chairman.png',
+    'directors/ceo': 'directors/ceo.png',
+    'directors/director1': 'directors/director1.png',
+    'news/inauguration': 'news/inauguration.png',
+    'news/scholarship': 'news/scholarship.png',
+    'news/environment': 'news/environment.png',
+    'news/event': 'news/event.png',
+    'csr/education': 'csr/education.png',
+    'csr/mangrove': 'csr/mangrove.png',
+    'csr/health': 'csr/health.png',
+}
+
+# Fallback URLs from Unsplash (free to use)
 IMAGE_URLS = {
-    # Power plant / industrial images
-    'power_plant_1': 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1200&q=80',
-    'power_plant_2': 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1200&q=80',
-    'power_plant_3': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
-    # Professional portraits
-    'portrait_male_1': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
-    'portrait_female_1': 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80',
-    'portrait_male_2': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
-    # News / events
-    'conference': 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80',
-    'graduation': 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80',
-    'environment': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80',
-    'meeting': 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&q=80',
-    # CSR
-    'education': 'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=800&q=80',
-    'health': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&q=80',
-    'mangrove': 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800&q=80',
+    'projects/maitree': 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1200&q=80',
+    'projects/hero': 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1200&q=80',
+    'projects/unit2': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
+    'directors/chairman': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
+    'directors/ceo': 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80',
+    'directors/director1': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
+    'news/inauguration': 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80',
+    'news/scholarship': 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80',
+    'news/environment': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80',
+    'news/event': 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&q=80',
+    'csr/education': 'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=800&q=80',
+    'csr/mangrove': 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800&q=80',
+    'csr/health': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&q=80',
 }
 
 
@@ -63,18 +77,33 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS('✅ Database seeded successfully!'))
 
-    def download_image(self, url, filename):
-        """Download image from URL and return ContentFile."""
+    def get_image(self, image_key, filename):
+        """Get image from local file or download from URL."""
         if not self.with_images:
             return None
-        try:
-            self.stdout.write(f'    ↓ Downloading {filename}...')
-            response = requests.get(url, timeout=30)
-            response.raise_for_status()
-            return ContentFile(response.content, name=filename)
-        except Exception as e:
-            self.stdout.write(self.style.WARNING(f'    ⚠ Failed to download {filename}: {e}'))
-            return None
+
+        # Try local file first
+        local_path = LOCAL_IMAGES.get(image_key)
+        if local_path:
+            full_path = os.path.join(settings.MEDIA_ROOT, local_path)
+            if os.path.exists(full_path):
+                self.stdout.write(f'    Using local: {local_path}')
+                with open(full_path, 'rb') as f:
+                    content = f.read()
+                return ContentFile(content, name=filename)
+
+        # Fall back to URL download
+        url = IMAGE_URLS.get(image_key)
+        if url:
+            try:
+                self.stdout.write(f'    Downloading {filename}...')
+                response = requests.get(url, timeout=30)
+                response.raise_for_status()
+                return ContentFile(response.content, name=filename)
+            except Exception as e:
+                self.stdout.write(self.style.WARNING(f'    Failed to download: {e}'))
+
+        return None
 
     def create_company_info(self):
         CompanyInfo.objects.update_or_create(
@@ -103,7 +132,7 @@ class Command(BaseCommand):
                 'latitude': 22.5568,
                 'longitude': 89.6205,
                 'efficiency_percent': 42.5,
-                'image_key': 'power_plant_1',
+                'image_key': 'projects/maitree',
             },
             {
                 'name': 'Unit 1 - Thermal Power Generation',
@@ -116,7 +145,7 @@ class Command(BaseCommand):
                 'latitude': 22.5570,
                 'longitude': 89.6200,
                 'efficiency_percent': 42.8,
-                'image_key': 'power_plant_2',
+                'image_key': 'projects/hero',
             },
             {
                 'name': 'Unit 2 - Thermal Power Generation',
@@ -129,7 +158,7 @@ class Command(BaseCommand):
                 'latitude': 22.5565,
                 'longitude': 89.6210,
                 'efficiency_percent': 42.6,
-                'image_key': 'power_plant_3',
+                'image_key': 'projects/unit2',
             },
         ]
 
@@ -139,13 +168,10 @@ class Command(BaseCommand):
                 slug=data['slug'],
                 defaults=data
             )
-            # Upload image if enabled and no image exists
             if image_key and (created or not project.hero_image):
-                image_url = IMAGE_URLS.get(image_key)
-                if image_url:
-                    image_file = self.download_image(image_url, f'{data["slug"]}.jpg')
-                    if image_file:
-                        project.hero_image.save(image_file.name, image_file, save=True)
+                image_file = self.get_image(image_key, f'{data["slug"]}.jpg')
+                if image_file:
+                    project.hero_image.save(image_file.name, image_file, save=True)
 
         self.stdout.write('  ✓ Projects created')
 
@@ -158,7 +184,7 @@ class Command(BaseCommand):
                 'bio': 'Dr. Mohammad Rahman brings over 30 years of experience in the power sector.',
                 'order': 1,
                 'is_chairman': True,
-                'image_key': 'portrait_male_1',
+                'image_key': 'directors/chairman',
             },
             {
                 'name': 'Ms. Priya Sharma',
@@ -167,7 +193,7 @@ class Command(BaseCommand):
                 'bio': 'Ms. Priya Sharma is a seasoned professional with extensive experience in managing large-scale power projects.',
                 'order': 2,
                 'is_chairman': False,
-                'image_key': 'portrait_female_1',
+                'image_key': 'directors/ceo',
             },
             {
                 'name': 'Mr. Kamal Ahmed',
@@ -176,7 +202,7 @@ class Command(BaseCommand):
                 'bio': 'Mr. Kamal Ahmed oversees all technical aspects of the power plant operations.',
                 'order': 3,
                 'is_chairman': False,
-                'image_key': 'portrait_male_2',
+                'image_key': 'directors/director1',
             },
         ]
 
@@ -187,11 +213,9 @@ class Command(BaseCommand):
                 defaults=data
             )
             if image_key and (created or not director.photo):
-                image_url = IMAGE_URLS.get(image_key)
-                if image_url:
-                    image_file = self.download_image(image_url, f'director-{director.order}.jpg')
-                    if image_file:
-                        director.photo.save(image_file.name, image_file, save=True)
+                image_file = self.get_image(image_key, f'director-{director.order}.jpg')
+                if image_file:
+                    director.photo.save(image_file.name, image_file, save=True)
 
         self.stdout.write('  ✓ Directors created')
 
@@ -212,7 +236,7 @@ Key highlights:
 - Contributed to 8% of Bangladesh's total power generation''',
                 'published_date': today - timedelta(days=5),
                 'is_featured': True,
-                'image_key': 'conference',
+                'image_key': 'news/inauguration',
             },
             {
                 'title': 'BIFPCL Launches Scholarship Program for Local Students',
@@ -227,7 +251,7 @@ The program will provide:
 - Internship opportunities at BIFPCL''',
                 'published_date': today - timedelta(days=12),
                 'is_featured': False,
-                'image_key': 'graduation',
+                'image_key': 'news/scholarship',
             },
             {
                 'title': 'Environmental Monitoring Report Shows Excellent Compliance',
@@ -242,7 +266,7 @@ Key findings:
 - NOx emissions: 22% below limit''',
                 'published_date': today - timedelta(days=20),
                 'is_featured': False,
-                'image_key': 'environment',
+                'image_key': 'news/environment',
             },
             {
                 'title': 'BIFPCL Hosts India-Bangladesh Energy Summit 2025',
@@ -257,7 +281,7 @@ The summit discussed:
 - Technology transfer and capacity building''',
                 'published_date': today - timedelta(days=8),
                 'is_featured': False,
-                'image_key': 'meeting',
+                'image_key': 'news/event',
             },
         ]
 
@@ -268,11 +292,9 @@ The summit discussed:
                 defaults=data
             )
             if image_key and (created or not article.image):
-                image_url = IMAGE_URLS.get(image_key)
-                if image_url:
-                    image_file = self.download_image(image_url, f'{data["slug"]}.jpg')
-                    if image_file:
-                        article.image.save(image_file.name, image_file, save=True)
+                image_file = self.get_image(image_key, f'{data["slug"]}.jpg')
+                if image_file:
+                    article.image.save(image_file.name, image_file, save=True)
 
         self.stdout.write('  ✓ News articles created')
 
@@ -363,7 +385,7 @@ The summit discussed:
                 'description': 'Comprehensive education support program including school infrastructure development.',
                 'impact_metric': '15,000+ students benefited',
                 'order': 1,
-                'image_key': 'education',
+                'image_key': 'csr/education',
             },
             {
                 'title': 'Sundarbans Mangrove Conservation',
@@ -371,7 +393,7 @@ The summit discussed:
                 'description': 'Partnerships with environmental organizations for mangrove plantation.',
                 'impact_metric': '540,000 trees planted',
                 'order': 2,
-                'image_key': 'mangrove',
+                'image_key': 'csr/mangrove',
             },
             {
                 'title': 'Community Health Outreach',
@@ -379,7 +401,7 @@ The summit discussed:
                 'description': 'Regular health camps, mobile medical units, and vaccination drives.',
                 'impact_metric': '50,000+ medical consultations',
                 'order': 3,
-                'image_key': 'health',
+                'image_key': 'csr/health',
             },
         ]
 
@@ -390,11 +412,9 @@ The summit discussed:
                 defaults=data
             )
             if image_key and (created or not initiative.image):
-                image_url = IMAGE_URLS.get(image_key)
-                if image_url:
-                    image_file = self.download_image(image_url, f'csr-{initiative.order}.jpg')
-                    if image_file:
-                        initiative.image.save(image_file.name, image_file, save=True)
+                image_file = self.get_image(image_key, f'csr-{initiative.order}.jpg')
+                if image_file:
+                    initiative.image.save(image_file.name, image_file, save=True)
 
         self.stdout.write('  ✓ CSR initiatives created')
 
