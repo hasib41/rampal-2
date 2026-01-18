@@ -30,7 +30,7 @@ if username and password:
 
 
 
-echo "==> Seeding database..."
-python manage.py seed_data
+echo "==> Seeding database with images..."
+python manage.py seed_data --with-images
 
 echo "==> Build completed successfully!"
