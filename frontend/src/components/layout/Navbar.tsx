@@ -11,6 +11,7 @@ const navLinks = [
         children: [
             { name: 'Board of Directors', path: '/directors' },
             { name: 'Media Center', path: '/media' },
+            { name: 'FAQ', path: '/faq' },
         ],
     },
     { name: 'Careers', path: '/careers' },

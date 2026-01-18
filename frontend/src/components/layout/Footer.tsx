@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom';
 
 const footerLinks = {
     quickLinks: [
-        { name: 'Career FAQ', path: '/careers' },
-        { name: 'Company Culture', path: '/about' },
+        { name: 'FAQ', path: '/faq' },
+        { name: 'Careers', path: '/careers' },
         { name: 'Sustainability', path: '/sustainability' },
-        { name: 'Investor Relations', path: '/investors' },
+        { name: 'Contact', path: '/contact' },
     ],
     legal: [
         { name: 'Privacy Policy', path: '/privacy' },

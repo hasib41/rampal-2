@@ -10,5 +10,6 @@ export { MediaPage } from './Media';
 export { MediaDetailPage } from './MediaDetail';
 export { NoticesPage } from './Notices';
 export { NoticeDetailPage } from './NoticeDetail';
+export { FAQPage } from './FAQ';
 
 

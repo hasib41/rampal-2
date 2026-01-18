@@ -16,6 +16,7 @@ import {
   MediaDetailPage,
   NoticesPage,
   NoticeDetailPage,
+  FAQPage,
 } from './pages';
 import {
   AdminDashboard,
@@ -57,6 +58,7 @@ export default function App() {
               <Route path="media/:slug" element={<MediaDetailPage />} />
               <Route path="notices" element={<NoticesPage />} />
               <Route path="notices/:slug" element={<NoticeDetailPage />} />
+              <Route path="faq" element={<FAQPage />} />
             </Route>
 
             {/* Admin Routes */}
