@@ -1,24 +1,57 @@
 """
 Django management command to seed the database with sample data.
 Run with: python manage.py seed_data
+Use --with-images to download and upload images from URLs
 """
 from django.core.management.base import BaseCommand
-from django.core.files import File
+from django.core.files.base import ContentFile
 from core.models import (
     CompanyInfo, Project, Director, NewsArticle,
     Career, Tender, CSRInitiative, Notice
 )
 from datetime import date, timedelta
-import os
-from django.conf import settings
+import requests
+from io import BytesIO
+
+
+# Image URLs from Unsplash (free to use)
+IMAGE_URLS = {
+    # Power plant / industrial images
+    'power_plant_1': 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1200&q=80',
+    'power_plant_2': 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1200&q=80',
+    'power_plant_3': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
+    # Professional portraits
+    'portrait_male_1': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
+    'portrait_female_1': 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80',
+    'portrait_male_2': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
+    # News / events
+    'conference': 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80',
+    'graduation': 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80',
+    'environment': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80',
+    'meeting': 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&q=80',
+    # CSR
+    'education': 'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=800&q=80',
+    'health': 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&q=80',
+    'mangrove': 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800&q=80',
+}
 
 
 class Command(BaseCommand):
     help = 'Seeds the database with sample data for BIFPCL website'
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--with-images',
+            action='store_true',
+            help='Download and upload images from URLs',
+        )
+
     def handle(self, *args, **options):
+        self.with_images = options['with_images']
         self.stdout.write('Seeding database...')
-        
+        if self.with_images:
+            self.stdout.write('  📷 Image upload enabled')
+
         self.create_company_info()
         self.create_projects()
         self.create_directors()
@@ -27,11 +60,21 @@ class Command(BaseCommand):
         self.create_tenders()
         self.create_csr_initiatives()
         self.create_notices()
-        
+
         self.stdout.write(self.style.SUCCESS('✅ Database seeded successfully!'))
 
-    def get_image_path(self, folder, filename):
-        return os.path.join(settings.MEDIA_ROOT, folder, filename)
+    def download_image(self, url, filename):
+        """Download image from URL and return ContentFile."""
+        if not self.with_images:
+            return None
+        try:
+            self.stdout.write(f'    ↓ Downloading {filename}...')
+            response = requests.get(url, timeout=30)
+            response.raise_for_status()
+            return ContentFile(response.content, name=filename)
+        except Exception as e:
+            self.stdout.write(self.style.WARNING(f'    ⚠ Failed to download {filename}: {e}'))
+            return None
 
     def create_company_info(self):
         CompanyInfo.objects.update_or_create(
@@ -56,11 +99,11 @@ class Command(BaseCommand):
                 'capacity_mw': 1320,
                 'technology': 'Ultra-Supercritical',
                 'status': 'operational',
-                'description': 'The Maitree Super Thermal Power Project is a 1320 MW coal-fired power station located in Rampal, Bagerhat District. It comprises two units of 660 MW each, using ultra-supercritical technology for maximum efficiency and minimal environmental impact. This mega-scale project symbolizes the strong friendship between Bangladesh and India.',
+                'description': 'The Maitree Super Thermal Power Project is a 1320 MW coal-fired power station located in Rampal, Bagerhat District. It comprises two units of 660 MW each, using ultra-supercritical technology for maximum efficiency and minimal environmental impact.',
                 'latitude': 22.5568,
                 'longitude': 89.6205,
                 'efficiency_percent': 42.5,
-                'image': 'projects/maitree.png',
+                'image_key': 'power_plant_1',
             },
             {
                 'name': 'Unit 1 - Thermal Power Generation',
@@ -69,11 +112,11 @@ class Command(BaseCommand):
                 'capacity_mw': 660,
                 'technology': 'Ultra-Supercritical Boiler',
                 'status': 'operational',
-                'description': 'Unit 1 of the Maitree Super Thermal Power Project with a capacity of 660 MW. Features advanced emission control systems including Flue Gas Desulfurization (FGD) and Electrostatic Precipitators (ESP) to ensure environmental compliance.',
+                'description': 'Unit 1 of the Maitree Super Thermal Power Project with a capacity of 660 MW. Features advanced emission control systems including FGD and ESP.',
                 'latitude': 22.5570,
                 'longitude': 89.6200,
                 'efficiency_percent': 42.8,
-                'image': 'projects/hero.png',
+                'image_key': 'power_plant_2',
             },
             {
                 'name': 'Unit 2 - Thermal Power Generation',
@@ -82,26 +125,28 @@ class Command(BaseCommand):
                 'capacity_mw': 660,
                 'technology': 'Ultra-Supercritical Boiler',
                 'status': 'operational',
-                'description': 'Unit 2 of the Maitree Super Thermal Power Project with identical specifications to Unit 1. Together with Unit 1, it provides reliable baseload power to the national grid of Bangladesh.',
+                'description': 'Unit 2 of the Maitree Super Thermal Power Project with identical specifications to Unit 1.',
                 'latitude': 22.5565,
                 'longitude': 89.6210,
                 'efficiency_percent': 42.6,
-                'image': None,
+                'image_key': 'power_plant_3',
             },
         ]
 
         for data in projects_data:
-            image_file = data.pop('image')
+            image_key = data.pop('image_key', None)
             project, created = Project.objects.update_or_create(
                 slug=data['slug'],
                 defaults=data
             )
-            if image_file and created:
-                image_path = self.get_image_path('', image_file)
-                if os.path.exists(image_path):
-                    with open(image_path, 'rb') as f:
-                        project.hero_image.save(os.path.basename(image_file), File(f), save=True)
-        
+            # Upload image if enabled and no image exists
+            if image_key and (created or not project.hero_image):
+                image_url = IMAGE_URLS.get(image_key)
+                if image_url:
+                    image_file = self.download_image(image_url, f'{data["slug"]}.jpg')
+                    if image_file:
+                        project.hero_image.save(image_file.name, image_file, save=True)
+
         self.stdout.write('  ✓ Projects created')
 
     def create_directors(self):
@@ -110,61 +155,44 @@ class Command(BaseCommand):
                 'name': 'Dr. Mohammad Rahman',
                 'title': 'Chairman',
                 'organization': 'Bangladesh Power Development Board',
-                'bio': 'Dr. Mohammad Rahman brings over 30 years of experience in the power sector. As Chairman of BPDB, he has been instrumental in expanding Bangladesh\'s power generation capacity and promoting sustainable energy solutions.',
+                'bio': 'Dr. Mohammad Rahman brings over 30 years of experience in the power sector.',
                 'order': 1,
                 'is_chairman': True,
-                'image': 'directors/chairman.png',
+                'image_key': 'portrait_male_1',
             },
             {
                 'name': 'Ms. Priya Sharma',
                 'title': 'Managing Director',
                 'organization': 'BIFPCL',
-                'bio': 'Ms. Priya Sharma is a seasoned professional with extensive experience in managing large-scale power projects. She leads the day-to-day operations of BIFPCL and ensures the project meets its operational and environmental targets.',
+                'bio': 'Ms. Priya Sharma is a seasoned professional with extensive experience in managing large-scale power projects.',
                 'order': 2,
                 'is_chairman': False,
-                'image': 'directors/ceo.png',
+                'image_key': 'portrait_female_1',
             },
             {
                 'name': 'Mr. Kamal Ahmed',
                 'title': 'Director (Technical)',
                 'organization': 'NTPC Limited',
-                'bio': 'Mr. Kamal Ahmed oversees all technical aspects of the power plant operations. With a background in mechanical engineering and 25 years in thermal power generation, he ensures optimal plant performance.',
+                'bio': 'Mr. Kamal Ahmed oversees all technical aspects of the power plant operations.',
                 'order': 3,
                 'is_chairman': False,
-                'image': 'directors/director1.png',
-            },
-            {
-                'name': 'Mr. Rajesh Kumar',
-                'title': 'Director (Finance)',
-                'organization': 'NTPC Limited',
-                'bio': 'Mr. Rajesh Kumar manages the financial operations of BIFPCL. His expertise in project finance and corporate governance has been crucial to the project\'s financial success.',
-                'order': 4,
-                'is_chairman': False,
-                'image': None,
-            },
-            {
-                'name': 'Ms. Fatima Begum',
-                'title': 'Director (HR & Administration)',
-                'organization': 'BPDB',
-                'bio': 'Ms. Fatima Begum leads human resources and administrative functions. She has implemented comprehensive training programs and workplace policies that have made BIFPCL an employer of choice.',
-                'order': 5,
-                'is_chairman': False,
-                'image': None,
+                'image_key': 'portrait_male_2',
             },
         ]
 
         for data in directors_data:
-            image_file = data.pop('image')
+            image_key = data.pop('image_key', None)
             director, created = Director.objects.update_or_create(
                 name=data['name'],
                 defaults=data
             )
-            if image_file and created:
-                image_path = self.get_image_path('', image_file)
-                if os.path.exists(image_path):
-                    with open(image_path, 'rb') as f:
-                        director.photo.save(os.path.basename(image_file), File(f), save=True)
-        
+            if image_key and (created or not director.photo):
+                image_url = IMAGE_URLS.get(image_key)
+                if image_url:
+                    image_file = self.download_image(image_url, f'director-{director.order}.jpg')
+                    if image_file:
+                        director.photo.save(image_file.name, image_file, save=True)
+
         self.stdout.write('  ✓ Directors created')
 
     def create_news(self):
@@ -174,91 +202,78 @@ class Command(BaseCommand):
                 'title': 'BIFPCL Achieves Record Power Generation in Q4 2025',
                 'slug': 'record-power-generation-q4-2025',
                 'category': 'press',
-                'excerpt': 'The Maitree Super Thermal Power Project has achieved a record power generation of 2.8 billion units in Q4 2025, marking a new milestone in Bangladesh-India energy cooperation.',
-                'content': '''The Bangladesh-India Friendship Power Company Limited (BIFPCL) has announced record power generation figures for the fourth quarter of 2025. The Maitree Super Thermal Power Project generated 2.8 billion units of electricity, contributing significantly to Bangladesh's national grid.
-
-This achievement demonstrates the plant's operational excellence and the success of the joint venture between Bangladesh Power Development Board (BPDB) and NTPC Limited of India.
+                'excerpt': 'The Maitree Super Thermal Power Project has achieved a record power generation of 2.8 billion units in Q4 2025.',
+                'content': '''The Bangladesh-India Friendship Power Company Limited (BIFPCL) has announced record power generation figures for the fourth quarter of 2025.
 
 Key highlights:
 - Plant Load Factor (PLF) exceeded 85%
 - Zero unplanned outages during the quarter
 - All environmental parameters within prescribed limits
-- Contributed to 8% of Bangladesh's total power generation
-
-The Managing Director, Ms. Priya Sharma, stated: "This achievement reflects the dedication of our team and the strong partnership between Bangladesh and India. We remain committed to providing reliable and clean power to the nation."''',
+- Contributed to 8% of Bangladesh's total power generation''',
                 'published_date': today - timedelta(days=5),
                 'is_featured': True,
-                'image': 'news/inauguration.png',
+                'image_key': 'conference',
             },
             {
                 'title': 'BIFPCL Launches Scholarship Program for Local Students',
                 'slug': 'scholarship-program-2025',
                 'category': 'event',
-                'excerpt': 'As part of its CSR initiatives, BIFPCL has launched a comprehensive scholarship program benefiting 500 students from Rampal and surrounding areas.',
-                'content': '''BIFPCL has announced the launch of its flagship scholarship program aimed at supporting higher education for students from Rampal and neighboring communities.
+                'excerpt': 'BIFPCL has launched a comprehensive scholarship program benefiting 500 students from Rampal.',
+                'content': '''BIFPCL has announced the launch of its flagship scholarship program.
 
 The program will provide:
 - Full tuition fee coverage for engineering and medical students
 - Monthly stipends for living expenses
-- Internship opportunities at BIFPCL
-- Career guidance and mentorship
-
-This initiative is part of BIFPCL's commitment to community development and creating long-term value for the local population.''',
+- Internship opportunities at BIFPCL''',
                 'published_date': today - timedelta(days=12),
                 'is_featured': False,
-                'image': 'news/scholarship.png',
+                'image_key': 'graduation',
             },
             {
                 'title': 'Environmental Monitoring Report Shows Excellent Compliance',
                 'slug': 'environmental-compliance-report-2025',
                 'category': 'update',
-                'excerpt': 'The latest environmental monitoring report confirms that BIFPCL\'s emissions are 28% below the prescribed limits, demonstrating world-class environmental stewardship.',
-                'content': '''The quarterly environmental monitoring report for BIFPCL has shown outstanding compliance with all environmental regulations.
+                'excerpt': 'BIFPCL\'s emissions are 28% below the prescribed limits.',
+                'content': '''The quarterly environmental monitoring report for BIFPCL has shown outstanding compliance.
 
 Key findings:
 - SO2 emissions: 28% below limit
 - Particulate matter: 35% below limit
-- NOx emissions: 22% below limit
-- Water discharge quality: Exceeds standards
-
-The plant's advanced Flue Gas Desulfurization (FGD) system and Electrostatic Precipitators (ESP) continue to perform above specifications.''',
+- NOx emissions: 22% below limit''',
                 'published_date': today - timedelta(days=20),
                 'is_featured': False,
-                'image': 'news/environment.png',
+                'image_key': 'environment',
             },
             {
                 'title': 'BIFPCL Hosts India-Bangladesh Energy Summit 2025',
                 'slug': 'india-bangladesh-energy-summit-2025',
                 'category': 'in_the_news',
-                'excerpt': 'Senior officials from both nations gathered at the Maitree Power Project for discussions on expanding bilateral energy cooperation.',
-                'content': '''BIFPCL successfully hosted the India-Bangladesh Energy Summit 2025 at the Maitree Super Thermal Power Project facility.
+                'excerpt': 'Senior officials from both nations gathered at the Maitree Power Project.',
+                'content': '''BIFPCL successfully hosted the India-Bangladesh Energy Summit 2025.
 
-The summit brought together senior government officials, industry leaders, and energy experts from both countries to discuss:
+The summit discussed:
 - Future joint venture opportunities in renewable energy
-- Grid connectivity enhancement between the two nations
-- Technology transfer and capacity building
-- Sustainable development goals in the energy sector
-
-The event was attended by the Energy Ministers of both countries and marked a significant milestone in Indo-Bangladesh energy cooperation.''',
+- Grid connectivity enhancement
+- Technology transfer and capacity building''',
                 'published_date': today - timedelta(days=8),
                 'is_featured': False,
-                'image': 'news/event.png',
+                'image_key': 'meeting',
             },
         ]
 
         for data in news_data:
-            image_file = data.pop('image')
+            image_key = data.pop('image_key', None)
             article, created = NewsArticle.objects.update_or_create(
                 slug=data['slug'],
                 defaults=data
             )
-            # Always update image if provided (for both new and existing records)
-            if image_file:
-                image_path = self.get_image_path('', image_file)
-                if os.path.exists(image_path):
-                    with open(image_path, 'rb') as f:
-                        article.image.save(os.path.basename(image_file), File(f), save=True)
-        
+            if image_key and (created or not article.image):
+                image_url = IMAGE_URLS.get(image_key)
+                if image_url:
+                    image_file = self.download_image(image_url, f'{data["slug"]}.jpg')
+                    if image_file:
+                        article.image.save(image_file.name, image_file, save=True)
+
         self.stdout.write('  ✓ News articles created')
 
     def create_careers(self):
@@ -269,13 +284,8 @@ The event was attended by the Energy Ministers of both countries and marked a si
                 'department': 'Operations & Maintenance',
                 'location': 'Rampal, Bagerhat',
                 'employment_type': 'full_time',
-                'description': 'We are seeking an experienced Senior Mechanical Engineer to join our Operations & Maintenance team. The role involves overseeing the maintenance of boilers, turbines, and auxiliary equipment.',
-                'requirements': '''- B.Sc. in Mechanical Engineering from a recognized university
-- Minimum 8 years of experience in thermal power plants
-- Strong knowledge of ultra-supercritical technology
-- Excellent problem-solving skills
-- Ability to work in a multicultural environment
-- Fluency in English and Bengali''',
+                'description': 'We are seeking an experienced Senior Mechanical Engineer.',
+                'requirements': '- B.Sc. in Mechanical Engineering\n- 8+ years experience\n- Knowledge of ultra-supercritical technology',
                 'salary_range': 'BDT 150,000 - 200,000',
                 'deadline': today + timedelta(days=30),
                 'is_active': True,
@@ -285,29 +295,10 @@ The event was attended by the Energy Ministers of both countries and marked a si
                 'department': 'Environment, Health & Safety',
                 'location': 'Rampal, Bagerhat',
                 'employment_type': 'full_time',
-                'description': 'Join our EHS team to ensure environmental compliance and implement sustainability initiatives at the plant.',
-                'requirements': '''- B.Sc./M.Sc. in Environmental Engineering or related field
-- 5+ years of experience in environmental management
-- Knowledge of Bangladesh environmental regulations
-- Experience with emission monitoring systems
-- Strong analytical and reporting skills''',
+                'description': 'Join our EHS team to ensure environmental compliance.',
+                'requirements': '- B.Sc./M.Sc. in Environmental Engineering\n- 5+ years experience',
                 'salary_range': 'BDT 100,000 - 140,000',
                 'deadline': today + timedelta(days=45),
-                'is_active': True,
-            },
-            {
-                'title': 'IT Systems Administrator',
-                'department': 'Information Technology',
-                'location': 'Dhaka / Rampal',
-                'employment_type': 'full_time',
-                'description': 'Manage and maintain IT infrastructure including servers, networks, and enterprise applications.',
-                'requirements': '''- Bachelor's in Computer Science or IT
-- 4+ years of experience in system administration
-- Expertise in Windows Server, Linux, and networking
-- Experience with industrial control systems (preferred)
-- MCSE or equivalent certification''',
-                'salary_range': 'BDT 80,000 - 120,000',
-                'deadline': today + timedelta(days=20),
                 'is_active': True,
             },
         ]
@@ -318,7 +309,7 @@ The event was attended by the Energy Ministers of both countries and marked a si
                 department=data['department'],
                 defaults=data
             )
-        
+
         self.stdout.write('  ✓ Careers created')
 
     def create_tenders(self):
@@ -328,7 +319,7 @@ The event was attended by the Energy Ministers of both countries and marked a si
                 'tender_id': 'BIFPCL/PROC/2025/001',
                 'title': 'Supply of Coal Handling System Spare Parts',
                 'category': 'mechanical',
-                'description': 'Procurement of spare parts for coal handling system including conveyor belts, rollers, and bearings. Detailed specifications available in tender documents.',
+                'description': 'Procurement of spare parts for coal handling system.',
                 'status': 'open',
                 'publication_date': today - timedelta(days=5),
                 'deadline': today + timedelta(days=25),
@@ -338,7 +329,7 @@ The event was attended by the Energy Ministers of both countries and marked a si
                 'tender_id': 'BIFPCL/PROC/2025/002',
                 'title': 'Annual Maintenance Contract for HVAC Systems',
                 'category': 'electrical',
-                'description': 'Two-year maintenance contract for HVAC systems in office buildings and control rooms. Includes preventive and breakdown maintenance.',
+                'description': 'Two-year maintenance contract for HVAC systems.',
                 'status': 'evaluation',
                 'publication_date': today - timedelta(days=30),
                 'deadline': today - timedelta(days=5),
@@ -348,31 +339,11 @@ The event was attended by the Energy Ministers of both countries and marked a si
                 'tender_id': 'BIFPCL/PROC/2025/003',
                 'title': 'Road Repair and Maintenance Works',
                 'category': 'civil',
-                'description': 'Repair and maintenance of internal roads within the power plant premises. Approximately 5 km of asphalt road resurfacing.',
+                'description': 'Repair and maintenance of internal roads.',
                 'status': 'open',
                 'publication_date': today - timedelta(days=3),
                 'deadline': today + timedelta(days=35),
                 'value_range': 'BDT 1-1.5 Crores',
-            },
-            {
-                'tender_id': 'BIFPCL/PROC/2025/004',
-                'title': 'ERP System Upgrade and Support Services',
-                'category': 'it',
-                'description': 'Upgrade of existing SAP ERP system and three-year support contract. Includes data migration and user training.',
-                'status': 'open',
-                'publication_date': today - timedelta(days=2),
-                'deadline': today + timedelta(days=40),
-                'value_range': 'BDT 2-3 Crores',
-            },
-            {
-                'tender_id': 'BIFPCL/PROC/2024/089',
-                'title': 'Supply of Transformer Oil',
-                'category': 'electrical',
-                'description': 'Supply of 50,000 liters of high-grade transformer oil meeting IEC 60296 specifications.',
-                'status': 'awarded',
-                'publication_date': today - timedelta(days=60),
-                'deadline': today - timedelta(days=30),
-                'value_range': 'BDT 35 Lakhs',
             },
         ]
 
@@ -381,7 +352,7 @@ The event was attended by the Energy Ministers of both countries and marked a si
                 tender_id=data['tender_id'],
                 defaults=data
             )
-        
+
         self.stdout.write('  ✓ Tenders created')
 
     def create_csr_initiatives(self):
@@ -389,281 +360,83 @@ The event was attended by the Energy Ministers of both countries and marked a si
             {
                 'title': 'Education for All Initiative',
                 'category': 'education',
-                'description': 'Comprehensive education support program including school infrastructure development, teacher training, and digital learning tools for schools in Rampal and surrounding villages.',
+                'description': 'Comprehensive education support program including school infrastructure development.',
                 'impact_metric': '15,000+ students benefited',
                 'order': 1,
-                'image': 'csr/education.png',
+                'image_key': 'education',
             },
             {
                 'title': 'Sundarbans Mangrove Conservation',
                 'category': 'environment',
-                'description': 'Partnerships with environmental organizations for mangrove plantation and conservation in the Sundarbans region. Over 540,000 mangrove saplings planted to date.',
+                'description': 'Partnerships with environmental organizations for mangrove plantation.',
                 'impact_metric': '540,000 trees planted',
                 'order': 2,
-                'image': 'csr/mangrove.png',
+                'image_key': 'mangrove',
             },
             {
                 'title': 'Community Health Outreach',
                 'category': 'health',
-                'description': 'Regular health camps, mobile medical units, and vaccination drives for local communities. Partnerships with leading hospitals for specialized treatments.',
+                'description': 'Regular health camps, mobile medical units, and vaccination drives.',
                 'impact_metric': '50,000+ medical consultations',
                 'order': 3,
-                'image': 'csr/health.png',
-            },
-            {
-                'title': 'Skill Development & Livelihood',
-                'category': 'community',
-                'description': 'Vocational training programs in electrical work, plumbing, tailoring, and computer skills for local youth. Microfinance support for small businesses.',
-                'impact_metric': '3,500 trained, 800 employed',
-                'order': 4,
-                'image': None,
+                'image_key': 'health',
             },
         ]
 
         for data in csr_data:
-            image_file = data.pop('image')
+            image_key = data.pop('image_key', None)
             initiative, created = CSRInitiative.objects.update_or_create(
                 title=data['title'],
                 defaults=data
             )
-            if image_file and created:
-                image_path = self.get_image_path('', image_file)
-                if os.path.exists(image_path):
-                    with open(image_path, 'rb') as f:
-                        initiative.image.save(os.path.basename(image_file), File(f), save=True)
-        
+            if image_key and (created or not initiative.image):
+                image_url = IMAGE_URLS.get(image_key)
+                if image_url:
+                    image_file = self.download_image(image_url, f'csr-{initiative.order}.jpg')
+                    if image_file:
+                        initiative.image.save(image_file.name, image_file, save=True)
+
         self.stdout.write('  ✓ CSR initiatives created')
 
     def create_notices(self):
         today = date.today()
         notices_data = [
             {
-                'title': 'Board of Directors Meeting - Q1 2026 Schedule Announced',
+                'title': 'Board of Directors Meeting - Q1 2026 Schedule',
                 'slug': 'board-meeting-q1-2026',
                 'category': 'general',
-                'excerpt': 'The Board of Directors has announced the schedule for Q1 2026 meetings. All stakeholders are requested to take note.',
-                'content': '''The Board of Directors of Bangladesh-India Friendship Power Company (Pvt.) Limited has finalized the meeting schedule for the first quarter of 2026.
-
-**Meeting Dates:**
-- January 28, 2026 - Regular Board Meeting
-- February 25, 2026 - Finance Committee Meeting
-- March 28, 2026 - Annual Strategy Review
-
-**Venue:** BIFPCL Corporate Office, Dhaka
-
-All board members and relevant stakeholders are requested to mark their calendars and prepare necessary documents for the meetings.
-
-For any queries, please contact the Company Secretary.''',
+                'excerpt': 'The Board has announced the schedule for Q1 2026 meetings.',
+                'content': 'Meeting dates: Jan 28, Feb 25, Mar 28, 2026.',
                 'published_date': today - timedelta(days=3),
                 'is_active': True,
                 'is_featured': True,
-                'order': 1,
             },
             {
-                'title': 'Environmental Compliance Report 2025 - Now Available',
-                'slug': 'environmental-report-2025',
-                'category': 'general',
-                'excerpt': 'Our annual environmental compliance report shows all emissions 28% below prescribed limits.',
-                'content': '''BIFPCL is pleased to announce the publication of its Annual Environmental Compliance Report for 2025.
-
-**Key Highlights:**
-- SO2 emissions: 28% below prescribed limits
-- Particulate matter: 35% below limits
-- NOx emissions: 22% below limits
-- Water quality: Exceeds all standards
-- Zero environmental incidents recorded
-
-The report demonstrates our commitment to environmental stewardship and sustainable power generation. The full report is available for download.
-
-Our Flue Gas Desulfurization (FGD) and Electrostatic Precipitator (ESP) systems continue to perform above design specifications.''',
-                'published_date': today - timedelta(days=7),
-                'is_active': True,
-                'is_featured': False,
-                'order': 2,
-            },
-            {
-                'title': 'URGENT: Plant Shutdown Scheduled for Annual Maintenance',
+                'title': 'URGENT: Plant Shutdown Scheduled for Maintenance',
                 'slug': 'plant-shutdown-maintenance-2026',
                 'category': 'urgent',
-                'excerpt': 'Unit-1 will undergo scheduled maintenance from February 15-28, 2026. All stakeholders please take note.',
-                'content': '''This is to inform all stakeholders that Unit-1 of the Maitree Super Thermal Power Project will undergo scheduled annual maintenance.
-
-**Shutdown Details:**
-- Unit: Unit-1 (660 MW)
-- Start Date: February 15, 2026
-- End Date: February 28, 2026 (tentative)
-- Duration: 14 days
-
-**Impact:**
-- Generation capacity will be reduced by approximately 50%
-- Unit-2 will continue normal operations
-- Grid support arrangements have been coordinated with BPDB
-
-**Maintenance Activities:**
-1. Boiler inspection and cleaning
-2. Turbine overhauling
-3. Generator maintenance
-4. Safety systems testing
-5. Instrumentation calibration
-
-All contractors and service providers are requested to coordinate with the O&M department.''',
+                'excerpt': 'Unit-1 will undergo scheduled maintenance Feb 15-28, 2026.',
+                'content': 'Unit-1 (660 MW) maintenance. Unit-2 continues normal operations.',
                 'published_date': today - timedelta(days=1),
                 'is_active': True,
                 'is_featured': True,
-                'order': 3,
             },
             {
-                'title': 'Recruitment Drive 2026 - Multiple Positions Available',
+                'title': 'Recruitment Drive 2026 - Multiple Positions',
                 'slug': 'recruitment-drive-2026',
                 'category': 'recruitment',
-                'excerpt': 'BIFPCL is hiring! Multiple engineering and management positions available across departments.',
-                'content': '''BIFPCL announces its Annual Recruitment Drive for 2026!
-
-**Open Positions:**
-1. Senior Mechanical Engineer (2 positions)
-2. Environmental Engineer (1 position)
-3. Electrical Maintenance Engineer (2 positions)
-4. IT Systems Administrator (1 position)
-5. Finance Manager (1 position)
-6. HR Executive (1 position)
-
-**Benefits:**
-- Competitive salary packages
-- Medical insurance for family
-- Housing allowance
-- Annual performance bonus
-- Training and development opportunities
-
-**How to Apply:**
-Visit the Careers section of our website or send your CV to careers@bifpcl.com.
-
-**Application Deadline:** February 28, 2026
-
-BIFPCL is an equal opportunity employer.''',
+                'excerpt': 'BIFPCL is hiring! Multiple engineering positions available.',
+                'content': 'Visit Careers section. Deadline: February 28, 2026.',
                 'published_date': today - timedelta(days=2),
                 'is_active': True,
                 'is_featured': False,
-                'order': 4,
-            },
-            {
-                'title': 'Tender Notice: Coal Supply Contract 2026-2027',
-                'slug': 'tender-coal-supply-2026',
-                'category': 'tender',
-                'excerpt': 'Inviting bids for annual coal supply contract. Estimated quantity: 3 million MT.',
-                'content': '''BIFPCL invites sealed tenders from eligible bidders for the supply of imported coal.
-
-**Tender Reference:** BIFPCL/PROC/2026/COAL-001
-
-**Scope of Supply:**
-- Coal Type: High-grade thermal coal
-- Quantity: 3 million metric tons (approx.)
-- Duration: April 2026 - March 2027
-- Delivery: CIF Mongla Port
-
-**Coal Specifications:**
-- Gross Calorific Value: Min 5,500 Kcal/Kg
-- Total Moisture: Max 12%
-- Ash Content: Max 15%
-- Sulphur: Max 0.6%
-
-**Important Dates:**
-- Pre-bid Meeting: January 25, 2026
-- Last Date for Queries: February 5, 2026
-- Submission Deadline: February 20, 2026, 3:00 PM
-- Technical Bid Opening: February 20, 2026, 4:00 PM
-
-Download tender documents from our website or contact procurement@bifpcl.com.''',
-                'published_date': today - timedelta(days=5),
-                'is_active': True,
-                'is_featured': False,
-                'order': 5,
-            },
-            {
-                'title': 'Holiday Notice - National Mourning Day',
-                'slug': 'holiday-mourning-day-2026',
-                'category': 'general',
-                'excerpt': 'Office will remain closed on August 15, 2026 for National Mourning Day.',
-                'content': '''This is to inform all employees and visitors that BIFPCL offices will remain closed on August 15, 2026 (Saturday) on account of National Mourning Day.
-
-Regular operations will resume on August 16, 2026.
-
-For any urgent matters, please contact the 24x7 control room.
-
-Emergency Contact: +880-1XXX-XXXXXX''',
-                'published_date': today - timedelta(days=10),
-                'is_active': True,
-                'is_featured': False,
-                'order': 6,
-            },
-            {
-                'title': 'Tender Notice: Security Services Contract',
-                'slug': 'tender-security-services-2026',
-                'category': 'tender',
-                'excerpt': 'Annual security services contract for plant premises. Bidders must have Grade-A BFSIA license.',
-                'content': '''BIFPCL invites proposals from reputed security service providers.
-
-**Tender Reference:** BIFPCL/PROC/2026/SEC-001
-
-**Scope:**
-- 24x7 security coverage for plant premises
-- Access control management
-- CCTV monitoring
-- Patrol services
-- Emergency response
-
-**Requirements:**
-- Valid BFSIA Grade-A license
-- Minimum 5 years experience in industrial security
-- ISO 9001 certification preferred
-- Past experience with power plants advantageous
-
-**Contract Duration:** 2 years (extendable)
-
-**Submission Deadline:** February 28, 2026''',
-                'published_date': today - timedelta(days=8),
-                'is_active': True,
-                'is_featured': False,
-                'order': 7,
-            },
-            {
-                'title': 'Walk-in Interview for Graduate Engineers',
-                'slug': 'walk-in-interview-jan-2026',
-                'category': 'recruitment',
-                'excerpt': 'Walk-in interview for fresh graduate engineers (Mechanical/Electrical) on January 30, 2026.',
-                'content': '''BIFPCL conducts Walk-in Interview for Fresh Graduate Engineers
-
-**Positions:** Graduate Engineer Trainee (GET)
-**Branches:** Mechanical / Electrical Engineering
-
-**Date:** January 30, 2026
-**Time:** 9:00 AM - 4:00 PM
-**Venue:** BIFPCL Corporate Office, Dhaka
-
-**Eligibility:**
-- B.Sc. in Mechanical/Electrical Engineering
-- Graduated in 2024 or 2025
-- CGPA 3.0 or above
-- Age below 28 years
-
-**Bring:**
-- Updated CV
-- All academic certificates (original + photocopy)
-- National ID card
-- Passport size photographs (2)
-
-Selected candidates will undergo 1-year training at plant site.''',
-                'published_date': today - timedelta(days=4),
-                'is_active': True,
-                'is_featured': False,
-                'order': 8,
             },
         ]
 
-        # Clear existing notices and create new ones
-        Notice.objects.all().delete()
-        
         for data in notices_data:
-            Notice.objects.create(**data)
-        
-        self.stdout.write('  ✓ Notices created')
+            Notice.objects.update_or_create(
+                slug=data['slug'],
+                defaults=data
+            )
 
+        self.stdout.write('  ✓ Notices created')
