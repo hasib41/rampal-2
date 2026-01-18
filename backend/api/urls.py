@@ -1,10 +1,17 @@
 from django.urls import path, include
+from django.http import JsonResponse
 from rest_framework.routers import DefaultRouter
 from .views import (
     CompanyInfoView, ProjectViewSet, DirectorViewSet, NewsViewSet,
     CareerViewSet, JobApplicationView, TenderViewSet,
     ContactInquiryView, CSRInitiativeViewSet, NoticeViewSet
 )
+
+
+def health_check(request):
+    """Health check endpoint for Render deployment monitoring."""
+    return JsonResponse({'status': 'healthy', 'service': 'bifpcl-api'})
+
 
 router = DefaultRouter()
 router.register('projects', ProjectViewSet, basename='project')
@@ -16,6 +23,7 @@ router.register('csr', CSRInitiativeViewSet, basename='csr')
 router.register('notices', NoticeViewSet, basename='notice')
 
 urlpatterns = [
+    path('health/', health_check, name='health-check'),
     path('', include(router.urls)),
     path('company/', CompanyInfoView.as_view(), name='company-info'),
     path('apply/', JobApplicationView.as_view(), name='job-application'),
