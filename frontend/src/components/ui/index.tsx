@@ -973,16 +973,29 @@ interface SectionTitleProps {
     subtitle?: string;
     centered?: boolean;
     light?: boolean;
+    variant?: 'default' | 'primary' | 'white';
 }
 
-export function SectionTitle({ title, subtitle, centered = false, light = false }: SectionTitleProps) {
+export function SectionTitle({ title, subtitle, centered = false, light = false, variant }: SectionTitleProps) {
+    const titleColor = variant === 'primary'
+        ? 'text-primary'
+        : variant === 'white'
+            ? 'text-white'
+            : light
+                ? 'text-white'
+                : 'text-gray-900';
+
+    const subtitleColor = variant === 'primary' || variant === 'white' || light
+        ? 'text-gray-300'
+        : 'text-gray-600';
+
     return (
         <div className={centered ? 'text-center' : ''}>
-            <h2 className={`text-3xl md:text-4xl font-bold ${light ? 'text-white' : 'text-gray-900'}`}>
+            <h2 className={`text-3xl md:text-4xl font-bold ${titleColor}`}>
                 {title}
             </h2>
             {subtitle && (
-                <p className={`mt-4 text-lg ${light ? 'text-gray-300' : 'text-gray-600'}`}>
+                <p className={`mt-4 text-lg ${subtitleColor}`}>
                     {subtitle}
                 </p>
             )}

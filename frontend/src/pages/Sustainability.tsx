@@ -47,6 +47,7 @@ export function SustainabilityPage() {
                     <SectionTitle
                         title="Driving Holistic Change"
                         subtitle="Our sustainability initiatives span education, healthcare, environmental conservation, and community development."
+                        variant="primary"
                     />
                     {isLoading ? (
                         <LoadingSpinner />

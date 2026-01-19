@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Download, Calendar, Eye, Filter, UserPlus, LogIn } from 'lucide-react';
+import { Search, Download, Calendar, Eye, Filter } from 'lucide-react';
 import { Card, Select, LoadingSpinner, Button } from '../components/ui';
 import { useTenders } from '../hooks/useApi';
 import { getMediaUrl } from '../services/api';
@@ -220,27 +220,6 @@ export function TendersPage() {
                         </Card>
                     )}
 
-                    {/* Vendor Portal Section */}
-                    <Card className="mt-8 bg-gradient-to-r from-primary to-primary-dark p-8 border-0">
-                        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                            <div>
-                                <h3 className="text-2xl font-bold text-white">Registered Vendors Portal</h3>
-                                <p className="text-white/80 mt-2 max-w-xl">
-                                    Access bidding documents, submit online proposals, and track your active bids in real-time. Secure high-level authentication required for all commercial and technical submissions.
-                                </p>
-                            </div>
-                            <div className="flex gap-3">
-                                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                                    <LogIn className="mr-2" size={18} />
-                                    Login to Portal
-                                </Button>
-                                <Button className="bg-white text-primary hover:bg-gray-100">
-                                    <UserPlus className="mr-2" size={18} />
-                                    Vendor Registration
-                                </Button>
-                            </div>
-                        </div>
-                    </Card>
                 </div>
             </section>
         </div>
