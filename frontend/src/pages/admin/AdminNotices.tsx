@@ -109,19 +109,42 @@ export function AdminNotices() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        console.log('Form submitted:', formData, editingNotice ? 'UPDATE' : 'CREATE');
-        setTimeout(() => {
+
+        try {
+            const submitData = new FormData();
+            submitData.append('title', formData.title);
+            submitData.append('category', formData.category);
+            submitData.append('excerpt', formData.excerpt);
+            submitData.append('content', formData.content);
+            submitData.append('published_date', formData.published_date);
+            submitData.append('is_featured', formData.is_featured.toString());
+            submitData.append('is_active', formData.is_active.toString());
+
+            if (editingNotice) {
+                await noticesApi.update(editingNotice.id, submitData);
+            } else {
+                await noticesApi.create(submitData);
+            }
+
             setIsModalOpen(false);
-            setIsSubmitting(false);
             refetch();
-        }, 500);
+        } catch (error) {
+            console.error('Failed to save notice:', error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleDelete = async () => {
         if (!deleteConfirm) return;
-        console.log('Delete notice:', deleteConfirm.id);
-        setDeleteConfirm(null);
-        refetch();
+
+        try {
+            await noticesApi.delete(deleteConfirm.id);
+            setDeleteConfirm(null);
+            refetch();
+        } catch (error) {
+            console.error('Failed to delete notice:', error);
+        }
     };
 
     return (

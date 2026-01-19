@@ -119,6 +119,13 @@ export const noticesApi = {
         api.get<PaginatedResponse<Notice>>('/notices/', { params }).then(getResults),
     getBySlug: (slug: string) => api.get<Notice>(`/notices/${slug}/`).then(res => res.data),
     getFeatured: () => api.get<Notice[]>('/notices/featured/').then(res => res.data),
+    create: (data: FormData) => api.post<Notice>('/notices/', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
+    update: (id: number, data: FormData) => api.patch<Notice>(`/notices/${id}/`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
+    delete: (id: number) => api.delete(`/notices/${id}/`),
 };
 
 // Contact

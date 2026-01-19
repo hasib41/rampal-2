@@ -99,19 +99,42 @@ export function AdminNews() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        console.log('Submitting:', formData);
-        setTimeout(() => {
-            setIsSubmitting(false);
+
+        try {
+            const submitData = new FormData();
+            submitData.append('title', formData.title);
+            submitData.append('slug', formData.slug);
+            submitData.append('category', formData.category);
+            submitData.append('excerpt', formData.excerpt);
+            submitData.append('content', formData.content);
+            submitData.append('published_date', formData.published_date);
+            submitData.append('is_featured', formData.is_featured.toString());
+
+            if (editingArticle) {
+                await newsApi.update(editingArticle.id, submitData);
+            } else {
+                await newsApi.create(submitData);
+            }
+
             setIsModalOpen(false);
             refetch();
-        }, 500);
+        } catch (error) {
+            console.error('Failed to save article:', error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleDelete = async () => {
         if (!deletingArticle) return;
-        console.log('Deleting:', deletingArticle.id);
-        setDeletingArticle(null);
-        refetch();
+
+        try {
+            await newsApi.delete(deletingArticle.id);
+            setDeletingArticle(null);
+            refetch();
+        } catch (error) {
+            console.error('Failed to delete article:', error);
+        }
     };
 
     const generateSlug = (title: string) => {
