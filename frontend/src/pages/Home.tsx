@@ -171,7 +171,7 @@ export function HomePage() {
             </section>
 
             {/* Stats Section */}
-            <section className="bg-gradient-to-r from-slate-100 via-emerald-50/50 to-slate-100 dark:bg-secondary py-10 sm:py-12 md:py-16 border-y border-slate-200 dark:border-gray-700">
+            <section className="bg-slate-100 dark:bg-secondary py-10 sm:py-12 md:py-16 border-y border-slate-200 dark:border-gray-700">
                 <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
                     <Stat value="1320" suffix="MW" label="Total Capacity" />
                     <Stat value="Ultra-Super" label="Critical Technology" />
@@ -192,7 +192,7 @@ export function HomePage() {
             </section>
 
             {/* Latest News/Media Section */}
-            <section className="bg-gradient-to-b from-slate-100 to-slate-50 dark:bg-secondary py-12 sm:py-16 md:py-20">
+            <section className="bg-slate-50 dark:bg-secondary py-12 sm:py-16 md:py-20">
                 <div className="max-w-7xl mx-auto px-4">
                     {/* Section Header */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8 md:mb-10">
@@ -408,7 +408,7 @@ export function HomePage() {
             </section>
 
             {/* Project Location Map Section */}
-            <section className="bg-gradient-to-br from-slate-100 via-emerald-50/30 to-slate-100 dark:bg-secondary py-12 sm:py-16 md:py-20 border-t border-slate-200 dark:border-gray-700/50">
+            <section className="bg-slate-100 dark:bg-secondary py-12 sm:py-16 md:py-20 border-t border-slate-200 dark:border-gray-700/50">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-center">
                         {/* Interactive Map */}
