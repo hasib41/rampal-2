@@ -1041,3 +1041,8 @@ export function Stat({ value, label, icon, suffix }: StatProps) {
 // MAP COMPONENT (Re-export)
 // ============================================================================
 export { ProjectLocationMap } from './ProjectLocationMap';
+
+// ============================================================================
+// NOTICE BOARD COMPONENT (Re-export)
+// ============================================================================
+export { NoticeBoard } from './NoticeBoard';

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, Users, Leaf, MapPin, FileText, Calendar, ChevronRight, ArrowRight, ChevronLeft, AlertCircle, Briefcase, UserPlus, Star, Newspaper, Clock, ExternalLink, TrendingUp } from 'lucide-react';
-import { Button, Stat, Card, LoadingSpinner, ProjectLocationMap } from '../components/ui';
+import { Zap, Users, Leaf, MapPin, Calendar, ChevronRight, ArrowRight, ChevronLeft, Briefcase, Newspaper, Clock, ExternalLink, TrendingUp } from 'lucide-react';
+import { Button, Stat, Card, LoadingSpinner, ProjectLocationMap, NoticeBoard } from '../components/ui';
 import { useDirectors, useCSRInitiatives, useNotices, useNews, useTenders } from '../hooks/useApi';
 import { getMediaUrl } from '../services/api';
 
@@ -46,13 +46,6 @@ export function HomePage() {
     const topDirectors = directors?.slice(0, 3);
     const recentNews = news?.slice(0, 4);
     const openTenders = tenders?.filter(t => t.status === 'open').slice(0, 3);
-
-    const categoryColors: Record<string, string> = {
-        general: 'bg-primary/10 text-primary border-primary/30',
-        urgent: 'bg-red-500/10 text-red-400 border-red-500/30',
-        tender: 'bg-accent-orange/10 text-accent-orange border-accent-orange/30',
-        recruitment: 'bg-accent-green/10 text-accent-green border-accent-green/30',
-    };
 
     const newsCategoryConfig: Record<string, { label: string; icon: typeof Newspaper; color: string; bgColor: string }> = {
         press: { label: 'Press Release', icon: Newspaper, color: 'text-primary-light', bgColor: 'bg-primary/20' },
@@ -187,112 +180,15 @@ export function HomePage() {
                 </div>
             </section>
 
-            {/* Notice Board Section - Redesigned */}
+            {/* Notice Board Section with Leadership Sidebar */}
             <section className="bg-slate-50/50 dark:bg-secondary-dark py-12 sm:py-16 md:py-20">
                 <div className="max-w-7xl mx-auto px-4">
-                    {/* Section Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8 md:mb-10">
-                        <div>
-                            <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg shadow-primary/20">
-                                    <FileText className="text-white" size={20} />
-                                </div>
-                                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Notice Board</h2>
-                            </div>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base mt-1">Latest announcements and important updates</p>
-                        </div>
-                        <Link
-                            to="/notices"
-                            className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-lg shadow-md shadow-primary/30 hover:shadow-lg hover:shadow-primary/40 transition-all"
-                        >
-                            View All Notices <ArrowRight size={16} />
-                        </Link>
-                    </div>
-
-                    {/* Notices Grid */}
-                    {noticesLoading ? (
-                        <LoadingSpinner />
-                    ) : (
-                        <>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                                {notices?.slice(0, 6).map((notice, index) => {
-                                    const isFirst = index === 0 && notice.is_featured;
-                                    const categoryStyle = categoryColors[notice.category] || categoryColors.general;
-
-                                    return (
-                                        <Link
-                                            key={notice.id}
-                                            to={`/notices/${notice.slug}`}
-                                            className={`group relative rounded-xl border transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 active:scale-[0.99] ${isFirst
-                                                ? 'sm:col-span-2 lg:col-span-2 bg-gradient-to-br from-primary/10 via-white to-emerald-50/30 dark:via-secondary dark:to-secondary border-primary/30'
-                                                : 'bg-white dark:bg-secondary border-slate-200 dark:border-gray-700 shadow-sm'
-                                                }`}
-                                        >
-                                            <div className="p-4 sm:p-6">
-                                                {/* Category & Date Row */}
-                                                <div className="flex items-center justify-between gap-2 mb-3 sm:mb-4">
-                                                    <span className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 rounded-full text-xs font-semibold border ${categoryStyle}`}>
-                                                        {notice.category === 'urgent' && <AlertCircle size={10} className="sm:w-3 sm:h-3" />}
-                                                        {notice.category === 'tender' && <Briefcase size={10} className="sm:w-3 sm:h-3" />}
-                                                        {notice.category === 'recruitment' && <UserPlus size={10} className="sm:w-3 sm:h-3" />}
-                                                        {notice.category === 'general' && <FileText size={10} className="sm:w-3 sm:h-3" />}
-                                                        {notice.category_display}
-                                                    </span>
-                                                    {notice.is_featured && (
-                                                        <span className="px-2 py-1 rounded bg-yellow-500/20 text-yellow-400 text-xs font-medium flex items-center gap-1 shrink-0">
-                                                            <Star size={10} fill="currentColor" /> <span className="hidden sm:inline">Featured</span>
-                                                        </span>
-                                                    )}
-                                                </div>
-
-                                                {/* Title */}
-                                                <h3 className={`font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors mb-3 ${isFirst ? 'text-lg sm:text-xl line-clamp-2' : 'text-base sm:text-lg line-clamp-2'
-                                                    }`}>
-                                                    {notice.title}
-                                                </h3>
-
-                                                {/* Excerpt (only for featured) */}
-                                                {isFirst && notice.excerpt && (
-                                                    <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 mb-4 hidden sm:block">
-                                                        {notice.excerpt}
-                                                    </p>
-                                                )}
-
-                                                {/* Footer */}
-                                                <div className="flex items-center justify-between mt-auto pt-3 sm:pt-4 border-t border-gray-200 dark:border-gray-700/50">
-                                                    <span className="flex items-center gap-1.5 sm:gap-2 text-gray-500 text-xs sm:text-sm">
-                                                        <Calendar size={12} className="sm:w-3.5 sm:h-3.5" />
-                                                        {new Date(notice.published_date).toLocaleDateString('en-US', {
-                                                            month: 'short',
-                                                            day: 'numeric',
-                                                            year: 'numeric'
-                                                        })}
-                                                    </span>
-                                                    <span className="flex items-center gap-1 text-primary-light text-xs sm:text-sm sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                                                        Read More <ChevronRight size={12} className="sm:w-3.5 sm:h-3.5" />
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    );
-                                })}
-                            </div>
-
-                            {(!notices || notices.length === 0) && (
-                                <div className="text-center py-16 bg-white dark:bg-secondary rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm">
-                                    <FileText className="mx-auto text-gray-400 dark:text-gray-600 mb-4" size={48} />
-                                    <p className="text-gray-500">No notices available at this time.</p>
-                                </div>
-                            )}
-
-                            {/* Mobile View All Button */}
-                            <div className="mt-8 text-center md:hidden">
-                                <Link to="/notices">
-                                    <Button>View All Notices</Button>
-                                </Link>
-                            </div>
-                        </>
-                    )}
+                    <NoticeBoard
+                        notices={notices || []}
+                        directors={directors}
+                        loading={noticesLoading}
+                        getMediaUrl={getMediaUrl}
+                    />
                 </div>
             </section>
 
