@@ -1036,3 +1036,8 @@ export function Stat({ value, label, icon, suffix }: StatProps) {
         </div>
     );
 }
+
+// ============================================================================
+// MAP COMPONENT (Re-export)
+// ============================================================================
+export { ProjectLocationMap } from './ProjectLocationMap';

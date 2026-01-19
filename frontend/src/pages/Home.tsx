@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Zap, Users, Leaf, MapPin, FileText, Calendar, ChevronRight, ArrowRight, ChevronLeft, AlertCircle, Briefcase, UserPlus, Star, Newspaper, Clock, ExternalLink, TrendingUp } from 'lucide-react';
-import { Button, Stat, Card, LoadingSpinner } from '../components/ui';
+import { Button, Stat, Card, LoadingSpinner, ProjectLocationMap } from '../components/ui';
 import { useDirectors, useCSRInitiatives, useNotices, useNews, useTenders } from '../hooks/useApi';
 import { getMediaUrl } from '../services/api';
 
@@ -516,26 +516,9 @@ export function HomePage() {
             <section className="bg-gradient-to-br from-slate-100 via-emerald-50/30 to-slate-100 dark:bg-secondary py-12 sm:py-16 md:py-20 border-t border-slate-200 dark:border-gray-700/50">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-center">
-                        {/* Map Image */}
-                        <div className="relative group rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl order-2 lg:order-1">
-                            <img
-                                src="/project-map.png"
-                                alt="Rampal Power Station Location Map"
-                                className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
-                            />
-                            {/* Overlay on hover/tap */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 dark:from-secondary-dark/90 via-transparent to-transparent opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 sm:p-6">
-                                <div>
-                                    <p className="text-white font-semibold text-sm sm:text-base">Rampal Power Station</p>
-                                    <p className="text-gray-300 text-xs sm:text-sm">Bagerhat, Bangladesh</p>
-                                </div>
-                            </div>
-                            {/* Location Pin Animation */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                                <div className="relative">
-                                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-primary rounded-full animate-ping absolute inset-0 opacity-50" />
-                                </div>
-                            </div>
+                        {/* Interactive Map */}
+                        <div className="order-2 lg:order-1">
+                            <ProjectLocationMap />
                         </div>
 
                         {/* Info Content */}
