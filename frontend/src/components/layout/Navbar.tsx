@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, Zap, Users, Newspaper, HelpCircle, Briefcase, Mail, Leaf, FolderOpen, ChevronRight, Sun, Moon, FileText } from 'lucide-react';
+import { ChevronDown, Zap, Users, Newspaper, HelpCircle, Briefcase, Mail, Leaf, FolderOpen, ChevronRight, Sun, Moon, FileText } from 'lucide-react';
 import { useTheme } from '../../contexts';
 
 // Navigation structure with icons for dropdowns
@@ -37,9 +37,14 @@ export function Navbar() {
     }, []);
 
     // Close mobile menu on route change
+    const prevPathRef = useRef(location.pathname);
     useEffect(() => {
-        setIsOpen(false);
-        setActiveDropdown(null);
+        if (prevPathRef.current !== location.pathname) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setIsOpen(false);
+            setActiveDropdown(null);
+            prevPathRef.current = location.pathname;
+        }
     }, [location.pathname]);
 
     // Toggle mobile dropdown
@@ -93,7 +98,7 @@ export function Navbar() {
                                             <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-secondary-dark rotate-45 border-l border-t border-gray-200 dark:border-gray-700/50" />
 
                                             <div className="relative bg-white dark:bg-secondary-dark rounded-2xl shadow-2xl shadow-gray-300/50 dark:shadow-black/30 border border-gray-200 dark:border-gray-700/50 py-3 min-w-[280px] overflow-hidden">
-                                                {link.children.map((child, idx) => {
+                                                {link.children.map((child) => {
                                                     const Icon = child.icon;
                                                     return (
                                                         <NavLink
