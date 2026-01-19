@@ -1,7 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { ChevronDown, Zap, Users, Newspaper, HelpCircle, Briefcase, Mail, Leaf, FolderOpen, ChevronRight, Sun, Moon, FileText } from 'lucide-react';
+import { ChevronDown, Zap, Users, Newspaper, HelpCircle, Briefcase, Mail, Leaf, FolderOpen, ChevronRight, Sun, Moon, FileText, ExternalLink } from 'lucide-react';
 import { useTheme } from '../../contexts';
+
+// Partner site links
+const partnerLinks = [
+    { name: 'BPDB', url: 'https://bpdb.gov.bd', label: 'Bangladesh Power Development Board' },
+    { name: 'NTPC', url: 'https://ntpc.co.in', label: 'NTPC Limited, India' },
+];
 
 // Navigation structure with icons for dropdowns
 const navLinks = [
@@ -60,8 +66,28 @@ export function Navbar() {
                     : 'bg-white/95 dark:bg-secondary-dark/90 backdrop-blur-md border-b border-gray-100/50 dark:border-transparent'
             }`}
         >
-            {/* Top accent bar */}
-            <div className="h-1 bg-gradient-to-r from-primary via-primary-light to-accent-green" />
+            {/* Top accent bar with partner links */}
+            <div className="h-7 bg-gradient-to-r from-primary via-primary-dark to-primary hidden sm:flex items-center justify-end px-4">
+                <div className="flex items-center gap-4 text-[11px]">
+                    <span className="text-white/60">Partners:</span>
+                    {partnerLinks.map((partner, index) => (
+                        <a
+                            key={partner.name}
+                            href={partner.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={partner.label}
+                            className="flex items-center gap-1 text-white/80 hover:text-white transition-colors"
+                        >
+                            {partner.name}
+                            <ExternalLink size={10} />
+                            {index < partnerLinks.length - 1 && <span className="ml-3 text-white/30">|</span>}
+                        </a>
+                    ))}
+                </div>
+            </div>
+            {/* Mobile accent bar */}
+            <div className="h-1 bg-gradient-to-r from-primary via-primary-light to-accent-green sm:hidden" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16 lg:h-[72px]">

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, Phone, MapPin, ChevronDown, Download, Globe, Building2, Clock } from 'lucide-react';
+import { Mail, Phone, MapPin, ChevronDown, Download, Globe, Building2, Clock, ExternalLink } from 'lucide-react';
 import { Card, Button, Input, Textarea, Select } from '../components/ui';
 import { contactApi } from '../services/api';
 
@@ -12,7 +12,7 @@ const categoryOptions = [
 
 const officeLocations = [
     {
-        name: 'Corporate Head Office',
+        name: 'BIFPCL Head Office',
         type: 'Project Site',
         address: 'Maitree Super Thermal Power Project',
         city: 'Rampal, Bagerhat',
@@ -20,26 +20,32 @@ const officeLocations = [
         phone: '+880 2 968 1234',
         email: 'info@bifpcl.com',
         hours: 'Sun - Thu: 9:00 AM - 5:00 PM',
+        website: 'https://bifpcl.com',
+        websiteLabel: 'bifpcl.com',
     },
     {
-        name: 'Dhaka Liaison Office',
-        type: 'Liaison Office',
-        address: 'Kawran Bazar',
-        city: 'Dhaka 1215',
+        name: 'BPDB Office',
+        type: 'Partner Office',
+        address: 'Bidyut Bhaban, 1 Abdul Gani Road',
+        city: 'Dhaka 1000',
         country: 'Bangladesh',
-        phone: '+880 2 812 3456',
-        email: 'dhaka@bifpcl.com',
+        phone: '+880 2 9540125',
+        email: 'info@bpdb.gov.bd',
         hours: 'Sun - Thu: 9:00 AM - 5:00 PM',
+        website: 'https://bpdb.gov.bd',
+        websiteLabel: 'bpdb.gov.bd',
     },
     {
-        name: 'NTPC Coordination Office',
+        name: 'NTPC Limited',
         type: 'Partner Office',
         address: 'NTPC Bhawan, Scope Complex',
         city: 'New Delhi 110003',
         country: 'India',
         phone: '+91 11 2436 0100',
-        email: 'ntpc.coord@bifpcl.com',
+        email: 'cc@ntpc.co.in',
         hours: 'Mon - Fri: 9:30 AM - 6:00 PM',
+        website: 'https://ntpc.co.in',
+        websiteLabel: 'ntpc.co.in',
     },
 ];
 
@@ -177,9 +183,15 @@ export function ContactPage() {
                                                         {office.type}
                                                     </span>
                                                 </div>
-                                                <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                                                    <MapPin className="text-primary" size={20} />
-                                                </div>
+                                                <a
+                                                    href={office.website}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 hover:bg-primary flex items-center justify-center transition-colors group"
+                                                    title={`Visit ${office.websiteLabel}`}
+                                                >
+                                                    <ExternalLink className="text-primary group-hover:text-white" size={18} />
+                                                </a>
                                             </div>
 
                                             <div className="space-y-2 text-sm">
@@ -200,6 +212,17 @@ export function ContactPage() {
                                                     <span>{office.hours}</span>
                                                 </div>
                                             </div>
+
+                                            {/* Visit Website Button */}
+                                            <a
+                                                href={office.website}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-primary hover:text-white text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition-all"
+                                            >
+                                                <Globe size={16} />
+                                                Visit {office.websiteLabel}
+                                            </a>
                                         </div>
                                     </Card>
                                 ))}
