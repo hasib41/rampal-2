@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, Phone, MapPin, ChevronDown, Download, Globe } from 'lucide-react';
+import { Mail, Phone, MapPin, ChevronDown, Download, Globe, Building2, Clock } from 'lucide-react';
 import { Card, Button, Input, Textarea, Select } from '../components/ui';
 import { contactApi } from '../services/api';
 
@@ -8,6 +8,39 @@ const categoryOptions = [
     { value: 'media', label: 'Media Relations' },
     { value: 'technical', label: 'Technical Support' },
     { value: 'careers', label: 'Careers' },
+];
+
+const officeLocations = [
+    {
+        name: 'Corporate Head Office',
+        type: 'Project Site',
+        address: 'Maitree Super Thermal Power Project',
+        city: 'Rampal, Bagerhat',
+        country: 'Bangladesh',
+        phone: '+880 2 968 1234',
+        email: 'info@bifpcl.com',
+        hours: 'Sun - Thu: 9:00 AM - 5:00 PM',
+    },
+    {
+        name: 'Dhaka Liaison Office',
+        type: 'Liaison Office',
+        address: 'Kawran Bazar',
+        city: 'Dhaka 1215',
+        country: 'Bangladesh',
+        phone: '+880 2 812 3456',
+        email: 'dhaka@bifpcl.com',
+        hours: 'Sun - Thu: 9:00 AM - 5:00 PM',
+    },
+    {
+        name: 'NTPC Coordination Office',
+        type: 'Partner Office',
+        address: 'NTPC Bhawan, Scope Complex',
+        city: 'New Delhi 110003',
+        country: 'India',
+        phone: '+91 11 2436 0100',
+        email: 'ntpc.coord@bifpcl.com',
+        hours: 'Mon - Fri: 9:30 AM - 6:00 PM',
+    },
 ];
 
 const faqs = [
@@ -122,30 +155,55 @@ export function ContactPage() {
 
                         {/* Office Info */}
                         <div className="space-y-6">
-                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Office Locations</h2>
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg shadow-primary/20">
+                                    <Building2 className="text-white" size={22} />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Office Locations</h2>
+                                    <p className="text-gray-500 dark:text-gray-400 text-sm">Our offices across Bangladesh & India</p>
+                                </div>
+                            </div>
 
-                            {/* Map Placeholder */}
-                            <Card className="p-0 overflow-hidden">
-                                <div className="h-64 bg-gradient-to-br from-primary/10 via-emerald-50 to-slate-100 dark:from-primary/20 dark:via-secondary dark:to-secondary-light relative">
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="text-center">
-                                            <MapPin className="text-primary mx-auto" size={48} />
-                                            <p className="text-gray-900 dark:text-white mt-2 font-medium">BIFPCL Office</p>
-                                            <p className="text-gray-500 dark:text-gray-400 text-sm">Rampal, Bagerhat</p>
+                            {/* Office Cards */}
+                            <div className="space-y-4">
+                                {officeLocations.map((office, index) => (
+                                    <Card key={index} className="p-0 overflow-hidden hover:shadow-lg transition-shadow">
+                                        <div className="p-5">
+                                            <div className="flex items-start justify-between mb-3">
+                                                <div>
+                                                    <h3 className="text-gray-900 dark:text-white font-bold text-lg">{office.name}</h3>
+                                                    <span className="inline-block px-2 py-0.5 bg-primary/10 dark:bg-primary/20 text-primary text-xs font-medium rounded-full mt-1">
+                                                        {office.type}
+                                                    </span>
+                                                </div>
+                                                <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                                    <MapPin className="text-primary" size={20} />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-2 text-sm">
+                                                <div className="flex items-start gap-2 text-gray-600 dark:text-gray-400">
+                                                    <MapPin size={14} className="mt-0.5 flex-shrink-0 text-gray-400" />
+                                                    <span>{office.address}, {office.city}, {office.country}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                                                    <Phone size={14} className="flex-shrink-0 text-gray-400" />
+                                                    <span>{office.phone}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                                                    <Mail size={14} className="flex-shrink-0 text-gray-400" />
+                                                    <span>{office.email}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                                                    <Clock size={14} className="flex-shrink-0 text-gray-400" />
+                                                    <span>{office.hours}</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="p-4 flex items-center justify-between border-t border-gray-200 dark:border-gray-700">
-                                    <div className="flex items-center gap-3">
-                                        <Phone className="text-primary" size={18} />
-                                        <span className="text-gray-600 dark:text-gray-300">+880 2 968 1234</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <Mail className="text-primary" size={18} />
-                                        <span className="text-gray-600 dark:text-gray-300">info@bifpcl.com</span>
-                                    </div>
-                                </div>
-                            </Card>
+                                    </Card>
+                                ))}
+                            </div>
 
                             {/* Department Cards */}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -154,11 +212,11 @@ export function ContactPage() {
                                     { icon: Phone, title: 'Technical Support', desc: 'Site coordination, grid connectivity, and engineering stakeholder support.' },
                                     { icon: MapPin, title: 'Careers', desc: 'Inquiries regarding human resources, internships, and professional development.' },
                                 ].map((item) => (
-                                    <Card key={item.title} className="p-4 hover:bg-slate-50 dark:hover:bg-secondary-light transition-colors group">
+                                    <Card key={item.title} className="p-4 hover:shadow-md transition-all group border border-gray-100 dark:border-gray-700">
                                         <item.icon className="text-primary mb-3 group-hover:scale-110 transition-transform" size={24} />
                                         <h4 className="text-gray-900 dark:text-white font-semibold text-sm">{item.title}</h4>
                                         <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">{item.desc}</p>
-                                        <span className="text-primary text-xs mt-2 inline-block cursor-pointer hover:underline">
+                                        <span className="text-primary text-xs mt-2 inline-block cursor-pointer hover:underline font-medium">
                                             Contact Now →
                                         </span>
                                     </Card>
