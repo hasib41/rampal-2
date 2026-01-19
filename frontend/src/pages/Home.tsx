@@ -37,13 +37,12 @@ export function HomePage() {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
-    const { data: directors, isLoading: directorsLoading } = useDirectors();
+    const { data: directors } = useDirectors();
     const { data: csrInitiatives, isLoading: csrLoading } = useCSRInitiatives();
     const { data: notices, isLoading: noticesLoading } = useNotices();
     const { data: news, isLoading: newsLoading } = useNews();
     const { data: tenders, isLoading: tendersLoading } = useTenders();
 
-    const topDirectors = directors?.slice(0, 3);
     const recentNews = news?.slice(0, 4);
     const openTenders = tenders?.filter(t => t.status === 'open').slice(0, 3);
 
@@ -524,57 +523,6 @@ export function HomePage() {
                                 <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${item.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`} />
                             </div>
                         ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Leadership Section */}
-            <section className="bg-gradient-to-b from-slate-100 to-slate-50 dark:bg-secondary py-12 sm:py-16 md:py-24">
-                <div className="max-w-7xl mx-auto px-4">
-                    {/* Section Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8 md:mb-10">
-                        <div>
-                            <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg shadow-primary/20">
-                                    <Users className="text-white" size={20} />
-                                </div>
-                                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Our Leadership</h2>
-                            </div>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base mt-1">Guided by leaders with vision, experience, and a dedication to excellence</p>
-                        </div>
-                        <Link
-                            to="/directors"
-                            className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-lg shadow-md shadow-primary/30 hover:shadow-lg hover:shadow-primary/40 transition-all"
-                        >
-                            View All Directors <ArrowRight size={16} />
-                        </Link>
-                    </div>
-                    {directorsLoading ? (
-                        <LoadingSpinner />
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
-                            {topDirectors?.map((director) => (
-                                <Card key={director.id} className="text-center p-4 sm:p-6">
-                                    <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-auto rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
-                                        {director.photo ? (
-                                            <img src={getMediaUrl(director.photo)} alt={director.name} className="w-full h-full object-cover" />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center text-gray-400">
-                                                <Users size={36} />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <h3 className="mt-3 sm:mt-4 text-gray-900 dark:text-white font-semibold text-sm sm:text-base">{director.name}</h3>
-                                    <p className="text-primary text-xs sm:text-sm">{director.title}</p>
-                                </Card>
-                            ))}
-                        </div>
-                    )}
-                    {/* Mobile View All Button */}
-                    <div className="mt-6 sm:mt-8 text-center md:hidden">
-                        <Link to="/directors">
-                            <Button>View Full Board of Directors</Button>
-                        </Link>
                     </div>
                 </div>
             </section>
