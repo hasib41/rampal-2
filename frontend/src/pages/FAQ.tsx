@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Search, ChevronDown, Zap, Leaf, Users, Building2, FileText, HelpCircle } from 'lucide-react';
+import { Search, ChevronDown, Zap, Leaf, Users, Building2, FileText, HelpCircle, X } from 'lucide-react';
 import { Card } from '../components/ui';
 
 interface FAQItem {
@@ -190,23 +190,25 @@ function FAQAccordion({ faq, isOpen, onToggle }: { faq: FAQItem; isOpen: boolean
     return (
         <div className="border-b border-white/10 last:border-b-0">
             <button
-                className="w-full px-6 py-5 flex items-start justify-between text-left hover:bg-white/[0.02] transition-colors"
+                className="w-full px-4 py-4 sm:px-6 sm:py-5 flex items-start justify-between text-left hover:bg-white/[0.02] transition-colors gap-3 active:bg-white/[0.04]"
                 onClick={onToggle}
                 aria-expanded={isOpen}
             >
-                <span className="text-white font-medium pr-4">{faq.question}</span>
+                <span className="text-white font-medium text-sm sm:text-base leading-relaxed">{faq.question}</span>
                 <ChevronDown
-                    className={`text-primary-light flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                    className={`text-primary-light flex-shrink-0 transition-transform duration-300 mt-0.5 ${isOpen ? 'rotate-180' : ''}`}
                     size={20}
                 />
             </button>
             <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                className={`grid transition-all duration-300 ease-in-out ${
+                    isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
                 }`}
             >
-                <div className="px-6 pb-5 text-gray-400 leading-relaxed">
-                    {faq.answer}
+                <div className="overflow-hidden">
+                    <div className="px-4 pb-4 sm:px-6 sm:pb-5 text-gray-400 text-sm sm:text-base leading-relaxed">
+                        {faq.answer}
+                    </div>
                 </div>
             </div>
         </div>
@@ -257,45 +259,52 @@ export function FAQPage() {
     return (
         <div className="min-h-screen">
             {/* Hero Section */}
-            <section className="relative py-24 pt-32 bg-gradient-to-br from-secondary via-secondary to-secondary-dark">
+            <section className="relative py-16 pt-24 sm:py-20 sm:pt-28 md:py-24 md:pt-32 bg-gradient-to-br from-secondary via-secondary to-secondary-dark">
                 <div className="absolute inset-0 opacity-30">
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(245,158,11,0.1),transparent_50%)]" />
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(245,158,11,0.1),transparent_50%)]" />
                 </div>
                 <div className="relative max-w-4xl mx-auto px-4 text-center">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-6">
-                        <HelpCircle className="text-primary-light" size={18} />
-                        <span className="text-primary-light text-sm font-medium">Help Center</span>
+                    {/* Badge */}
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-primary/10 border border-primary/20 rounded-full mb-4 sm:mb-6">
+                        <HelpCircle className="text-primary-light" size={16} />
+                        <span className="text-primary-light text-xs sm:text-sm font-medium">Help Center</span>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold text-white">
+
+                    {/* Title */}
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
                         Frequently Asked Questions
                     </h1>
-                    <p className="mt-4 text-xl text-white/70 max-w-2xl mx-auto">
-                        Find answers to common questions about BIFPCL, our operations, environmental initiatives, and how to work with us.
+
+                    {/* Subtitle */}
+                    <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl text-white/70 max-w-2xl mx-auto px-2">
+                        Find answers to common questions about BIFPCL, our operations, and how to work with us.
                     </p>
 
                     {/* Search Bar */}
-                    <div className="mt-8 max-w-xl mx-auto relative">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                    <div className="mt-6 sm:mt-8 max-w-xl mx-auto relative">
+                        <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                         <input
                             type="text"
                             placeholder="Search for answers..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary/20 transition-all"
+                            className="w-full pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 bg-white/10 border border-white/20 rounded-xl text-white text-sm sm:text-base placeholder-gray-400 focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary/20 transition-all"
                         />
                         {searchQuery && (
                             <button
                                 onClick={() => setSearchQuery('')}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                                className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1"
+                                aria-label="Clear search"
                             >
-                                Clear
+                                <X size={18} />
                             </button>
                         )}
                     </div>
 
+                    {/* Search Results Count */}
                     {searchQuery && (
-                        <p className="mt-4 text-gray-400">
+                        <p className="mt-3 sm:mt-4 text-gray-400 text-sm sm:text-base">
                             Found <span className="text-primary-light font-medium">{totalResults}</span> result{totalResults !== 1 ? 's' : ''} for "{searchQuery}"
                         </p>
                     )}
@@ -304,14 +313,17 @@ export function FAQPage() {
 
             {/* Category Tabs */}
             <section className="bg-secondary border-b border-white/10 sticky top-16 z-20">
-                <div className="max-w-7xl mx-auto px-4">
-                    <div className="flex gap-1 overflow-x-auto py-4 scrollbar-hide">
+                <div className="max-w-7xl mx-auto px-3 sm:px-4">
+                    <div
+                        className="flex gap-1.5 sm:gap-2 overflow-x-auto py-3 sm:py-4 -mx-3 px-3 sm:-mx-4 sm:px-4"
+                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    >
                         <button
                             onClick={() => setActiveCategory('all')}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                            className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all flex-shrink-0 ${
                                 activeCategory === 'all'
                                     ? 'bg-primary text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                    : 'text-gray-400 hover:text-white hover:bg-white/5 active:bg-white/10'
                             }`}
                         >
                             All Topics
@@ -322,14 +334,15 @@ export function FAQPage() {
                                 <button
                                     key={category.id}
                                     onClick={() => setActiveCategory(category.id)}
-                                    className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2 ${
+                                    className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all flex items-center gap-1.5 sm:gap-2 flex-shrink-0 ${
                                         activeCategory === category.id
                                             ? 'bg-primary text-white'
-                                            : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                            : 'text-gray-400 hover:text-white hover:bg-white/5 active:bg-white/10'
                                     }`}
                                 >
-                                    <Icon size={16} />
-                                    {category.name}
+                                    <Icon size={14} className="sm:w-4 sm:h-4" />
+                                    <span className="hidden xs:inline sm:inline">{category.name}</span>
+                                    <span className="xs:hidden sm:hidden">{category.name.slice(0, 3)}</span>
                                 </button>
                             );
                         })}
@@ -338,13 +351,13 @@ export function FAQPage() {
             </section>
 
             {/* FAQ Content */}
-            <section className="bg-secondary py-16">
-                <div className="max-w-4xl mx-auto px-4">
+            <section className="bg-secondary py-8 sm:py-12 md:py-16">
+                <div className="max-w-4xl mx-auto px-3 sm:px-4">
                     {filteredCategories.length === 0 ? (
-                        <div className="text-center py-16">
-                            <HelpCircle className="mx-auto text-gray-500 mb-4" size={48} />
-                            <h3 className="text-xl font-semibold text-white mb-2">No results found</h3>
-                            <p className="text-gray-400">
+                        <div className="text-center py-12 sm:py-16">
+                            <HelpCircle className="mx-auto text-gray-500 mb-4" size={40} />
+                            <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">No results found</h3>
+                            <p className="text-gray-400 text-sm sm:text-base">
                                 Try adjusting your search or browse all categories.
                             </p>
                             <button
@@ -352,26 +365,29 @@ export function FAQPage() {
                                     setSearchQuery('');
                                     setActiveCategory('all');
                                 }}
-                                className="mt-4 text-primary-light hover:underline"
+                                className="mt-4 text-primary-light hover:underline text-sm sm:text-base"
                             >
                                 Clear filters
                             </button>
                         </div>
                     ) : (
-                        <div className="space-y-12">
+                        <div className="space-y-8 sm:space-y-10 md:space-y-12">
                             {filteredCategories.map(category => {
                                 const Icon = category.icon;
                                 return (
                                     <div key={category.id}>
-                                        <div className="flex items-center gap-3 mb-6">
-                                            <div className="p-2 bg-primary/10 rounded-lg">
-                                                <Icon className="text-primary-light" size={24} />
+                                        {/* Category Header */}
+                                        <div className="flex items-start sm:items-center gap-3 mb-4 sm:mb-6">
+                                            <div className="p-2 sm:p-2.5 bg-primary/10 rounded-lg flex-shrink-0">
+                                                <Icon className="text-primary-light w-5 h-5 sm:w-6 sm:h-6" />
                                             </div>
-                                            <div>
-                                                <h2 className="text-2xl font-bold text-white">{category.name}</h2>
-                                                <p className="text-gray-400 text-sm">{category.description}</p>
+                                            <div className="min-w-0">
+                                                <h2 className="text-xl sm:text-2xl font-bold text-white">{category.name}</h2>
+                                                <p className="text-gray-400 text-xs sm:text-sm mt-0.5">{category.description}</p>
                                             </div>
                                         </div>
+
+                                        {/* FAQ Card */}
                                         <Card padding="none" className="overflow-hidden">
                                             {category.faqs.map((faq, index) => (
                                                 <FAQAccordion
@@ -391,24 +407,24 @@ export function FAQPage() {
             </section>
 
             {/* Contact CTA */}
-            <section className="bg-secondary-dark py-16">
+            <section className="bg-secondary-dark py-12 sm:py-16">
                 <div className="max-w-4xl mx-auto px-4 text-center">
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                         Still have questions?
                     </h2>
-                    <p className="text-gray-400 mb-8">
+                    <p className="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base max-w-md mx-auto">
                         Can't find the answer you're looking for? Our team is here to help.
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                         <a
                             href="/contact"
-                            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary hover:bg-primary-light text-white font-medium rounded-lg transition-colors"
+                            className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 bg-primary hover:bg-primary-light text-white font-medium rounded-lg transition-colors text-sm sm:text-base active:scale-[0.98]"
                         >
                             Contact Support
                         </a>
                         <a
                             href="mailto:info@bifpcl.com"
-                            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-lg border border-white/10 transition-colors"
+                            className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-lg border border-white/10 transition-colors text-sm sm:text-base active:scale-[0.98]"
                         >
                             Email Us
                         </a>
