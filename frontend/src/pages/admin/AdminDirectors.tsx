@@ -133,15 +133,15 @@ export function AdminDirectors() {
 
             {/* Stats Row */}
             <div className="flex gap-4">
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg">
-                    <Users size={16} className="text-primary-light" />
-                    <span className="text-gray-400">Total:</span>
-                    <span className="text-white font-medium">{directors?.length || 0}</span>
+                <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-white/5 rounded-lg">
+                    <Users size={16} className="text-primary" />
+                    <span className="text-gray-600 dark:text-gray-400">Total:</span>
+                    <span className="text-gray-900 dark:text-white font-medium">{directors?.length || 0}</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg">
-                    <Shield size={16} className="text-amber-400" />
-                    <span className="text-gray-400">Chairman:</span>
-                    <span className="text-white font-medium">{chairmanCount}</span>
+                <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-white/5 rounded-lg">
+                    <Shield size={16} className="text-amber-500 dark:text-amber-400" />
+                    <span className="text-gray-600 dark:text-gray-400">Chairman:</span>
+                    <span className="text-gray-900 dark:text-white font-medium">{chairmanCount}</span>
                 </div>
             </div>
 
@@ -170,20 +170,20 @@ export function AdminDirectors() {
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="border-b border-white/10 bg-white/[0.02]">
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Member</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Title</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Organization</th>
-                                    <th className="text-center py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Order</th>
-                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Actions</th>
+                                <tr className="border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/[0.02]">
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Member</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Title</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Organization</th>
+                                    <th className="text-center py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Order</th>
+                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/5">
+                            <tbody className="divide-y divide-gray-100 dark:divide-white/5">
                                 {filteredDirectors?.map((director) => (
-                                    <tr key={director.id} className="hover:bg-white/[0.02]">
+                                    <tr key={director.id} className="hover:bg-gray-50 dark:hover:bg-white/[0.02]">
                                         <td className="py-3.5 px-5">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-white/5 overflow-hidden flex-shrink-0">
+                                                <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 overflow-hidden flex-shrink-0">
                                                     {director.photo ? (
                                                         <img src={getMediaUrl(director.photo)} alt={director.name} className="w-full h-full object-cover" />
                                                     ) : (
@@ -194,7 +194,7 @@ export function AdminDirectors() {
                                                 </div>
                                                 <div className="min-w-0">
                                                     <div className="flex items-center gap-2">
-                                                        <span className="text-white font-medium truncate">{director.name}</span>
+                                                        <span className="text-gray-900 dark:text-white font-medium truncate">{director.name}</span>
                                                         {director.is_chairman && (
                                                             <Badge variant="warning" size="sm">Chairman</Badge>
                                                         )}
@@ -203,10 +203,10 @@ export function AdminDirectors() {
                                             </div>
                                         </td>
                                         <td className="py-3.5 px-5">
-                                            <span className="text-gray-300">{director.title}</span>
+                                            <span className="text-gray-700 dark:text-gray-300">{director.title}</span>
                                         </td>
                                         <td className="py-3.5 px-5">
-                                            <span className="text-gray-400">{director.organization}</span>
+                                            <span className="text-gray-600 dark:text-gray-400">{director.organization}</span>
                                         </td>
                                         <td className="py-3.5 px-5 text-center">
                                             <span className="text-gray-500">{director.order}</span>
@@ -287,7 +287,7 @@ export function AdminDirectors() {
                     />
                     <div className="flex items-center justify-between">
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1.5">Photo</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Photo</label>
                             <input
                                 type="file"
                                 accept="image/*"
@@ -295,7 +295,7 @@ export function AdminDirectors() {
                                     const file = e.target.files?.[0];
                                     if (file) setFormData({ ...formData, photo: file });
                                 }}
-                                className="text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-medium file:bg-primary file:text-white hover:file:bg-primary-dark cursor-pointer"
+                                className="text-gray-600 dark:text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-medium file:bg-primary file:text-white hover:file:bg-primary-dark cursor-pointer"
                             />
                         </div>
                         <Checkbox

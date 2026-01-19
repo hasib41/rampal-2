@@ -37,24 +37,25 @@ export function NoticesPage() {
     return (
         <>
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-br from-secondary-dark via-secondary to-secondary-dark py-24">
-                <div className="absolute inset-0 bg-[url('/hero-bg.jpg')] bg-cover bg-center opacity-20" />
+            <section className="relative bg-gradient-to-r from-emerald-900 to-teal-800 py-24">
+                <div className="absolute inset-0 bg-[url('/hero-bg.jpg')] bg-cover bg-center" />
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/90 via-teal-800/75 to-emerald-900/85" />
                 <div className="relative max-w-7xl mx-auto px-4 text-center">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 rounded-full text-primary-light text-sm mb-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full text-white text-sm mb-6">
                         <FileText size={16} />
                         <span>Official Announcements</span>
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                        Notice Board
+                        Notice <span className="text-emerald-300">Board</span>
                     </h1>
-                    <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                    <p className="text-xl text-white/70 max-w-2xl mx-auto">
                         Stay updated with the latest announcements, tenders, and recruitment notifications from BIFPCL.
                     </p>
                 </div>
             </section>
 
             {/* Filters Section */}
-            <section className="bg-secondary border-b border-gray-700 sticky top-0 z-20">
+            <section className="bg-white/95 dark:bg-secondary backdrop-blur-sm border-b border-slate-200 dark:border-gray-700 sticky top-16 z-20">
                 <div className="max-w-7xl mx-auto px-4 py-4">
                     <div className="flex flex-col md:flex-row items-center gap-4">
                         {/* Search */}
@@ -67,12 +68,12 @@ export function NoticesPage() {
                                 placeholder="Search notices..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-12 pr-10 py-3 bg-secondary-dark border-2 border-gray-700 rounded-xl text-gray-200 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-600"
+                                className="w-full pl-12 pr-10 py-3 bg-gray-50 dark:bg-secondary-dark border-2 border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600"
                             />
                             {searchTerm && (
                                 <button
                                     onClick={() => setSearchTerm('')}
-                                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500 hover:text-gray-300 transition-colors text-xl"
+                                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors text-xl"
                                 >
                                     ×
                                 </button>
@@ -87,7 +88,7 @@ export function NoticesPage() {
                                     onClick={() => setActiveCategory(cat.key)}
                                     className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${activeCategory === cat.key
                                         ? 'bg-primary text-white'
-                                        : 'bg-secondary-dark text-gray-400 hover:text-white hover:bg-secondary-light'
+                                        : 'bg-gray-100 dark:bg-secondary-dark text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-secondary-light'
                                         }`}
                                 >
                                     {cat.label}
@@ -99,7 +100,7 @@ export function NoticesPage() {
             </section>
 
             {/* Notices List */}
-            <section className="bg-secondary-dark py-12">
+            <section className="bg-slate-50/80 dark:bg-secondary-dark py-12">
                 <div className="max-w-7xl mx-auto px-4">
                     {isLoading ? (
                         <LoadingSpinner />
@@ -109,8 +110,8 @@ export function NoticesPage() {
                             {featuredNotices && featuredNotices.length > 0 && (
                                 <div className="mb-12">
                                     <div className="flex items-center gap-2 mb-6">
-                                        <Star className="text-yellow-400" size={20} />
-                                        <h2 className="text-xl font-semibold text-white">Featured Notices</h2>
+                                        <Star className="text-yellow-500 dark:text-yellow-400" size={20} />
+                                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Featured Notices</h2>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {featuredNotices.map((notice) => (
@@ -129,7 +130,7 @@ export function NoticesPage() {
                                 </div>
                             ) : (
                                 <div className="text-center py-16">
-                                    <FileText className="mx-auto text-gray-600 mb-4" size={48} />
+                                    <FileText className="mx-auto text-gray-400 dark:text-gray-600 mb-4" size={48} />
                                     <p className="text-gray-500">No notices found matching your criteria.</p>
                                 </div>
                             )}
@@ -149,8 +150,8 @@ function NoticeCard({ notice, featured = false }: { notice: Notice; featured?: b
         <Link
             to={`/notices/${notice.slug}`}
             className={`block rounded-xl border transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 group ${featured
-                ? 'bg-gradient-to-br from-secondary to-secondary-dark border-yellow-500/30'
-                : 'bg-secondary border-gray-700'
+                ? 'bg-gradient-to-br from-white to-emerald-50/30 dark:from-secondary dark:to-secondary-dark border-yellow-500/30'
+                : 'bg-white dark:bg-secondary border-slate-200 dark:border-gray-700'
                 }`}
         >
             <div className="p-6">
@@ -167,18 +168,18 @@ function NoticeCard({ notice, featured = false }: { notice: Notice; featured?: b
                                 {notice.category_display}
                             </span>
                             {featured && (
-                                <span className="px-2 py-0.5 rounded text-xs font-medium bg-yellow-500/20 text-yellow-400 flex items-center gap-1">
+                                <span className="px-2 py-0.5 rounded text-xs font-medium bg-yellow-500/20 text-yellow-500 dark:text-yellow-400 flex items-center gap-1">
                                     <Star size={10} /> Featured
                                 </span>
                             )}
                         </div>
 
-                        <h3 className="text-lg font-semibold text-white group-hover:text-primary-light transition-colors line-clamp-2">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors line-clamp-2">
                             {notice.title}
                         </h3>
 
                         {notice.excerpt && (
-                            <p className="mt-2 text-gray-400 text-sm line-clamp-2">
+                            <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm line-clamp-2">
                                 {notice.excerpt}
                             </p>
                         )}
@@ -194,14 +195,14 @@ function NoticeCard({ notice, featured = false }: { notice: Notice; featured?: b
                             </span>
 
                             {notice.document && (
-                                <span className="flex items-center gap-1 text-primary-light">
+                                <span className="flex items-center gap-1 text-primary">
                                     <Download size={14} />
                                     {notice.attachment_name || 'Download'}
                                 </span>
                             )}
 
                             {notice.link && (
-                                <span className="flex items-center gap-1 text-primary-light">
+                                <span className="flex items-center gap-1 text-primary">
                                     <ExternalLink size={14} />
                                     External Link
                                 </span>

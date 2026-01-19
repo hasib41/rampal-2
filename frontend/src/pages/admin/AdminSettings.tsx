@@ -20,8 +20,8 @@ import {
 function SectionHeader({ title, description }: { title: string; description?: string }) {
     return (
         <div className="mb-5">
-            <h3 className="font-semibold text-white text-lg">{title}</h3>
-            {description && <p className="text-sm text-gray-400 mt-1">{description}</p>}
+            <h3 className="font-semibold text-gray-900 dark:text-white text-lg">{title}</h3>
+            {description && <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{description}</p>}
         </div>
     );
 }
@@ -41,9 +41,9 @@ function InfoCallout({ children }: { children: React.ReactNode }) {
     return (
         <div className="flex items-start gap-3 p-4 mt-4 bg-primary/5 border border-primary/20 rounded-lg">
             <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                <span className="text-primary-light text-xs">i</span>
+                <span className="text-primary text-xs">i</span>
             </div>
-            <p className="text-sm text-gray-300">{children}</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">{children}</p>
         </div>
     );
 }
@@ -154,7 +154,7 @@ export function AdminSettings() {
             {saveSuccess && (
                 <div className="fixed bottom-6 right-6 flex items-center gap-3 px-5 py-3 bg-accent-green/20 border border-accent-green/30 rounded-xl shadow-lg animate-slide-up z-50">
                     <Check className="text-accent-green" size={20} />
-                    <span className="text-white font-medium">Settings saved successfully!</span>
+                    <span className="text-gray-900 dark:text-white font-medium">Settings saved successfully!</span>
                 </div>
             )}
 
@@ -193,11 +193,11 @@ export function AdminSettings() {
                         />
                         <FieldGroup columns={3}>
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">Language</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Language</label>
                                 <select
                                     value={generalSettings.language}
                                     onChange={(e) => setGeneralSettings({...generalSettings, language: e.target.value})}
-                                    className="w-full px-4 py-3 bg-secondary-dark border border-gray-700 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                    className="w-full px-4 py-3 bg-white dark:bg-secondary-dark border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
                                 >
                                     <option value="en">English</option>
                                     <option value="bn">বাংলা (Bengali)</option>
@@ -205,11 +205,11 @@ export function AdminSettings() {
                                 <p className="text-xs text-gray-500 mt-1.5">Primary website language</p>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">Time Zone</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Time Zone</label>
                                 <select
                                     value={generalSettings.timezone}
                                     onChange={(e) => setGeneralSettings({...generalSettings, timezone: e.target.value})}
-                                    className="w-full px-4 py-3 bg-secondary-dark border border-gray-700 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                    className="w-full px-4 py-3 bg-white dark:bg-secondary-dark border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
                                 >
                                     <option value="Asia/Dhaka">Bangladesh (GMT+6)</option>
                                     <option value="Asia/Kolkata">India (GMT+5:30)</option>
@@ -217,11 +217,11 @@ export function AdminSettings() {
                                 <p className="text-xs text-gray-500 mt-1.5">Used for dates and deadlines</p>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">Date Format</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date Format</label>
                                 <select
                                     value={generalSettings.dateFormat}
                                     onChange={(e) => setGeneralSettings({...generalSettings, dateFormat: e.target.value})}
-                                    className="w-full px-4 py-3 bg-secondary-dark border border-gray-700 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                    className="w-full px-4 py-3 bg-white dark:bg-secondary-dark border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
                                 >
                                     <option value="DD/MM/YYYY">DD/MM/YYYY (31/12/2024)</option>
                                     <option value="MM/DD/YYYY">MM/DD/YYYY (12/31/2024)</option>
@@ -239,17 +239,17 @@ export function AdminSettings() {
                             description="Control public access to your website"
                         />
                         <div className="space-y-4">
-                            <div className="flex items-start justify-between p-4 bg-white/[0.02] rounded-xl border border-gray-700/50">
+                            <div className="flex items-start justify-between p-4 bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-gray-200 dark:border-gray-700/50">
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2">
-                                        <h4 className="font-medium text-white">Maintenance Mode</h4>
+                                        <h4 className="font-medium text-gray-900 dark:text-white">Maintenance Mode</h4>
                                         {generalSettings.maintenanceMode && (
                                             <span className="px-2 py-0.5 bg-accent-orange/20 text-accent-orange text-xs font-medium rounded-full">
                                                 Active
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-sm text-gray-400 mt-1">
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                                         When enabled, visitors will see a maintenance page instead of your website.
                                         Admin users can still access the site normally.
                                     </p>
@@ -273,10 +273,10 @@ export function AdminSettings() {
                                 </div>
                             )}
 
-                            <div className="flex items-start justify-between p-4 bg-white/[0.02] rounded-xl border border-gray-700/50">
+                            <div className="flex items-start justify-between p-4 bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-gray-200 dark:border-gray-700/50">
                                 <div className="flex-1">
-                                    <h4 className="font-medium text-white">Coming Soon Mode</h4>
-                                    <p className="text-sm text-gray-400 mt-1">
+                                    <h4 className="font-medium text-gray-900 dark:text-white">Coming Soon Mode</h4>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                                         Show a "Coming Soon" page for sections that are still under development.
                                     </p>
                                 </div>
@@ -357,7 +357,7 @@ export function AdminSettings() {
                         />
                         <FieldGroup columns={3}>
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                     Total Capacity
                                 </label>
                                 <div className="relative">
@@ -365,7 +365,7 @@ export function AdminSettings() {
                                         type="number"
                                         value={companySettings.totalCapacity}
                                         onChange={(e) => setCompanySettings({...companySettings, totalCapacity: Number(e.target.value)})}
-                                        className="w-full px-4 py-3 pr-14 bg-secondary-dark border border-gray-700 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                        className="w-full px-4 py-3 pr-14 bg-white dark:bg-secondary-dark border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
                                     />
                                     <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">MW</span>
                                 </div>
@@ -396,22 +396,22 @@ export function AdminSettings() {
                         />
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-3">Organization Logo</label>
-                                <div className="border-2 border-dashed border-gray-700 rounded-xl p-6 text-center hover:border-gray-600 transition-colors cursor-pointer group">
-                                    <div className="w-16 h-16 bg-gray-800 rounded-xl mx-auto mb-3 flex items-center justify-center group-hover:bg-gray-700 transition-colors">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Organization Logo</label>
+                                <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-6 text-center hover:border-gray-400 dark:hover:border-gray-600 transition-colors cursor-pointer group">
+                                    <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-xl mx-auto mb-3 flex items-center justify-center group-hover:bg-gray-200 dark:group-hover:bg-gray-700 transition-colors">
                                         <Image className="text-gray-500" size={28} />
                                     </div>
-                                    <p className="text-gray-400 text-sm">Click to upload or drag and drop</p>
+                                    <p className="text-gray-600 dark:text-gray-400 text-sm">Click to upload or drag and drop</p>
                                     <p className="text-gray-500 text-xs mt-1">PNG, JPG up to 2MB (recommended: 512x512px)</p>
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-3">Favicon</label>
-                                <div className="border-2 border-dashed border-gray-700 rounded-xl p-6 text-center hover:border-gray-600 transition-colors cursor-pointer group">
-                                    <div className="w-16 h-16 bg-gray-800 rounded-xl mx-auto mb-3 flex items-center justify-center group-hover:bg-gray-700 transition-colors">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Favicon</label>
+                                <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-6 text-center hover:border-gray-400 dark:hover:border-gray-600 transition-colors cursor-pointer group">
+                                    <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-xl mx-auto mb-3 flex items-center justify-center group-hover:bg-gray-200 dark:group-hover:bg-gray-700 transition-colors">
                                         <Globe className="text-gray-500" size={28} />
                                     </div>
-                                    <p className="text-gray-400 text-sm">Click to upload favicon</p>
+                                    <p className="text-gray-600 dark:text-gray-400 text-sm">Click to upload favicon</p>
                                     <p className="text-gray-500 text-xs mt-1">ICO or PNG, 32x32px or 64x64px</p>
                                 </div>
                             </div>
@@ -542,11 +542,11 @@ export function AdminSettings() {
                         />
                         <FieldGroup columns={2}>
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">Working Days</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Working Days</label>
                                 <select
                                     value={contactSettings.workingDays}
                                     onChange={(e) => setContactSettings({...contactSettings, workingDays: e.target.value})}
-                                    className="w-full px-4 py-3 bg-secondary-dark border border-gray-700 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                    className="w-full px-4 py-3 bg-white dark:bg-secondary-dark border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
                                 >
                                     <option value="Sunday - Thursday">Sunday - Thursday</option>
                                     <option value="Monday - Friday">Monday - Friday</option>
@@ -639,14 +639,14 @@ export function AdminSettings() {
                             description="Choose which activities should trigger email alerts"
                         />
                         <div className="space-y-3">
-                            <div className="flex items-start justify-between p-4 bg-white/[0.02] rounded-xl border border-gray-700/50">
+                            <div className="flex items-start justify-between p-4 bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-gray-200 dark:border-gray-700/50">
                                 <div className="flex items-start gap-3">
                                     <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                                         <Briefcase className="text-primary-light" size={18} />
                                     </div>
                                     <div>
-                                        <h4 className="font-medium text-white">Job Applications</h4>
-                                        <p className="text-sm text-gray-400 mt-0.5">
+                                        <h4 className="font-medium text-gray-900 dark:text-white">Job Applications</h4>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
                                             Receive an email when someone applies for a job position
                                         </p>
                                     </div>
@@ -657,14 +657,14 @@ export function AdminSettings() {
                                 />
                             </div>
 
-                            <div className="flex items-start justify-between p-4 bg-white/[0.02] rounded-xl border border-gray-700/50">
+                            <div className="flex items-start justify-between p-4 bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-gray-200 dark:border-gray-700/50">
                                 <div className="flex items-start gap-3">
                                     <div className="w-10 h-10 rounded-lg bg-accent-green/10 flex items-center justify-center shrink-0">
                                         <FileText className="text-accent-green" size={18} />
                                     </div>
                                     <div>
-                                        <h4 className="font-medium text-white">Tender Submissions</h4>
-                                        <p className="text-sm text-gray-400 mt-0.5">
+                                        <h4 className="font-medium text-gray-900 dark:text-white">Tender Submissions</h4>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
                                             Get notified when a vendor submits a tender bid
                                         </p>
                                     </div>
@@ -675,14 +675,14 @@ export function AdminSettings() {
                                 />
                             </div>
 
-                            <div className="flex items-start justify-between p-4 bg-white/[0.02] rounded-xl border border-gray-700/50">
+                            <div className="flex items-start justify-between p-4 bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-gray-200 dark:border-gray-700/50">
                                 <div className="flex items-start gap-3">
                                     <div className="w-10 h-10 rounded-lg bg-accent-orange/10 flex items-center justify-center shrink-0">
                                         <Mail className="text-accent-orange" size={18} />
                                     </div>
                                     <div>
-                                        <h4 className="font-medium text-white">Contact Form Messages</h4>
-                                        <p className="text-sm text-gray-400 mt-0.5">
+                                        <h4 className="font-medium text-gray-900 dark:text-white">Contact Form Messages</h4>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
                                             Receive emails when visitors submit the contact form
                                         </p>
                                     </div>
@@ -693,14 +693,14 @@ export function AdminSettings() {
                                 />
                             </div>
 
-                            <div className="flex items-start justify-between p-4 bg-white/[0.02] rounded-xl border border-gray-700/50">
+                            <div className="flex items-start justify-between p-4 bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-gray-200 dark:border-gray-700/50">
                                 <div className="flex items-start gap-3">
                                     <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0">
                                         <Bell className="text-purple-400" size={18} />
                                     </div>
                                     <div>
-                                        <h4 className="font-medium text-white">Newsletter Sign-ups</h4>
-                                        <p className="text-sm text-gray-400 mt-0.5">
+                                        <h4 className="font-medium text-gray-900 dark:text-white">Newsletter Sign-ups</h4>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
                                             Get notified when someone subscribes to your newsletter
                                         </p>
                                     </div>
@@ -720,14 +720,14 @@ export function AdminSettings() {
                             description="Important system and security notifications"
                         />
                         <div className="space-y-3">
-                            <div className="flex items-start justify-between p-4 bg-white/[0.02] rounded-xl border border-gray-700/50">
+                            <div className="flex items-start justify-between p-4 bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-gray-200 dark:border-gray-700/50">
                                 <div className="flex items-start gap-3">
                                     <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center shrink-0">
                                         <AlertTriangle className="text-red-400" size={18} />
                                     </div>
                                     <div>
-                                        <h4 className="font-medium text-white">System Alerts</h4>
-                                        <p className="text-sm text-gray-400 mt-0.5">
+                                        <h4 className="font-medium text-gray-900 dark:text-white">System Alerts</h4>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
                                             Critical alerts about system errors or security issues
                                         </p>
                                     </div>
@@ -738,14 +738,14 @@ export function AdminSettings() {
                                 />
                             </div>
 
-                            <div className="flex items-start justify-between p-4 bg-white/[0.02] rounded-xl border border-gray-700/50">
+                            <div className="flex items-start justify-between p-4 bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-gray-200 dark:border-gray-700/50">
                                 <div className="flex items-start gap-3">
                                     <div className="w-10 h-10 rounded-lg bg-gray-700/50 flex items-center justify-center shrink-0">
                                         <Calendar className="text-gray-400" size={18} />
                                     </div>
                                     <div>
-                                        <h4 className="font-medium text-white">Weekly Summary Report</h4>
-                                        <p className="text-sm text-gray-400 mt-0.5">
+                                        <h4 className="font-medium text-gray-900 dark:text-white">Weekly Summary Report</h4>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
                                             Receive a weekly email summarizing website activity
                                         </p>
                                     </div>
@@ -841,11 +841,11 @@ export function AdminSettings() {
                             description="Control how long you stay logged in"
                         />
                         <div className="max-w-sm">
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Auto Logout After Inactivity</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Auto Logout After Inactivity</label>
                             <select
                                 value={securitySettings.sessionTimeout}
                                 onChange={(e) => setSecuritySettings({...securitySettings, sessionTimeout: e.target.value})}
-                                className="w-full px-4 py-3 bg-secondary-dark border border-gray-700 rounded-xl text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                className="w-full px-4 py-3 bg-white dark:bg-secondary-dark border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
                             >
                                 <option value="15">15 minutes</option>
                                 <option value="30">30 minutes</option>
@@ -865,14 +865,14 @@ export function AdminSettings() {
                             title="Two-Factor Authentication"
                             description="Add an extra layer of security to your account"
                         />
-                        <div className="flex items-start justify-between p-4 bg-white/[0.02] rounded-xl border border-gray-700/50">
+                        <div className="flex items-start justify-between p-4 bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-gray-200 dark:border-gray-700/50">
                             <div className="flex items-start gap-3">
                                 <div className="w-10 h-10 rounded-lg bg-accent-green/10 flex items-center justify-center shrink-0">
                                     <Shield className="text-accent-green" size={18} />
                                 </div>
                                 <div>
                                     <div className="flex items-center gap-2">
-                                        <h4 className="font-medium text-white">Two-Factor Authentication</h4>
+                                        <h4 className="font-medium text-gray-900 dark:text-white">Two-Factor Authentication</h4>
                                         {securitySettings.twoFactorEnabled ? (
                                             <span className="px-2 py-0.5 bg-accent-green/20 text-accent-green text-xs font-medium rounded-full flex items-center gap-1">
                                                 <Check size={10} /> Enabled
@@ -883,7 +883,7 @@ export function AdminSettings() {
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-sm text-gray-400 mt-1">
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                                         Require a verification code from your phone in addition to your password when logging in.
                                     </p>
                                 </div>
@@ -902,7 +902,7 @@ export function AdminSettings() {
                             </div>
                             <div className="flex-1">
                                 <h3 className="font-semibold text-red-400 text-lg">Danger Zone</h3>
-                                <p className="text-sm text-gray-400 mt-1 mb-5">
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 mb-5">
                                     These actions are irreversible. Please proceed with caution.
                                 </p>
                                 <div className="flex flex-wrap gap-3">

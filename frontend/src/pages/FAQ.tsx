@@ -188,15 +188,15 @@ const faqCategories: FAQCategory[] = [
 
 function FAQAccordion({ faq, isOpen, onToggle }: { faq: FAQItem; isOpen: boolean; onToggle: () => void }) {
     return (
-        <div className="border-b border-white/10 last:border-b-0">
+        <div className="border-b border-gray-200 dark:border-white/10 last:border-b-0">
             <button
-                className="w-full px-4 py-4 sm:px-6 sm:py-5 flex items-start justify-between text-left hover:bg-white/[0.02] transition-colors gap-3 active:bg-white/[0.04]"
+                className="w-full px-4 py-4 sm:px-6 sm:py-5 flex items-start justify-between text-left hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors gap-3 active:bg-gray-100 dark:active:bg-white/[0.04]"
                 onClick={onToggle}
                 aria-expanded={isOpen}
             >
-                <span className="text-white font-medium text-sm sm:text-base leading-relaxed">{faq.question}</span>
+                <span className="text-gray-900 dark:text-white font-medium text-sm sm:text-base leading-relaxed">{faq.question}</span>
                 <ChevronDown
-                    className={`text-primary-light flex-shrink-0 transition-transform duration-300 mt-0.5 ${isOpen ? 'rotate-180' : ''}`}
+                    className={`text-primary flex-shrink-0 transition-transform duration-300 mt-0.5 ${isOpen ? 'rotate-180' : ''}`}
                     size={20}
                 />
             </button>
@@ -206,7 +206,7 @@ function FAQAccordion({ faq, isOpen, onToggle }: { faq: FAQItem; isOpen: boolean
                 }`}
             >
                 <div className="overflow-hidden">
-                    <div className="px-4 pb-4 sm:px-6 sm:pb-5 text-gray-400 text-sm sm:text-base leading-relaxed">
+                    <div className="px-4 pb-4 sm:px-6 sm:pb-5 text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-relaxed">
                         {faq.answer}
                     </div>
                 </div>
@@ -259,21 +259,19 @@ export function FAQPage() {
     return (
         <div className="min-h-screen">
             {/* Hero Section */}
-            <section className="relative py-16 pt-24 sm:py-20 sm:pt-28 md:py-24 md:pt-32 bg-gradient-to-br from-secondary via-secondary to-secondary-dark">
-                <div className="absolute inset-0 opacity-30">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(245,158,11,0.1),transparent_50%)]" />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(245,158,11,0.1),transparent_50%)]" />
-                </div>
+            <section className="relative py-16 pt-24 sm:py-20 sm:pt-28 md:py-24 md:pt-32 bg-gradient-to-r from-emerald-900 to-teal-800">
+                <div className="absolute inset-0 bg-[url('/faq-hero.jpg')] bg-cover bg-center" />
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/90 via-teal-800/75 to-emerald-900/85" />
                 <div className="relative max-w-4xl mx-auto px-4 text-center">
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-primary/10 border border-primary/20 rounded-full mb-4 sm:mb-6">
-                        <HelpCircle className="text-primary-light" size={16} />
-                        <span className="text-primary-light text-xs sm:text-sm font-medium">Help Center</span>
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white/10 border border-white/20 rounded-full mb-4 sm:mb-6">
+                        <HelpCircle className="text-emerald-300" size={16} />
+                        <span className="text-white text-xs sm:text-sm font-medium">Help Center</span>
                     </div>
 
                     {/* Title */}
                     <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                        Frequently Asked Questions
+                        Frequently Asked <span className="text-emerald-300">Questions</span>
                     </h1>
 
                     {/* Subtitle */}
@@ -283,18 +281,18 @@ export function FAQPage() {
 
                     {/* Search Bar */}
                     <div className="mt-6 sm:mt-8 max-w-xl mx-auto relative">
-                        <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                        <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-white/50" size={18} />
                         <input
                             type="text"
                             placeholder="Search for answers..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 bg-white/10 border border-white/20 rounded-xl text-white text-sm sm:text-base placeholder-gray-400 focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary/20 transition-all"
+                            className="w-full pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white text-sm sm:text-base placeholder-white/50 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20 transition-all"
                         />
                         {searchQuery && (
                             <button
                                 onClick={() => setSearchQuery('')}
-                                className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1"
+                                className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors p-1"
                                 aria-label="Clear search"
                             >
                                 <X size={18} />
@@ -304,15 +302,15 @@ export function FAQPage() {
 
                     {/* Search Results Count */}
                     {searchQuery && (
-                        <p className="mt-3 sm:mt-4 text-gray-400 text-sm sm:text-base">
-                            Found <span className="text-primary-light font-medium">{totalResults}</span> result{totalResults !== 1 ? 's' : ''} for "{searchQuery}"
+                        <p className="mt-3 sm:mt-4 text-white/70 text-sm sm:text-base">
+                            Found <span className="text-emerald-300 font-medium">{totalResults}</span> result{totalResults !== 1 ? 's' : ''} for "{searchQuery}"
                         </p>
                     )}
                 </div>
             </section>
 
             {/* Category Tabs */}
-            <section className="bg-secondary border-b border-white/10 sticky top-16 z-20">
+            <section className="bg-white/95 dark:bg-secondary backdrop-blur-sm border-b border-slate-200 dark:border-white/10 sticky top-16 z-20">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4">
                     <div
                         className="flex gap-1.5 sm:gap-2 overflow-x-auto py-3 sm:py-4 -mx-3 px-3 sm:-mx-4 sm:px-4"
@@ -322,8 +320,8 @@ export function FAQPage() {
                             onClick={() => setActiveCategory('all')}
                             className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all flex-shrink-0 ${
                                 activeCategory === 'all'
-                                    ? 'bg-primary text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-white/5 active:bg-white/10'
+                                    ? 'bg-primary hover:bg-primary-dark text-white shadow-md shadow-primary/30'
+                                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 active:bg-gray-200 dark:active:bg-white/10'
                             }`}
                         >
                             All Topics
@@ -336,8 +334,8 @@ export function FAQPage() {
                                     onClick={() => setActiveCategory(category.id)}
                                     className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all flex items-center gap-1.5 sm:gap-2 flex-shrink-0 ${
                                         activeCategory === category.id
-                                            ? 'bg-primary text-white'
-                                            : 'text-gray-400 hover:text-white hover:bg-white/5 active:bg-white/10'
+                                            ? 'bg-primary hover:bg-primary-dark text-white shadow-md shadow-primary/30'
+                                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 active:bg-gray-200 dark:active:bg-white/10'
                                     }`}
                                 >
                                     <Icon size={14} className="sm:w-4 sm:h-4" />
@@ -351,13 +349,13 @@ export function FAQPage() {
             </section>
 
             {/* FAQ Content */}
-            <section className="bg-secondary py-8 sm:py-12 md:py-16">
+            <section className="bg-slate-50/80 dark:bg-secondary py-8 sm:py-12 md:py-16">
                 <div className="max-w-4xl mx-auto px-3 sm:px-4">
                     {filteredCategories.length === 0 ? (
                         <div className="text-center py-12 sm:py-16">
-                            <HelpCircle className="mx-auto text-gray-500 mb-4" size={40} />
-                            <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">No results found</h3>
-                            <p className="text-gray-400 text-sm sm:text-base">
+                            <HelpCircle className="mx-auto text-gray-400 dark:text-gray-500 mb-4" size={40} />
+                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">No results found</h3>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base">
                                 Try adjusting your search or browse all categories.
                             </p>
                             <button
@@ -365,7 +363,7 @@ export function FAQPage() {
                                     setSearchQuery('');
                                     setActiveCategory('all');
                                 }}
-                                className="mt-4 text-primary-light hover:underline text-sm sm:text-base"
+                                className="mt-4 text-primary hover:underline text-sm sm:text-base"
                             >
                                 Clear filters
                             </button>
@@ -379,11 +377,11 @@ export function FAQPage() {
                                         {/* Category Header */}
                                         <div className="flex items-start sm:items-center gap-3 mb-4 sm:mb-6">
                                             <div className="p-2 sm:p-2.5 bg-primary/10 rounded-lg flex-shrink-0">
-                                                <Icon className="text-primary-light w-5 h-5 sm:w-6 sm:h-6" />
+                                                <Icon className="text-primary w-5 h-5 sm:w-6 sm:h-6" />
                                             </div>
                                             <div className="min-w-0">
-                                                <h2 className="text-xl sm:text-2xl font-bold text-white">{category.name}</h2>
-                                                <p className="text-gray-400 text-xs sm:text-sm mt-0.5">{category.description}</p>
+                                                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{category.name}</h2>
+                                                <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-0.5">{category.description}</p>
                                             </div>
                                         </div>
 
@@ -407,24 +405,24 @@ export function FAQPage() {
             </section>
 
             {/* Contact CTA */}
-            <section className="bg-secondary-dark py-12 sm:py-16">
+            <section className="bg-white dark:bg-secondary-dark py-12 sm:py-16 border-t border-slate-100 dark:border-transparent">
                 <div className="max-w-4xl mx-auto px-4 text-center">
-                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
                         Still have questions?
                     </h2>
-                    <p className="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base max-w-md mx-auto">
+                    <p className="text-gray-500 dark:text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base max-w-md mx-auto">
                         Can't find the answer you're looking for? Our team is here to help.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                         <a
                             href="/contact"
-                            className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 bg-primary hover:bg-primary-light text-white font-medium rounded-lg transition-colors text-sm sm:text-base active:scale-[0.98]"
+                            className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg shadow-md shadow-primary/30 hover:shadow-lg hover:shadow-primary/40 transition-all text-sm sm:text-base active:scale-[0.98]"
                         >
                             Contact Support
                         </a>
                         <a
                             href="mailto:info@bifpcl.com"
-                            className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-lg border border-white/10 transition-colors text-sm sm:text-base active:scale-[0.98]"
+                            className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 bg-primary/10 hover:bg-primary/20 text-primary dark:bg-white/5 dark:hover:bg-white/10 dark:text-white font-medium rounded-lg border border-primary/20 dark:border-white/10 transition-all text-sm sm:text-base active:scale-[0.98]"
                         >
                             Email Us
                         </a>

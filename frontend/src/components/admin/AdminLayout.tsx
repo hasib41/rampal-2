@@ -45,14 +45,14 @@ export function AdminLayout() {
     };
 
     return (
-        <div className="min-h-screen bg-[#09090b]">
+        <div className="min-h-screen bg-gray-100 dark:bg-[#09090b]">
             {/* Mobile Header */}
-            <header className="lg:hidden fixed top-0 left-0 right-0 z-50 h-14 bg-[#0f0f12] border-b border-white/5">
+            <header className="lg:hidden fixed top-0 left-0 right-0 z-50 h-14 bg-white dark:bg-[#0f0f12] border-b border-gray-200 dark:border-white/5">
                 <div className="flex items-center justify-between h-full px-4">
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setMobileMenuOpen(true)}
-                            className="p-2 text-gray-400 hover:text-white rounded-lg"
+                            className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white rounded-lg"
                         >
                             <Menu size={20} />
                         </button>
@@ -60,7 +60,7 @@ export function AdminLayout() {
                             <div className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center">
                                 <Zap className="text-white" size={14} />
                             </div>
-                            <span className="text-white font-semibold text-sm">BIFPCL</span>
+                            <span className="text-gray-900 dark:text-white font-semibold text-sm">BIFPCL</span>
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@ export function AdminLayout() {
             {/* Mobile Overlay */}
             {mobileMenuOpen && (
                 <div
-                    className="lg:hidden fixed inset-0 bg-black/60 z-50"
+                    className="lg:hidden fixed inset-0 bg-black/40 dark:bg-black/60 z-50"
                     onClick={() => setMobileMenuOpen(false)}
                 />
             )}
@@ -78,7 +78,7 @@ export function AdminLayout() {
             <aside
                 className={`
                     fixed top-0 left-0 h-screen z-50
-                    bg-[#0f0f12] border-r border-white/5
+                    bg-white dark:bg-[#0f0f12] border-r border-gray-200 dark:border-white/5
                     transition-all duration-200
                     ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
                     lg:translate-x-0
@@ -87,27 +87,27 @@ export function AdminLayout() {
             >
                 <div className="flex flex-col h-full">
                     {/* Header */}
-                    <div className="h-14 flex items-center justify-between px-3 border-b border-white/5">
+                    <div className="h-14 flex items-center justify-between px-3 border-b border-gray-200 dark:border-white/5">
                         {sidebarOpen && (
                             <div className="flex items-center gap-2">
                                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                                     <Zap className="text-white" size={16} />
                                 </div>
                                 <div>
-                                    <span className="text-white font-semibold text-sm">BIFPCL</span>
+                                    <span className="text-gray-900 dark:text-white font-semibold text-sm">BIFPCL</span>
                                     <p className="text-[9px] text-gray-500 -mt-0.5">Admin</p>
                                 </div>
                             </div>
                         )}
                         <button
                             onClick={() => setSidebarOpen(!sidebarOpen)}
-                            className="hidden lg:flex p-1.5 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg"
+                            className="hidden lg:flex p-1.5 text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg"
                         >
                             {sidebarOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
                         </button>
                         <button
                             onClick={() => setMobileMenuOpen(false)}
-                            className="lg:hidden p-1.5 text-gray-500 hover:text-white"
+                            className="lg:hidden p-1.5 text-gray-500 hover:text-gray-900 dark:hover:text-white"
                         >
                             <X size={18} />
                         </button>
@@ -126,7 +126,7 @@ export function AdminLayout() {
                                         flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all
                                         ${active
                                             ? 'bg-primary text-white'
-                                            : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'
                                         }
                                         ${!sidebarOpen && 'justify-center px-0'}
                                     `}
@@ -139,17 +139,17 @@ export function AdminLayout() {
                     </nav>
 
                     {/* Bottom */}
-                    <div className="p-2 border-t border-white/5 space-y-1">
+                    <div className="p-2 border-t border-gray-200 dark:border-white/5 space-y-1">
                         <Link
                             to="/"
-                            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition-all ${!sidebarOpen && 'justify-center px-0'}`}
+                            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-all ${!sidebarOpen && 'justify-center px-0'}`}
                         >
                             <LogOut size={20} />
                             {sidebarOpen && <span>Back to Site</span>}
                         </Link>
                         <button
                             onClick={logout}
-                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-400 hover:bg-red-500/10 transition-all ${!sidebarOpen && 'justify-center px-0'}`}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-500 dark:text-red-400 hover:bg-red-500/10 transition-all ${!sidebarOpen && 'justify-center px-0'}`}
                         >
                             <LogOut size={20} />
                             {sidebarOpen && <span>Logout</span>}

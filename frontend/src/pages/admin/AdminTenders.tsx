@@ -131,15 +131,15 @@ export function AdminTenders() {
 
             {/* Stats */}
             <div className="flex gap-4">
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg">
-                    <FileText size={16} className="text-primary-light" />
-                    <span className="text-gray-400">Total:</span>
-                    <span className="text-white font-medium">{tenders?.length || 0}</span>
+                <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-white/5 rounded-lg">
+                    <FileText size={16} className="text-primary" />
+                    <span className="text-gray-600 dark:text-gray-400">Total:</span>
+                    <span className="text-gray-900 dark:text-white font-medium">{tenders?.length || 0}</span>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-lg">
-                    <CheckCircle size={16} className="text-emerald-400" />
-                    <span className="text-gray-400">Open:</span>
-                    <span className="text-white font-medium">{openCount}</span>
+                    <CheckCircle size={16} className="text-emerald-500 dark:text-emerald-400" />
+                    <span className="text-gray-600 dark:text-gray-400">Open:</span>
+                    <span className="text-gray-900 dark:text-white font-medium">{openCount}</span>
                 </div>
             </div>
 
@@ -181,37 +181,37 @@ export function AdminTenders() {
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="border-b border-white/10 bg-white/[0.02]">
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">ID</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Title</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Category</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Deadline</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Value</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Status</th>
-                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Actions</th>
+                                <tr className="border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/[0.02]">
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">ID</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Title</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Category</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Deadline</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Value</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Status</th>
+                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/5">
+                            <tbody className="divide-y divide-gray-100 dark:divide-white/5">
                                 {filteredTenders?.map((tender) => {
                                     const status = statusConfig[tender.status] || statusConfig.open;
                                     return (
-                                        <tr key={tender.id} className="hover:bg-white/[0.02]">
+                                        <tr key={tender.id} className="hover:bg-gray-50 dark:hover:bg-white/[0.02]">
                                             <td className="py-3.5 px-5">
-                                                <span className="font-mono text-gray-500 bg-white/5 px-2 py-1 rounded">{tender.tender_id}</span>
+                                                <span className="font-mono text-gray-500 bg-gray-100 dark:bg-white/5 px-2 py-1 rounded">{tender.tender_id}</span>
                                             </td>
                                             <td className="py-3.5 px-5">
-                                                <span className="text-white truncate block max-w-xs">{tender.title}</span>
+                                                <span className="text-gray-900 dark:text-white truncate block max-w-xs">{tender.title}</span>
                                             </td>
                                             <td className="py-3.5 px-5">
-                                                <span className="text-gray-400 capitalize">{tender.category}</span>
+                                                <span className="text-gray-600 dark:text-gray-400 capitalize">{tender.category}</span>
                                             </td>
                                             <td className="py-3.5 px-5">
-                                                <span className="text-gray-400">
+                                                <span className="text-gray-600 dark:text-gray-400">
                                                     {new Date(tender.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                                 </span>
                                             </td>
                                             <td className="py-3.5 px-5">
-                                                <span className="text-gray-400">{tender.value_range || '-'}</span>
+                                                <span className="text-gray-600 dark:text-gray-400">{tender.value_range || '-'}</span>
                                             </td>
                                             <td className="py-3.5 px-5">
                                                 <Badge variant={status.variant}>{tender.status}</Badge>
@@ -285,9 +285,9 @@ export function AdminTenders() {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1.5">Document (PDF)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Document (PDF)</label>
                         <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => { const f = e.target.files?.[0]; if (f) setFormData({ ...formData, document: f }); }}
-                            className="text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-medium file:bg-primary file:text-white cursor-pointer" />
+                            className="text-gray-600 dark:text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-medium file:bg-primary file:text-white cursor-pointer" />
                     </div>
                 </form>
             </Modal>

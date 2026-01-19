@@ -157,7 +157,7 @@ export function AdminNews() {
             <div className="flex flex-wrap gap-2">
                 <button
                     onClick={() => setCategoryFilter('all')}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${categoryFilter === 'all' ? 'bg-primary text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${categoryFilter === 'all' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/10'}`}
                 >
                     <Newspaper size={16} />
                     All <span className="font-medium">{news?.length || 0}</span>
@@ -168,7 +168,7 @@ export function AdminNews() {
                         <button
                             key={key}
                             onClick={() => setCategoryFilter(categoryFilter === key ? 'all' : key)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${categoryFilter === key ? 'bg-primary text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${categoryFilter === key ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/10'}`}
                         >
                             {config.label} <span className="font-medium">{count}</span>
                         </button>
@@ -200,22 +200,22 @@ export function AdminNews() {
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="border-b border-white/10 bg-white/[0.02]">
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Article</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Category</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Date</th>
-                                    <th className="text-center py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Featured</th>
-                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Actions</th>
+                                <tr className="border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/[0.02]">
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Article</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Category</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Date</th>
+                                    <th className="text-center py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Featured</th>
+                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/5">
+                            <tbody className="divide-y divide-gray-100 dark:divide-white/5">
                                 {filteredNews?.map((article: NewsArticle) => {
                                     const config = categoryConfig[article.category] || categoryConfig.press;
                                     return (
-                                        <tr key={article.id} className="hover:bg-white/[0.02]">
+                                        <tr key={article.id} className="hover:bg-gray-50 dark:hover:bg-white/[0.02]">
                                             <td className="py-3.5 px-5">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-12 h-12 rounded bg-white/5 overflow-hidden flex-shrink-0">
+                                                    <div className="w-12 h-12 rounded bg-gray-100 dark:bg-white/5 overflow-hidden flex-shrink-0">
                                                         {article.image ? (
                                                             <img src={getMediaUrl(article.image)} alt="" className="w-full h-full object-cover" />
                                                         ) : (
@@ -225,7 +225,7 @@ export function AdminNews() {
                                                         )}
                                                     </div>
                                                     <div className="min-w-0">
-                                                        <span className="text-white font-medium truncate block max-w-sm">{article.title}</span>
+                                                        <span className="text-gray-900 dark:text-white font-medium truncate block max-w-sm">{article.title}</span>
                                                         {article.excerpt && (
                                                             <span className="text-gray-500 text-sm truncate block max-w-sm">{article.excerpt}</span>
                                                         )}
@@ -236,7 +236,7 @@ export function AdminNews() {
                                                 <Badge variant={config.variant}>{config.label}</Badge>
                                             </td>
                                             <td className="py-3.5 px-5">
-                                                <span className="text-gray-400">
+                                                <span className="text-gray-600 dark:text-gray-400">
                                                     {new Date(article.published_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                                 </span>
                                             </td>

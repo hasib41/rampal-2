@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider } from './contexts';
+import { AuthProvider, ThemeProvider } from './contexts';
 import { Layout } from './components/layout';
 import { AdminLayout } from './components/admin';
 import {
@@ -40,10 +40,11 @@ const queryClient = new QueryClient({
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Layout />}>
               <Route index element={<HomePage />} />
@@ -72,9 +73,10 @@ export default function App() {
               <Route path="tenders" element={<AdminTenders />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </QueryClientProvider>
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }

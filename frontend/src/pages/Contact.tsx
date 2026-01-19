@@ -53,29 +53,29 @@ export function ContactPage() {
     return (
         <div className="min-h-screen">
             {/* Hero Section */}
-            <section className="relative py-24 pt-32">
+            <section className="relative py-24 pt-32 bg-gradient-to-r from-emerald-900 to-teal-800">
                 <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{ backgroundImage: `url('/contact-hero.jpg')` }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-secondary/95 via-secondary/80 to-secondary/60" />
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/90 via-teal-800/75 to-emerald-900/85" />
                 <div className="relative max-w-7xl mx-auto px-4">
-                    <span className="text-primary-light text-sm font-semibold uppercase tracking-wider">
+                    <span className="text-emerald-300 text-sm font-semibold uppercase tracking-wider">
                         Stakeholder Hub
                     </span>
                     <h1 className="text-4xl md:text-5xl font-bold text-white mt-2">
                         Institutional Support &<br />
-                        <span className="text-primary-light">Contact Center</span>
+                        <span className="text-emerald-300">Contact Center</span>
                     </h1>
                     <p className="mt-4 text-xl text-white/80 max-w-2xl">
                         Connecting international stakeholders, investors, and local communities to the heart of Bangladesh-India power cooperation.
                     </p>
                     <div className="flex gap-4 mt-6">
-                        <Button variant="outline">
+                        <Button variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
                             <Globe className="mr-2" size={18} />
                             Global Offices
                         </Button>
-                        <Button variant="outline">
+                        <Button variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
                             <Download className="mr-2" size={18} />
                             Download Profiles
                         </Button>
@@ -84,13 +84,13 @@ export function ContactPage() {
             </section>
 
             {/* Main Content */}
-            <section className="bg-secondary py-16">
+            <section className="bg-slate-50 dark:bg-secondary py-16">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                         {/* Contact Form */}
-                        <Card dark className="p-8">
-                            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                                <Mail className="text-primary-light" size={24} />
+                        <Card className="p-8">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                                <Mail className="text-primary" size={24} />
                                 Send an Inquiry
                             </h2>
                             {submitted ? (
@@ -98,8 +98,8 @@ export function ContactPage() {
                                     <div className="w-16 h-16 bg-accent-green/20 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <span className="text-accent-green text-2xl">✓</span>
                                     </div>
-                                    <h3 className="text-xl font-semibold text-white">Message Sent!</h3>
-                                    <p className="text-gray-400 mt-2">We'll respond to your inquiry shortly.</p>
+                                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Message Sent!</h3>
+                                    <p className="text-gray-500 dark:text-gray-400 mt-2">We'll respond to your inquiry shortly.</p>
                                     <Button onClick={() => { setSubmitted(false); setFormData({ full_name: '', organization: '', email: '', category: 'general', message: '' }); }} className="mt-4">
                                         Send Another
                                     </Button>
@@ -122,27 +122,27 @@ export function ContactPage() {
 
                         {/* Office Info */}
                         <div className="space-y-6">
-                            <h2 className="text-2xl font-bold text-white">Office Locations</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Office Locations</h2>
 
                             {/* Map Placeholder */}
-                            <Card dark className="p-0 overflow-hidden">
-                                <div className="h-64 bg-gradient-to-br from-primary/20 to-secondary-light relative">
+                            <Card className="p-0 overflow-hidden">
+                                <div className="h-64 bg-gradient-to-br from-primary/10 via-emerald-50 to-slate-100 dark:from-primary/20 dark:via-secondary dark:to-secondary-light relative">
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="text-center">
-                                            <MapPin className="text-primary-light mx-auto" size={48} />
-                                            <p className="text-white mt-2 font-medium">BIFPCL Office</p>
-                                            <p className="text-gray-400 text-sm">Rampal, Bagerhat</p>
+                                            <MapPin className="text-primary mx-auto" size={48} />
+                                            <p className="text-gray-900 dark:text-white mt-2 font-medium">BIFPCL Office</p>
+                                            <p className="text-gray-500 dark:text-gray-400 text-sm">Rampal, Bagerhat</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="p-4 flex items-center justify-between border-t border-gray-700">
+                                <div className="p-4 flex items-center justify-between border-t border-gray-200 dark:border-gray-700">
                                     <div className="flex items-center gap-3">
-                                        <Phone className="text-primary-light" size={18} />
-                                        <span className="text-gray-300">+880 2 968 1234</span>
+                                        <Phone className="text-primary" size={18} />
+                                        <span className="text-gray-600 dark:text-gray-300">+880 2 968 1234</span>
                                     </div>
                                     <div className="flex items-center gap-3">
-                                        <Mail className="text-primary-light" size={18} />
-                                        <span className="text-gray-300">info@bifpcl.com</span>
+                                        <Mail className="text-primary" size={18} />
+                                        <span className="text-gray-600 dark:text-gray-300">info@bifpcl.com</span>
                                     </div>
                                 </div>
                             </Card>
@@ -154,11 +154,11 @@ export function ContactPage() {
                                     { icon: Phone, title: 'Technical Support', desc: 'Site coordination, grid connectivity, and engineering stakeholder support.' },
                                     { icon: MapPin, title: 'Careers', desc: 'Inquiries regarding human resources, internships, and professional development.' },
                                 ].map((item) => (
-                                    <Card key={item.title} dark className="p-4 hover:bg-secondary-light transition-colors group">
-                                        <item.icon className="text-primary-light mb-3 group-hover:scale-110 transition-transform" size={24} />
-                                        <h4 className="text-white font-semibold text-sm">{item.title}</h4>
-                                        <p className="text-gray-400 text-xs mt-1">{item.desc}</p>
-                                        <span className="text-primary-light text-xs mt-2 inline-block cursor-pointer hover:underline">
+                                    <Card key={item.title} className="p-4 hover:bg-slate-50 dark:hover:bg-secondary-light transition-colors group">
+                                        <item.icon className="text-primary mb-3 group-hover:scale-110 transition-transform" size={24} />
+                                        <h4 className="text-gray-900 dark:text-white font-semibold text-sm">{item.title}</h4>
+                                        <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">{item.desc}</p>
+                                        <span className="text-primary text-xs mt-2 inline-block cursor-pointer hover:underline">
                                             Contact Now →
                                         </span>
                                     </Card>
@@ -170,33 +170,32 @@ export function ContactPage() {
             </section>
 
             {/* FAQ Section */}
-            <section className="bg-secondary-dark py-16">
+            <section className="bg-white dark:bg-secondary-dark py-16 border-t border-slate-100 dark:border-transparent">
                 <div className="max-w-4xl mx-auto px-4">
-                    <h2 className="text-3xl font-bold text-white text-center mb-2">
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-2">
                         Frequently Asked Questions
                     </h2>
-                    <p className="text-gray-400 text-center mb-8">
+                    <p className="text-gray-500 dark:text-gray-400 text-center mb-8">
                         Common inquiries from our institutional partners and the public.
                     </p>
                     <div className="space-y-3">
                         {faqs.map((faq, index) => (
                             <Card
                                 key={index}
-                                dark
                                 className="overflow-hidden"
                             >
                                 <button
-                                    className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-secondary-light transition-colors"
+                                    className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-slate-50 dark:hover:bg-secondary-light transition-colors"
                                     onClick={() => setOpenFaq(openFaq === index ? null : index)}
                                 >
-                                    <span className="text-white font-medium">{faq.question}</span>
+                                    <span className="text-gray-900 dark:text-white font-medium">{faq.question}</span>
                                     <ChevronDown
-                                        className={`text-primary-light transition-transform ${openFaq === index ? 'rotate-180' : ''}`}
+                                        className={`text-primary transition-transform ${openFaq === index ? 'rotate-180' : ''}`}
                                         size={20}
                                     />
                                 </button>
                                 {openFaq === index && (
-                                    <div className="px-6 pb-4 text-gray-400">
+                                    <div className="px-6 pb-4 text-gray-600 dark:text-gray-400">
                                         {faq.answer}
                                     </div>
                                 )}

@@ -32,32 +32,32 @@ export function ProjectsPage() {
     const { data: projects, isLoading } = useProjects();
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-white dark:bg-secondary-dark">
             {/* Hero Section */}
-            <section className="relative py-24 pt-32">
+            <section className="relative py-24 pt-32 bg-gradient-to-r from-emerald-900 to-teal-800">
                 <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{ backgroundImage: `url('/projects-hero.jpg')` }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-secondary/95 via-secondary/80 to-secondary/60" />
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/90 via-teal-800/75 to-emerald-900/85" />
                 <div className="relative max-w-7xl mx-auto px-4">
-                    <span className="inline-flex items-center gap-2 text-primary-light text-sm font-semibold uppercase tracking-wider">
+                    <span className="inline-flex items-center gap-2 text-emerald-300 text-sm font-semibold uppercase tracking-wider">
                         <Zap size={16} />
                         Ultra-Supercritical Tech
                     </span>
                     <h1 className="text-4xl md:text-5xl font-bold text-white mt-2">
                         Maitree Super<br />
-                        <span className="text-primary-light">Thermal Power</span>
+                        <span className="text-emerald-300">Thermal Power</span>
                     </h1>
                     <p className="mt-4 text-xl text-white/80 max-w-2xl">
                         A futuristic energy landmark at Rampal, Bangladesh featuring high-efficiency power generation through international collaboration and sustainable engineering excellence.
                     </p>
                     <div className="flex gap-4 mt-6">
-                        <Button>
+                        <Button className="bg-white text-emerald-900 hover:bg-white/90">
                             <BarChart3 className="mr-2" size={18} />
                             Technical Metrics
                         </Button>
-                        <Button variant="outline">
+                        <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
                             <ExternalLink className="mr-2" size={18} />
                             Live Site View
                         </Button>
@@ -66,13 +66,13 @@ export function ProjectsPage() {
             </section>
 
             {/* Projects Grid */}
-            <section className="bg-secondary py-16">
+            <section className="bg-slate-50/80 dark:bg-secondary py-16">
                 <div className="max-w-7xl mx-auto px-4">
-                    <h2 className="text-2xl font-bold text-white mb-8">All Projects</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">All Projects</h2>
                     {isLoading ? (
                         <LoadingSpinner />
                     ) : projects?.length === 0 ? (
-                        <div className="text-center text-gray-400 py-12">
+                        <div className="text-center text-gray-500 dark:text-gray-400 py-12">
                             <Zap className="mx-auto mb-2 opacity-50" size={48} />
                             <p>No projects available at the moment.</p>
                         </div>
@@ -84,7 +84,7 @@ export function ProjectsPage() {
                                     <Link
                                         key={project.id}
                                         to={`/projects/${project.slug}`}
-                                        className="group relative bg-secondary-dark rounded-2xl overflow-hidden border border-gray-700 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10"
+                                        className="group relative bg-white dark:bg-secondary-dark rounded-2xl overflow-hidden border border-slate-200 dark:border-gray-700 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10"
                                     >
                                         {/* Hover gradient overlay */}
                                         <div className={`absolute inset-0 bg-gradient-to-br ${status.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500 z-10 pointer-events-none`} />
@@ -98,13 +98,12 @@ export function ProjectsPage() {
                                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                                 />
                                             ) : (
-                                                <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
-                                                    <Zap size={48} className="text-gray-600" />
+                                                <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
+                                                    <Zap size={48} className="text-gray-400 dark:text-gray-600" />
                                                 </div>
                                             )}
-                                            {/* Gradient overlays */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-secondary-dark via-secondary-dark/20 to-transparent" />
-                                            <div className="absolute inset-0 bg-gradient-to-r from-secondary-dark/50 via-transparent to-transparent" />
+                                            {/* Bottom gradient for text readability */}
+                                            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent" />
 
                                             {/* Status badge */}
                                             <div className={`absolute top-4 left-4 px-3 py-1.5 rounded-lg ${status.bg} ${status.text} border ${status.border} text-xs font-semibold backdrop-blur-sm flex items-center gap-1.5`}>
@@ -118,34 +117,34 @@ export function ProjectsPage() {
                                             </span>
 
                                             {/* Capacity badge on image */}
-                                            <div className="absolute bottom-4 right-4 flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary-dark/90 backdrop-blur-sm border border-gray-700">
+                                            <div className="absolute bottom-4 right-4 flex items-center gap-2 px-3 py-2 rounded-lg bg-white/90 dark:bg-secondary-dark/90 backdrop-blur-sm border border-slate-200 dark:border-gray-700">
                                                 <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${status.gradient} flex items-center justify-center`}>
                                                     <Zap className="text-white" size={16} />
                                                 </div>
                                                 <div>
-                                                    <p className="text-white font-bold text-lg leading-none">{project.capacity_mw}</p>
-                                                    <p className="text-gray-400 text-xs">MW</p>
+                                                    <p className="text-gray-900 dark:text-white font-bold text-lg leading-none">{project.capacity_mw}</p>
+                                                    <p className="text-gray-500 dark:text-gray-400 text-xs">MW</p>
                                                 </div>
                                             </div>
                                         </div>
 
                                         {/* Content Section */}
                                         <div className="relative p-5 sm:p-6">
-                                            <h3 className="text-white font-bold text-lg sm:text-xl group-hover:text-primary-light transition-colors line-clamp-2 mb-3">
+                                            <h3 className="text-gray-900 dark:text-white font-bold text-lg sm:text-xl group-hover:text-primary transition-colors line-clamp-2 mb-3">
                                                 {project.name}
                                             </h3>
 
-                                            <div className="flex items-center gap-2 text-gray-400">
+                                            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                                                 <MapPin size={16} className="text-gray-500 shrink-0" />
                                                 <span className="text-sm truncate">{project.location}</span>
                                             </div>
 
                                             {/* View Details Button */}
-                                            <div className="mt-4 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-primary/10 border border-primary/30 group-hover:bg-primary group-hover:border-primary transition-all duration-300">
-                                                <span className="text-sm font-medium text-primary-light group-hover:text-white transition-colors">
+                                            <div className="mt-4 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white shadow-md shadow-primary/30 hover:shadow-lg hover:shadow-primary/40 transition-all duration-300">
+                                                <span className="text-sm font-semibold">
                                                     View Details
                                                 </span>
-                                                <ExternalLink className="text-primary-light group-hover:text-white transition-colors" size={14} />
+                                                <ExternalLink size={14} />
                                             </div>
                                         </div>
 

@@ -16,12 +16,12 @@ const footerLinks = {
 
 export function Footer() {
     return (
-        <footer className="bg-secondary-dark text-gray-300 border-t border-gray-800">
+        <footer className="bg-gradient-to-b from-slate-100 to-slate-50 dark:bg-secondary-dark text-gray-600 dark:text-gray-300 border-t border-slate-200 dark:border-gray-800">
             <div className="max-w-7xl mx-auto px-4 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* Brand */}
                     <div>
-                        <h3 className="text-white font-bold text-xl mb-4">BIFPCL</h3>
+                        <h3 className="text-gray-900 dark:text-white font-bold text-xl mb-4">BIFPCL</h3>
                         <p className="text-sm leading-relaxed">
                             Bangladesh-India Friendship Power Company (Pvt.) Limited. A mega-scale joint venture
                             powering the nation's progress with sustainable energy.
@@ -30,11 +30,11 @@ export function Footer() {
 
                     {/* Quick Links */}
                     <div>
-                        <h4 className="text-white font-semibold mb-4">Quick Links</h4>
+                        <h4 className="text-gray-900 dark:text-white font-semibold mb-4">Quick Links</h4>
                         <ul className="space-y-2">
                             {footerLinks.quickLinks.map((link) => (
                                 <li key={link.path}>
-                                    <Link to={link.path} className="hover:text-white transition-colors text-sm">
+                                    <Link to={link.path} className="hover:text-gray-900 dark:hover:text-white transition-colors text-sm">
                                         {link.name}
                                     </Link>
                                 </li>
@@ -44,11 +44,11 @@ export function Footer() {
 
                     {/* Legal */}
                     <div>
-                        <h4 className="text-white font-semibold mb-4">Legal</h4>
+                        <h4 className="text-gray-900 dark:text-white font-semibold mb-4">Legal</h4>
                         <ul className="space-y-2">
                             {footerLinks.legal.map((link) => (
                                 <li key={link.path}>
-                                    <Link to={link.path} className="hover:text-white transition-colors text-sm">
+                                    <Link to={link.path} className="hover:text-gray-900 dark:hover:text-white transition-colors text-sm">
                                         {link.name}
                                     </Link>
                                 </li>
@@ -58,7 +58,7 @@ export function Footer() {
 
                     {/* Contact */}
                     <div>
-                        <h4 className="text-white font-semibold mb-4">Connect</h4>
+                        <h4 className="text-gray-900 dark:text-white font-semibold mb-4">Connect</h4>
                         <div className="space-y-2 text-sm">
                             <p>Email: info@bifpcl.com</p>
                             <p>Phone: +880-2-XXXXXXX</p>
@@ -67,7 +67,7 @@ export function Footer() {
                     </div>
                 </div>
 
-                <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm">
+                <div className="border-t border-slate-200 dark:border-gray-700 mt-8 pt-8 text-center text-sm">
                     <p>© {new Date().getFullYear()} BIFPCL. All rights reserved.</p>
                 </div>
             </div>

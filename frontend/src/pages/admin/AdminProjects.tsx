@@ -129,15 +129,15 @@ export function AdminProjects() {
 
             {/* Stats */}
             <div className="flex gap-4">
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg">
-                    <Zap size={16} className="text-primary-light" />
-                    <span className="text-gray-400">Projects:</span>
-                    <span className="text-white font-medium">{projects?.length || 0}</span>
+                <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-white/5 rounded-lg">
+                    <Zap size={16} className="text-primary" />
+                    <span className="text-gray-600 dark:text-gray-400">Projects:</span>
+                    <span className="text-gray-900 dark:text-white font-medium">{projects?.length || 0}</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg">
-                    <Zap size={16} className="text-amber-400" />
-                    <span className="text-gray-400">Total:</span>
-                    <span className="text-white font-medium">{totalCapacity.toLocaleString()} MW</span>
+                <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-white/5 rounded-lg">
+                    <Zap size={16} className="text-amber-500 dark:text-amber-400" />
+                    <span className="text-gray-600 dark:text-gray-400">Total:</span>
+                    <span className="text-gray-900 dark:text-white font-medium">{totalCapacity.toLocaleString()} MW</span>
                 </div>
             </div>
 
@@ -165,23 +165,23 @@ export function AdminProjects() {
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="border-b border-white/10 bg-white/[0.02]">
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Project</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Location</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Capacity</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Technology</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Status</th>
-                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Actions</th>
+                                <tr className="border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/[0.02]">
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Project</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Location</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Capacity</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Technology</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Status</th>
+                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/5">
+                            <tbody className="divide-y divide-gray-100 dark:divide-white/5">
                                 {filteredProjects?.map((project: Project) => {
                                     const status = statusConfig[project.status] || statusConfig.operational;
                                     return (
-                                        <tr key={project.id} className="hover:bg-white/[0.02]">
+                                        <tr key={project.id} className="hover:bg-gray-50 dark:hover:bg-white/[0.02]">
                                             <td className="py-3.5 px-5">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded bg-white/5 overflow-hidden flex-shrink-0">
+                                                    <div className="w-10 h-10 rounded bg-gray-100 dark:bg-white/5 overflow-hidden flex-shrink-0">
                                                         {project.hero_image ? (
                                                             <img src={getMediaUrl(project.hero_image)} alt="" className="w-full h-full object-cover" />
                                                         ) : (
@@ -190,20 +190,20 @@ export function AdminProjects() {
                                                             </div>
                                                         )}
                                                     </div>
-                                                    <span className="text-white font-medium">{project.name}</span>
+                                                    <span className="text-gray-900 dark:text-white font-medium">{project.name}</span>
                                                 </div>
                                             </td>
                                             <td className="py-3.5 px-5">
-                                                <div className="flex items-center gap-1.5 text-gray-400">
+                                                <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
                                                     <MapPin size={14} />
                                                     {project.location}
                                                 </div>
                                             </td>
                                             <td className="py-3.5 px-5">
-                                                <span className="text-white font-medium">{project.capacity_mw} MW</span>
+                                                <span className="text-gray-900 dark:text-white font-medium">{project.capacity_mw} MW</span>
                                             </td>
                                             <td className="py-3.5 px-5">
-                                                <span className="text-gray-400">{project.technology}</span>
+                                                <span className="text-gray-600 dark:text-gray-400">{project.technology}</span>
                                             </td>
                                             <td className="py-3.5 px-5">
                                                 <Badge variant={status.variant}>{status.label}</Badge>
@@ -265,9 +265,9 @@ export function AdminProjects() {
                         <Input label="Efficiency (%)" type="number" step="0.01" value={formData.efficiency_percent} onChange={(e) => setFormData({ ...formData, efficiency_percent: e.target.value })} />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1.5">Hero Image</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Hero Image</label>
                         <input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) setFormData({ ...formData, hero_image: f }); }}
-                            className="text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-medium file:bg-primary file:text-white cursor-pointer" />
+                            className="text-gray-600 dark:text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-medium file:bg-primary file:text-white cursor-pointer" />
                     </div>
                 </form>
             </Modal>

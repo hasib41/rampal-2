@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { MapPin, Briefcase, X, Upload, FileText, CheckCircle, AlertCircle, Clock, DollarSign, ChevronRight, User, Mail, Phone, Linkedin, Loader2 } from 'lucide-react';
+import { MapPin, Briefcase, X, Upload, FileText, CheckCircle, AlertCircle, Clock, DollarSign, ChevronRight, User, Mail, Phone, Linkedin, Loader2, Heart, GraduationCap, Shield, Globe } from 'lucide-react';
 import { PageHeader, Card, Button, LoadingSpinner } from '../components/ui';
 import { useCareers } from '../hooks/useApi';
 import { careersApi } from '../services/api';
@@ -150,12 +150,12 @@ export function CareersPage() {
                     <div key={step} className="flex items-center">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${isCompleted ? 'bg-accent-green text-white' :
                             isActive ? 'bg-primary text-white' :
-                                'bg-gray-700 text-gray-400'
+                                'bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400'
                             }`}>
                             {isCompleted ? <CheckCircle size={16} /> : index + 1}
                         </div>
                         {index < 2 && (
-                            <div className={`w-12 h-0.5 mx-2 transition-colors ${isCompleted ? 'bg-accent-green' : 'bg-gray-700'
+                            <div className={`w-12 h-0.5 mx-2 transition-colors ${isCompleted ? 'bg-accent-green' : 'bg-slate-200 dark:bg-gray-700'
                                 }`} />
                         )}
                     </div>
@@ -165,7 +165,7 @@ export function CareersPage() {
     );
 
     return (
-        <div className="bg-secondary-dark min-h-screen">
+        <div className="bg-white dark:bg-secondary-dark min-h-screen">
             <PageHeader
                 title="Careers at BIFPCL"
                 subtitle="Join our team and be part of Bangladesh's energy future. We offer competitive salaries, excellent benefits, and growth opportunities."
@@ -173,40 +173,101 @@ export function CareersPage() {
             />
 
             {/* Stats Section */}
-            <section className="bg-secondary py-8 border-b border-gray-700">
+            <section className="bg-slate-50 dark:bg-secondary py-8 border-b border-slate-200 dark:border-gray-700">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                         <div>
-                            <p className="text-3xl font-bold text-primary-light">{careers?.length || 0}</p>
-                            <p className="text-gray-400 text-sm">Open Positions</p>
+                            <p className="text-3xl font-bold text-primary">{careers?.length || 0}</p>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">Open Positions</p>
                         </div>
                         <div>
                             <p className="text-3xl font-bold text-accent-green">500+</p>
-                            <p className="text-gray-400 text-sm">Employees</p>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">Employees</p>
                         </div>
                         <div>
                             <p className="text-3xl font-bold text-accent-orange">4</p>
-                            <p className="text-gray-400 text-sm">Departments</p>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">Departments</p>
                         </div>
                         <div>
-                            <p className="text-3xl font-bold text-purple-400">95%</p>
-                            <p className="text-gray-400 text-sm">Employee Satisfaction</p>
+                            <p className="text-3xl font-bold text-purple-500 dark:text-purple-400">95%</p>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">Employee Satisfaction</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Job Listings */}
-            <section className="py-16">
+            {/* Why Work With Us Section */}
+            <section className="py-16 bg-white dark:bg-secondary-dark">
                 <div className="max-w-7xl mx-auto px-4">
-                    <h2 className="text-2xl font-bold text-white mb-8">Open Positions</h2>
+                    <div className="text-center mb-12">
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-3">
+                            Why Work With Us?
+                        </h2>
+                        <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+                            Join a dynamic team dedicated to powering Bangladesh's future through sustainable energy solutions
+                        </p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {[
+                            {
+                                icon: Heart,
+                                title: 'Health Benefits',
+                                description: 'Comprehensive medical, dental, and vision coverage for you and your family',
+                                color: 'text-red-500',
+                                bgColor: 'bg-red-500/10',
+                            },
+                            {
+                                icon: GraduationCap,
+                                title: 'Learning & Growth',
+                                description: 'Professional development programs, training, and career advancement opportunities',
+                                color: 'text-primary',
+                                bgColor: 'bg-primary/10',
+                            },
+                            {
+                                icon: Shield,
+                                title: 'Job Security',
+                                description: 'Stable employment with a government-backed joint venture power company',
+                                color: 'text-accent-green',
+                                bgColor: 'bg-accent-green/10',
+                            },
+                            {
+                                icon: Globe,
+                                title: 'International Exposure',
+                                description: 'Work with experts from Bangladesh and India on world-class power projects',
+                                color: 'text-accent-orange',
+                                bgColor: 'bg-accent-orange/10',
+                            },
+                        ].map((benefit) => (
+                            <Card
+                                key={benefit.title}
+                                className="p-6 text-center hover:shadow-lg transition-all duration-300 group bg-white dark:bg-secondary border-slate-200 dark:border-gray-700"
+                            >
+                                <div className={`w-14 h-14 ${benefit.bgColor} rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+                                    <benefit.icon className={benefit.color} size={28} />
+                                </div>
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                                    {benefit.title}
+                                </h3>
+                                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                                    {benefit.description}
+                                </p>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Job Listings */}
+            <section className="py-16 bg-slate-50 dark:bg-secondary">
+                <div className="max-w-7xl mx-auto px-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Open Positions</h2>
 
                     {isLoading ? (
                         <LoadingSpinner />
                     ) : careers?.length === 0 ? (
-                        <div className="text-center py-16 bg-secondary rounded-xl border border-gray-700">
-                            <Briefcase className="mx-auto text-gray-600 mb-4" size={48} />
-                            <p className="text-gray-400">No open positions at the moment. Check back later!</p>
+                        <div className="text-center py-16 bg-slate-50 dark:bg-secondary rounded-xl border border-slate-200 dark:border-gray-700">
+                            <Briefcase className="mx-auto text-gray-400 dark:text-gray-600 mb-4" size={48} />
+                            <p className="text-gray-500 dark:text-gray-400">No open positions at the moment. Check back later!</p>
                         </div>
                     ) : (
                         <div className="space-y-4">
@@ -217,14 +278,13 @@ export function CareersPage() {
                                 return (
                                     <Card
                                         key={career.id}
-                                        dark
-                                        className="p-6 hover:border-primary/50 transition-all duration-300 group"
+                                        className="p-6 hover:border-primary/50 transition-all duration-300 group bg-white dark:bg-secondary-dark border-slate-200 dark:border-gray-700"
                                     >
                                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                             {/* Job Info */}
                                             <div className="flex-1">
                                                 <div className="flex items-center gap-3 mb-2">
-                                                    <h3 className="text-xl font-bold text-white group-hover:text-primary-light transition-colors">
+                                                    <h3 className="text-xl font-bold text-slate-800 dark:text-white group-hover:text-primary transition-colors">
                                                         {career.title}
                                                     </h3>
                                                     <span className={`px-2 py-0.5 rounded text-xs font-semibold ${career.employment_type === 'full_time'
@@ -235,29 +295,29 @@ export function CareersPage() {
                                                     </span>
                                                 </div>
 
-                                                <div className="flex flex-wrap gap-4 text-sm text-gray-400">
+                                                <div className="flex flex-wrap gap-4 text-sm text-slate-500 dark:text-gray-400">
                                                     <span className="flex items-center gap-1.5">
-                                                        <Briefcase size={14} className="text-gray-500" />
+                                                        <Briefcase size={14} className="text-slate-400 dark:text-gray-500" />
                                                         {career.department}
                                                     </span>
                                                     <span className="flex items-center gap-1.5">
-                                                        <MapPin size={14} className="text-gray-500" />
+                                                        <MapPin size={14} className="text-slate-400 dark:text-gray-500" />
                                                         {career.location}
                                                     </span>
                                                     <span className="flex items-center gap-1.5">
-                                                        <DollarSign size={14} className="text-gray-500" />
+                                                        <DollarSign size={14} className="text-slate-400 dark:text-gray-500" />
                                                         {career.salary_range}
                                                     </span>
                                                 </div>
 
-                                                <p className="text-gray-500 text-sm mt-3 line-clamp-2">
+                                                <p className="text-slate-500 dark:text-gray-500 text-sm mt-3 line-clamp-2">
                                                     {career.description}
                                                 </p>
                                             </div>
 
                                             {/* Deadline & Apply */}
                                             <div className="flex md:flex-col items-center md:items-end gap-4">
-                                                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${isUrgent ? 'bg-red-500/10 text-red-400' : 'bg-gray-800 text-gray-400'
+                                                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${isUrgent ? 'bg-red-500/10 text-red-500 dark:text-red-400' : 'bg-slate-100 dark:bg-gray-800 text-slate-500 dark:text-gray-400'
                                                     }`}>
                                                     <Clock size={14} />
                                                     <span className="text-sm font-medium">
@@ -284,18 +344,18 @@ export function CareersPage() {
 
             {/* Application Modal */}
             {selectedCareer && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={closeModal}>
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 dark:bg-black/80 backdrop-blur-sm" onClick={closeModal}>
                     <div
-                        className="bg-secondary rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-700"
+                        className="bg-white dark:bg-secondary rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-slate-200 dark:border-gray-700"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Modal Header */}
-                        <div className="bg-gradient-to-r from-primary/20 to-accent-green/10 p-6 border-b border-gray-700">
+                        <div className="bg-gradient-to-r from-primary/10 to-emerald-500/10 dark:from-primary/20 dark:to-accent-green/10 p-6 border-b border-slate-200 dark:border-gray-700">
                             <div className="flex items-start justify-between">
                                 <div>
-                                    <p className="text-primary-light text-sm font-medium mb-1">Apply for Position</p>
-                                    <h2 className="text-2xl font-bold text-white">{selectedCareer.title}</h2>
-                                    <div className="flex items-center gap-4 mt-2 text-gray-400 text-sm">
+                                    <p className="text-primary text-sm font-medium mb-1">Apply for Position</p>
+                                    <h2 className="text-2xl font-bold text-slate-800 dark:text-white">{selectedCareer.title}</h2>
+                                    <div className="flex items-center gap-4 mt-2 text-slate-500 dark:text-gray-400 text-sm">
                                         <span className="flex items-center gap-1">
                                             <Briefcase size={14} /> {selectedCareer.department}
                                         </span>
@@ -309,7 +369,7 @@ export function CareersPage() {
                                 </div>
                                 <button
                                     onClick={closeModal}
-                                    className="w-10 h-10 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                                    className="w-10 h-10 rounded-full bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 flex items-center justify-center text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-white transition-colors"
                                 >
                                     <X size={20} />
                                 </button>
@@ -324,9 +384,9 @@ export function CareersPage() {
                                     <div className="w-20 h-20 bg-accent-green/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
                                         <CheckCircle className="text-accent-green" size={40} />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-white mb-2">Application Submitted!</h3>
-                                    <p className="text-gray-400 max-w-md mx-auto">
-                                        Thank you for applying for the <span className="text-white font-medium">{selectedCareer.title}</span> position.
+                                    <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">Application Submitted!</h3>
+                                    <p className="text-slate-500 dark:text-gray-400 max-w-md mx-auto">
+                                        Thank you for applying for the <span className="text-slate-800 dark:text-white font-medium">{selectedCareer.title}</span> position.
                                         We'll review your application and get back to you within 5-7 business days.
                                     </p>
                                     <Button onClick={closeModal} className="mt-6">
@@ -340,11 +400,11 @@ export function CareersPage() {
                                     {/* Step 1: Personal Details */}
                                     {currentStep === 'details' && (
                                         <div className="space-y-4">
-                                            <h3 className="text-lg font-semibold text-white mb-4">Personal Information</h3>
+                                            <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Personal Information</h3>
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-400 mb-1.5">
+                                                    <label className="block text-sm font-medium text-slate-600 dark:text-gray-400 mb-1.5">
                                                         <User size={14} className="inline mr-1" />
                                                         Full Name *
                                                     </label>
@@ -353,14 +413,14 @@ export function CareersPage() {
                                                         value={formData.full_name}
                                                         onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                                                         placeholder="John Doe"
-                                                        className={`w-full px-4 py-3 bg-secondary-dark border rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${errors.full_name ? 'border-red-500' : 'border-gray-700'
+                                                        className={`w-full px-4 py-3 bg-slate-50 dark:bg-secondary-dark border rounded-xl text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${errors.full_name ? 'border-red-500' : 'border-slate-200 dark:border-gray-700'
                                                             }`}
                                                     />
-                                                    {errors.full_name && <p className="text-red-400 text-xs mt-1">{errors.full_name}</p>}
+                                                    {errors.full_name && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.full_name}</p>}
                                                 </div>
 
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-400 mb-1.5">
+                                                    <label className="block text-sm font-medium text-slate-600 dark:text-gray-400 mb-1.5">
                                                         <Mail size={14} className="inline mr-1" />
                                                         Email Address *
                                                     </label>
@@ -369,16 +429,16 @@ export function CareersPage() {
                                                         value={formData.email}
                                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                                         placeholder="john@example.com"
-                                                        className={`w-full px-4 py-3 bg-secondary-dark border rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${errors.email ? 'border-red-500' : 'border-gray-700'
+                                                        className={`w-full px-4 py-3 bg-slate-50 dark:bg-secondary-dark border rounded-xl text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${errors.email ? 'border-red-500' : 'border-slate-200 dark:border-gray-700'
                                                             }`}
                                                     />
-                                                    {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
+                                                    {errors.email && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.email}</p>}
                                                 </div>
                                             </div>
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-400 mb-1.5">
+                                                    <label className="block text-sm font-medium text-slate-600 dark:text-gray-400 mb-1.5">
                                                         <Phone size={14} className="inline mr-1" />
                                                         Phone Number *
                                                     </label>
@@ -387,14 +447,14 @@ export function CareersPage() {
                                                         value={formData.phone}
                                                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                                         placeholder="+880 1XXX-XXXXXX"
-                                                        className={`w-full px-4 py-3 bg-secondary-dark border rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${errors.phone ? 'border-red-500' : 'border-gray-700'
+                                                        className={`w-full px-4 py-3 bg-slate-50 dark:bg-secondary-dark border rounded-xl text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${errors.phone ? 'border-red-500' : 'border-slate-200 dark:border-gray-700'
                                                             }`}
                                                     />
-                                                    {errors.phone && <p className="text-red-400 text-xs mt-1">{errors.phone}</p>}
+                                                    {errors.phone && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.phone}</p>}
                                                 </div>
 
                                                 <div>
-                                                    <label className="block text-sm font-medium text-gray-400 mb-1.5">
+                                                    <label className="block text-sm font-medium text-slate-600 dark:text-gray-400 mb-1.5">
                                                         <Linkedin size={14} className="inline mr-1" />
                                                         LinkedIn Profile (Optional)
                                                     </label>
@@ -403,7 +463,7 @@ export function CareersPage() {
                                                         value={formData.linkedin_url}
                                                         onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
                                                         placeholder="https://linkedin.com/in/johndoe"
-                                                        className="w-full px-4 py-3 bg-secondary-dark border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                                        className="w-full px-4 py-3 bg-slate-50 dark:bg-secondary-dark border border-slate-200 dark:border-gray-700 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                                     />
                                                 </div>
                                             </div>
@@ -413,11 +473,11 @@ export function CareersPage() {
                                     {/* Step 2: Documents */}
                                     {currentStep === 'documents' && (
                                         <div className="space-y-6">
-                                            <h3 className="text-lg font-semibold text-white mb-4">Documents & Cover Letter</h3>
+                                            <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Documents & Cover Letter</h3>
 
                                             {/* Resume Upload */}
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-400 mb-2">
+                                                <label className="block text-sm font-medium text-slate-600 dark:text-gray-400 mb-2">
                                                     <FileText size={14} className="inline mr-1" />
                                                     Resume / CV *
                                                 </label>
@@ -428,7 +488,7 @@ export function CareersPage() {
                                                             ? 'border-red-500 bg-red-500/5'
                                                             : resume
                                                                 ? 'border-accent-green bg-accent-green/5'
-                                                                : 'border-gray-700 hover:border-gray-600'
+                                                                : 'border-slate-300 dark:border-gray-700 hover:border-slate-400 dark:hover:border-gray-600'
                                                         }`}
                                                     onDragEnter={handleDrag}
                                                     onDragLeave={handleDrag}
@@ -450,41 +510,41 @@ export function CareersPage() {
                                                                 <FileText className="text-accent-green" size={24} />
                                                             </div>
                                                             <div className="text-left">
-                                                                <p className="text-white font-medium">{resume.name}</p>
-                                                                <p className="text-gray-500 text-sm">
+                                                                <p className="text-slate-800 dark:text-white font-medium">{resume.name}</p>
+                                                                <p className="text-slate-500 dark:text-gray-500 text-sm">
                                                                     {(resume.size / 1024 / 1024).toFixed(2)} MB
                                                                 </p>
                                                             </div>
                                                             <button
                                                                 type="button"
                                                                 onClick={(e) => { e.stopPropagation(); setResume(null); }}
-                                                                className="ml-4 text-gray-400 hover:text-red-400"
+                                                                className="ml-4 text-slate-400 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400"
                                                             >
                                                                 <X size={20} />
                                                             </button>
                                                         </div>
                                                     ) : (
                                                         <>
-                                                            <Upload className={`mx-auto mb-3 ${dragActive ? 'text-primary' : 'text-gray-500'}`} size={32} />
-                                                            <p className="text-white font-medium">
+                                                            <Upload className={`mx-auto mb-3 ${dragActive ? 'text-primary' : 'text-slate-400 dark:text-gray-500'}`} size={32} />
+                                                            <p className="text-slate-700 dark:text-white font-medium">
                                                                 Drag and drop your resume here
                                                             </p>
-                                                            <p className="text-gray-500 text-sm mt-1">
+                                                            <p className="text-slate-500 dark:text-gray-500 text-sm mt-1">
                                                                 or click to browse (PDF, DOC, DOCX)
                                                             </p>
                                                         </>
                                                     )}
                                                 </div>
-                                                {errors.resume && <p className="text-red-400 text-xs mt-1">{errors.resume}</p>}
+                                                {errors.resume && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.resume}</p>}
                                             </div>
 
                                             {/* Cover Letter */}
                                             <div>
                                                 <div className="flex items-center justify-between mb-2">
-                                                    <label className="text-sm font-medium text-gray-400">
+                                                    <label className="text-sm font-medium text-slate-600 dark:text-gray-400">
                                                         Cover Letter *
                                                     </label>
-                                                    <span className={`text-xs ${formData.cover_letter.length < 100 ? 'text-gray-500' : 'text-accent-green'}`}>
+                                                    <span className={`text-xs ${formData.cover_letter.length < 100 ? 'text-slate-500 dark:text-gray-500' : 'text-accent-green'}`}>
                                                         {formData.cover_letter.length} / 100 min
                                                     </span>
                                                 </div>
@@ -493,10 +553,10 @@ export function CareersPage() {
                                                     onChange={(e) => setFormData({ ...formData, cover_letter: e.target.value })}
                                                     placeholder="Tell us why you're interested in this position and what makes you a great fit..."
                                                     rows={6}
-                                                    className={`w-full px-4 py-3 bg-secondary-dark border rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none ${errors.cover_letter ? 'border-red-500' : 'border-gray-700'
+                                                    className={`w-full px-4 py-3 bg-slate-50 dark:bg-secondary-dark border rounded-xl text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none ${errors.cover_letter ? 'border-red-500' : 'border-slate-200 dark:border-gray-700'
                                                         }`}
                                                 />
-                                                {errors.cover_letter && <p className="text-red-400 text-xs mt-1">{errors.cover_letter}</p>}
+                                                {errors.cover_letter && <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.cover_letter}</p>}
                                             </div>
                                         </div>
                                     )}
@@ -504,51 +564,51 @@ export function CareersPage() {
                                     {/* Step 3: Review */}
                                     {currentStep === 'review' && (
                                         <div className="space-y-6">
-                                            <h3 className="text-lg font-semibold text-white mb-4">Review Your Application</h3>
+                                            <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Review Your Application</h3>
 
                                             {/* Personal Info Summary */}
-                                            <div className="bg-secondary-dark rounded-xl p-4 border border-gray-700">
-                                                <h4 className="text-sm font-medium text-gray-400 mb-3">Personal Information</h4>
+                                            <div className="bg-slate-50 dark:bg-secondary-dark rounded-xl p-4 border border-slate-200 dark:border-gray-700">
+                                                <h4 className="text-sm font-medium text-slate-600 dark:text-gray-400 mb-3">Personal Information</h4>
                                                 <div className="grid grid-cols-2 gap-4 text-sm">
                                                     <div>
-                                                        <p className="text-gray-500">Full Name</p>
-                                                        <p className="text-white font-medium">{formData.full_name}</p>
+                                                        <p className="text-slate-500 dark:text-gray-500">Full Name</p>
+                                                        <p className="text-slate-800 dark:text-white font-medium">{formData.full_name}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-gray-500">Email</p>
-                                                        <p className="text-white font-medium">{formData.email}</p>
+                                                        <p className="text-slate-500 dark:text-gray-500">Email</p>
+                                                        <p className="text-slate-800 dark:text-white font-medium">{formData.email}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-gray-500">Phone</p>
-                                                        <p className="text-white font-medium">{formData.phone}</p>
+                                                        <p className="text-slate-500 dark:text-gray-500">Phone</p>
+                                                        <p className="text-slate-800 dark:text-white font-medium">{formData.phone}</p>
                                                     </div>
                                                     {formData.linkedin_url && (
                                                         <div>
-                                                            <p className="text-gray-500">LinkedIn</p>
-                                                            <p className="text-primary-light font-medium truncate">{formData.linkedin_url}</p>
+                                                            <p className="text-slate-500 dark:text-gray-500">LinkedIn</p>
+                                                            <p className="text-primary font-medium truncate">{formData.linkedin_url}</p>
                                                         </div>
                                                     )}
                                                 </div>
                                             </div>
 
                                             {/* Documents Summary */}
-                                            <div className="bg-secondary-dark rounded-xl p-4 border border-gray-700">
-                                                <h4 className="text-sm font-medium text-gray-400 mb-3">Documents</h4>
+                                            <div className="bg-slate-50 dark:bg-secondary-dark rounded-xl p-4 border border-slate-200 dark:border-gray-700">
+                                                <h4 className="text-sm font-medium text-slate-600 dark:text-gray-400 mb-3">Documents</h4>
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-10 h-10 bg-accent-green/20 rounded-lg flex items-center justify-center">
                                                         <FileText className="text-accent-green" size={18} />
                                                     </div>
                                                     <div>
-                                                        <p className="text-white font-medium">{resume?.name}</p>
-                                                        <p className="text-gray-500 text-xs">Resume uploaded</p>
+                                                        <p className="text-slate-800 dark:text-white font-medium">{resume?.name}</p>
+                                                        <p className="text-slate-500 dark:text-gray-500 text-xs">Resume uploaded</p>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             {/* Cover Letter Preview */}
-                                            <div className="bg-secondary-dark rounded-xl p-4 border border-gray-700">
-                                                <h4 className="text-sm font-medium text-gray-400 mb-3">Cover Letter</h4>
-                                                <p className="text-gray-300 text-sm line-clamp-3">{formData.cover_letter}</p>
+                                            <div className="bg-slate-50 dark:bg-secondary-dark rounded-xl p-4 border border-slate-200 dark:border-gray-700">
+                                                <h4 className="text-sm font-medium text-slate-600 dark:text-gray-400 mb-3">Cover Letter</h4>
+                                                <p className="text-slate-600 dark:text-gray-300 text-sm line-clamp-3">{formData.cover_letter}</p>
                                             </div>
 
                                             {errors.submit && (
@@ -561,7 +621,7 @@ export function CareersPage() {
                                     )}
 
                                     {/* Navigation Buttons */}
-                                    <div className="flex gap-3 mt-6 pt-4 border-t border-gray-700">
+                                    <div className="flex gap-3 mt-6 pt-4 border-t border-slate-200 dark:border-gray-700">
                                         {currentStep !== 'details' && (
                                             <Button
                                                 type="button"

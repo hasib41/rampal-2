@@ -18,13 +18,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const buttonVariants: Record<ButtonVariant, string> = {
-    primary: 'bg-primary hover:bg-primary-light text-white shadow-lg shadow-primary/25 hover:shadow-primary/40',
-    secondary: 'bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 hover:border-white/20',
-    ghost: 'hover:bg-white/5 text-gray-400 hover:text-white',
-    danger: 'bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 hover:border-red-500/30',
-    success: 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20',
-    outline: 'bg-transparent hover:bg-white/5 text-gray-200 border border-white/20 hover:border-white/30',
-    warning: 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 hover:border-amber-500/30',
+    primary: 'bg-primary hover:bg-primary-dark text-white shadow-md shadow-primary/30 hover:shadow-lg hover:shadow-primary/40',
+    secondary: 'bg-primary/10 hover:bg-primary/20 text-primary dark:text-primary-light border border-primary/20 hover:border-primary/30 dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 dark:hover:border-white/20',
+    ghost: 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white',
+    danger: 'bg-red-500 hover:bg-red-600 text-white shadow-md shadow-red-500/30 hover:shadow-lg hover:shadow-red-500/40 dark:bg-red-500/10 dark:hover:bg-red-500/20 dark:text-red-400 dark:shadow-none',
+    success: 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/40 dark:bg-emerald-500/10 dark:hover:bg-emerald-500/20 dark:text-emerald-400 dark:shadow-none',
+    outline: 'bg-transparent hover:bg-primary/10 text-primary border-2 border-primary hover:border-primary-dark dark:hover:bg-white/5 dark:text-gray-200 dark:border-white/20 dark:hover:border-white/30',
+    warning: 'bg-amber-500 hover:bg-amber-600 text-white shadow-md shadow-amber-500/30 hover:shadow-lg hover:shadow-amber-500/40 dark:bg-amber-500/10 dark:hover:bg-amber-500/20 dark:text-amber-400 dark:shadow-none',
 };
 
 const buttonSizes: Record<ButtonSize, string> = {
@@ -51,7 +51,7 @@ export function Button({
                 inline-flex items-center justify-center font-medium rounded-xl
                 transition-all duration-200 ease-out
                 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none
-                focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-secondary-dark
+                focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-secondary-dark
                 ${buttonVariants[variant]}
                 ${buttonSizes[size]}
                 ${className}
@@ -115,26 +115,26 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     ({ label, error, hint, leftIcon, rightIcon, className = '', ...props }, ref) => (
         <div className="space-y-1.5">
             {label && (
-                <label className="block text-sm font-medium text-gray-300">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     {label}
-                    {props.required && <span className="text-red-400 ml-1">*</span>}
+                    {props.required && <span className="text-red-500 dark:text-red-400 ml-1">*</span>}
                 </label>
             )}
             <div className="relative">
                 {leftIcon && (
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-gray-500">
                         {leftIcon}
                     </div>
                 )}
                 <input
                     ref={ref}
                     className={`
-                        w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-lg
-                        text-[15px] text-gray-200 placeholder-gray-500
+                        w-full px-3.5 py-2.5 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg
+                        text-[15px] text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500
                         transition-all duration-200
-                        hover:border-white/20
+                        hover:border-gray-400 dark:hover:border-white/20
                         focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20
-                        disabled:opacity-50 disabled:cursor-not-allowed
+                        disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 dark:disabled:bg-white/5
                         ${leftIcon ? 'pl-10' : ''}
                         ${rightIcon ? 'pr-10' : ''}
                         ${error ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' : ''}
@@ -143,13 +143,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                     {...props}
                 />
                 {rightIcon && (
-                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
+                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 dark:text-gray-500">
                         {rightIcon}
                     </div>
                 )}
             </div>
             {hint && !error && <p className="text-sm text-gray-500">{hint}</p>}
-            {error && <p className="text-sm text-red-400 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
+            {error && <p className="text-sm text-red-500 dark:text-red-400 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
         </div>
     )
 );
@@ -169,13 +169,13 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     ({ label, error, hint, showCount, maxLength, className = '', value, ...props }, ref) => {
         const currentLength = typeof value === 'string' ? value.length : 0;
-        
+
         return (
             <div className="space-y-1.5">
                 {label && (
-                    <label className="block text-sm font-medium text-gray-300">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         {label}
-                        {props.required && <span className="text-red-400 ml-1">*</span>}
+                        {props.required && <span className="text-red-500 dark:text-red-400 ml-1">*</span>}
                     </label>
                 )}
                 <textarea
@@ -183,10 +183,10 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                     value={value}
                     maxLength={maxLength}
                     className={`
-                        w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-lg
-                        text-[15px] text-gray-200 placeholder-gray-500
+                        w-full px-3.5 py-2.5 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg
+                        text-[15px] text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500
                         transition-all duration-200 resize-none
-                        hover:border-white/20
+                        hover:border-gray-400 dark:hover:border-white/20
                         focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20
                         disabled:opacity-50 disabled:cursor-not-allowed
                         ${error ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' : ''}
@@ -196,9 +196,9 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                 />
                 <div className="flex items-center justify-between">
                     {hint && !error && <p className="text-sm text-gray-500">{hint}</p>}
-                    {error && <p className="text-sm text-red-400 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
+                    {error && <p className="text-sm text-red-500 dark:text-red-400 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
                     {showCount && maxLength && (
-                        <p className={`text-sm ml-auto ${currentLength >= maxLength ? 'text-red-400' : 'text-gray-500'}`}>
+                        <p className={`text-sm ml-auto ${currentLength >= maxLength ? 'text-red-500 dark:text-red-400' : 'text-gray-500'}`}>
                             {currentLength}/{maxLength}
                         </p>
                     )}
@@ -222,18 +222,18 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     ({ label, error, options, className = '', ...props }, ref) => (
         <div className="space-y-1.5">
             {label && (
-                <label className="block text-sm font-medium text-gray-300">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     {label}
-                    {props.required && <span className="text-red-400 ml-1">*</span>}
+                    {props.required && <span className="text-red-500 dark:text-red-400 ml-1">*</span>}
                 </label>
             )}
             <select
                 ref={ref}
                 className={`
-                    w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-lg
-                    text-[15px] text-gray-200
+                    w-full px-3.5 py-2.5 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg
+                    text-[15px] text-gray-900 dark:text-gray-200
                     transition-all duration-200
-                    hover:border-white/20
+                    hover:border-gray-400 dark:hover:border-white/20
                     focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20
                     disabled:opacity-50 disabled:cursor-not-allowed
                     ${error ? 'border-red-500/50' : ''}
@@ -242,12 +242,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 {...props}
             >
                 {options.map((opt) => (
-                    <option key={opt.value} value={opt.value} className="bg-secondary-dark">
+                    <option key={opt.value} value={opt.value} className="bg-white dark:bg-secondary-dark">
                         {opt.label}
                     </option>
                 ))}
             </select>
-            {error && <p className="text-sm text-red-400 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
+            {error && <p className="text-sm text-red-500 dark:text-red-400 flex items-center gap-1"><AlertCircle size={12} />{error}</p>}
         </div>
     )
 );
@@ -276,8 +276,8 @@ export function Toggle({ checked, onChange, label, description, disabled }: Togg
                 className={`
                     relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent
                     transition-colors duration-200 ease-in-out
-                    focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-secondary-dark
-                    ${checked ? 'bg-primary' : 'bg-white/10'}
+                    focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-secondary-dark
+                    ${checked ? 'bg-primary' : 'bg-gray-200 dark:bg-white/10'}
                 `}
             >
                 <span
@@ -290,7 +290,7 @@ export function Toggle({ checked, onChange, label, description, disabled }: Togg
             </button>
             {(label || description) && (
                 <div>
-                    {label && <p className="text-sm font-medium text-gray-200">{label}</p>}
+                    {label && <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{label}</p>}
                     {description && <p className="text-xs text-gray-500">{description}</p>}
                 </div>
             )}
@@ -320,15 +320,15 @@ export function Checkbox({ checked, onChange, label, disabled }: CheckboxProps) 
                 className={`
                     w-5 h-5 rounded-md border-2 flex items-center justify-center
                     transition-all duration-200
-                    focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-secondary-dark
-                    ${checked ? 'bg-primary border-primary' : 'bg-white/5 border-white/20 hover:border-white/30'}
+                    focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-secondary-dark
+                    ${checked ? 'bg-primary border-primary' : 'bg-white dark:bg-white/5 border-gray-300 dark:border-white/20 hover:border-gray-400 dark:hover:border-white/30'}
                 `}
             >
                 {checked && (
                     <CheckCircle className="text-white" size={14} />
                 )}
             </button>
-            {label && <span className="text-sm text-gray-300">{label}</span>}
+            {label && <span className="text-sm text-gray-700 dark:text-gray-300">{label}</span>}
         </label>
     );
 }
@@ -346,12 +346,12 @@ interface BadgeProps {
 }
 
 const badgeVariants: Record<BadgeVariant, string> = {
-    default: 'bg-white/10 text-gray-300',
-    primary: 'bg-primary/20 text-primary-light',
-    success: 'bg-emerald-500/20 text-emerald-400',
-    warning: 'bg-amber-500/20 text-amber-400',
-    danger: 'bg-red-500/20 text-red-400',
-    info: 'bg-blue-500/20 text-blue-400',
+    default: 'bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300',
+    primary: 'bg-primary/20 text-primary dark:text-primary-light',
+    success: 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400',
+    warning: 'bg-amber-500/20 text-amber-600 dark:text-amber-400',
+    danger: 'bg-red-500/20 text-red-600 dark:text-red-400',
+    info: 'bg-blue-500/20 text-blue-600 dark:text-blue-400',
 };
 
 export function Badge({ children, variant = 'default', size = 'sm', dot }: BadgeProps) {
@@ -365,11 +365,11 @@ export function Badge({ children, variant = 'default', size = 'sm', dot }: Badge
         >
             {dot && (
                 <span className={`w-1.5 h-1.5 rounded-full ${
-                    variant === 'success' ? 'bg-emerald-400' :
-                    variant === 'warning' ? 'bg-amber-400' :
-                    variant === 'danger' ? 'bg-red-400' :
-                    variant === 'primary' ? 'bg-primary-light' :
-                    variant === 'info' ? 'bg-blue-400' : 'bg-gray-400'
+                    variant === 'success' ? 'bg-emerald-500 dark:bg-emerald-400' :
+                    variant === 'warning' ? 'bg-amber-500 dark:bg-amber-400' :
+                    variant === 'danger' ? 'bg-red-500 dark:bg-red-400' :
+                    variant === 'primary' ? 'bg-primary dark:bg-primary-light' :
+                    variant === 'info' ? 'bg-blue-500 dark:bg-blue-400' : 'bg-gray-400'
                 }`} />
             )}
             {children}
@@ -386,6 +386,7 @@ interface CardProps {
     hover?: boolean;
     padding?: 'none' | 'sm' | 'md' | 'lg';
     dark?: boolean;
+    shadow?: 'none' | 'sm' | 'md' | 'lg';
     onClick?: () => void;
 }
 
@@ -396,14 +397,24 @@ const cardPadding = {
     lg: 'p-6',
 };
 
-export function Card({ children, className = '', hover = false, padding = 'md', dark = false, onClick }: CardProps) {
+const cardShadow = {
+    none: '',
+    sm: 'shadow-sm',
+    md: 'shadow-md shadow-slate-200/50 dark:shadow-black/20',
+    lg: 'shadow-lg shadow-slate-200/50 dark:shadow-black/30',
+};
+
+export function Card({ children, className = '', hover = false, padding = 'md', dark = false, shadow = 'none', onClick }: CardProps) {
     return (
         <div
             onClick={onClick}
             className={`
-                ${dark ? 'bg-secondary-dark border-gray-700' : 'bg-white/[0.02] border-white/[0.05]'}
-                backdrop-blur-sm border rounded-2xl
-                ${hover || onClick ? 'hover:bg-white/[0.04] hover:border-white/10 transition-all duration-200 cursor-pointer' : ''}
+                ${dark
+                    ? 'bg-slate-50 dark:bg-secondary-dark border-slate-200 dark:border-gray-700'
+                    : 'bg-white dark:bg-secondary border-slate-200 dark:border-gray-700/50'}
+                border rounded-2xl
+                ${cardShadow[shadow]}
+                ${hover || onClick ? 'hover:bg-slate-50 dark:hover:bg-secondary-light hover:border-slate-300 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-slate-200/50 dark:hover:shadow-black/30 transition-all duration-300 cursor-pointer' : ''}
                 ${cardPadding[padding]}
                 ${className}
             `}
@@ -425,17 +436,17 @@ interface StatCardProps {
     iconColor?: string;
 }
 
-export function StatCard({ title, value, change, trend, icon, iconColor = 'bg-primary/20 text-primary-light' }: StatCardProps) {
+export function StatCard({ title, value, change, trend, icon, iconColor = 'bg-primary/20 text-primary dark:text-primary-light' }: StatCardProps) {
     return (
         <Card className="relative overflow-hidden">
             <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                    <p className="text-sm text-gray-400">{title}</p>
-                    <p className="text-3xl font-bold text-white">{value}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-white">{value}</p>
                     {change && (
                         <p className={`text-sm flex items-center gap-1 ${
-                            trend === 'up' ? 'text-emerald-400' : 
-                            trend === 'down' ? 'text-red-400' : 'text-gray-400'
+                            trend === 'up' ? 'text-emerald-600 dark:text-emerald-400' :
+                            trend === 'down' ? 'text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'
                         }`}>
                             {change}
                         </p>
@@ -465,27 +476,28 @@ interface PageHeaderProps {
 export function PageHeader({ title, description, subtitle, bgImage, action }: PageHeaderProps) {
     if (bgImage) {
         return (
-            <div
-                className="relative py-24 pt-32 bg-cover bg-center"
-                style={{ backgroundImage: `url('${bgImage}')` }}
-            >
-                <div className="absolute inset-0 bg-gradient-to-r from-secondary/95 via-secondary/80 to-secondary/60" />
+            <section className="relative py-24 pt-32 bg-gradient-to-r from-emerald-900 to-teal-800">
+                <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ backgroundImage: `url('${bgImage}')` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/90 via-teal-800/75 to-emerald-900/85" />
                 <div className="relative max-w-7xl mx-auto px-4">
                     <h1 className="text-4xl md:text-5xl font-bold text-white">{title}</h1>
                     {subtitle && <p className="mt-4 text-xl text-white/80 max-w-2xl">{subtitle}</p>}
-                    {description && <p className="text-gray-300 mt-2">{description}</p>}
+                    {description && <p className="text-white/70 mt-2">{description}</p>}
                     {action && <div className="mt-6">{action}</div>}
                 </div>
-            </div>
+            </section>
         );
     }
 
     return (
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 className="text-2xl font-bold text-white">{title}</h1>
-                {subtitle && <p className="text-xl text-white/80 mt-1">{subtitle}</p>}
-                {description && <p className="text-gray-400 mt-1">{description}</p>}
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h1>
+                {subtitle && <p className="text-xl text-gray-600 dark:text-white/80 mt-1">{subtitle}</p>}
+                {description && <p className="text-gray-500 dark:text-gray-400 mt-1">{description}</p>}
             </div>
             {action && <div className="flex-shrink-0">{action}</div>}
         </div>
@@ -505,10 +517,10 @@ interface EmptyStateProps {
 export function EmptyState({ icon, title, description, action }: EmptyStateProps) {
     return (
         <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="p-4 rounded-2xl bg-white/5 text-gray-400 mb-4">
+            <div className="p-4 rounded-2xl bg-gray-100 dark:bg-white/5 text-gray-400 mb-4">
                 {icon}
             </div>
-            <h3 className="text-lg font-medium text-gray-200">{title}</h3>
+            <h3 className="text-lg font-medium text-gray-700 dark:text-gray-200">{title}</h3>
             {description && <p className="text-gray-500 mt-1 max-w-sm">{description}</p>}
             {action && <div className="mt-4">{action}</div>}
         </div>
@@ -526,7 +538,7 @@ export function LoadingState({ text = 'Loading...' }: LoadingStateProps) {
     return (
         <div className="flex flex-col items-center justify-center py-12">
             <Loader2 className="w-8 h-8 text-primary animate-spin mb-4" />
-            <p className="text-gray-400">{text}</p>
+            <p className="text-gray-500 dark:text-gray-400">{text}</p>
         </div>
     );
 }
@@ -557,29 +569,29 @@ export function Modal({ isOpen, onClose, title, description, children, size = 'm
     return (
         <div className="fixed inset-0 z-50 overflow-y-auto">
             {/* Backdrop */}
-            <div 
-                className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+            <div
+                className="fixed inset-0 bg-black/50 dark:bg-black/60 backdrop-blur-sm transition-opacity"
                 onClick={onClose}
             />
-            
+
             {/* Modal */}
             <div className="flex min-h-full items-center justify-center p-4">
                 <div
                     className={`
                         relative w-full ${modalSizes[size]}
-                        bg-secondary-dark border border-white/10 rounded-2xl shadow-2xl
+                        bg-white dark:bg-secondary-dark border border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl
                         transform transition-all
                     `}
                 >
                     {/* Header */}
-                    <div className="flex items-start justify-between p-6 border-b border-white/5">
+                    <div className="flex items-start justify-between p-6 border-b border-gray-200 dark:border-white/5">
                         <div>
-                            <h3 className="text-xl font-semibold text-white">{title}</h3>
-                            {description && <p className="text-gray-400 text-sm mt-1">{description}</p>}
+                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{title}</h3>
+                            {description && <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">{description}</p>}
                         </div>
                         <button
                             onClick={onClose}
-                            className="p-2 -m-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                            className="p-2 -m-2 text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors"
                         >
                             <X size={20} />
                         </button>
@@ -592,7 +604,7 @@ export function Modal({ isOpen, onClose, title, description, children, size = 'm
 
                     {/* Footer */}
                     {footer && (
-                        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-white/5 bg-white/[0.02]">
+                        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02] rounded-b-2xl">
                             {footer}
                         </div>
                     )}
@@ -649,7 +661,7 @@ export function ConfirmModal({
                 </>
             }
         >
-            <p className="text-gray-300">{message}</p>
+            <p className="text-gray-600 dark:text-gray-300">{message}</p>
         </Modal>
     );
 }
@@ -665,7 +677,7 @@ export function SearchInput({ value, onClear, className = '', ...props }: Search
     return (
         <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
             </div>
@@ -673,10 +685,10 @@ export function SearchInput({ value, onClear, className = '', ...props }: Search
                 type="text"
                 value={value}
                 className={`
-                    w-full pl-12 pr-10 py-2.5 bg-white/5 border border-white/10 rounded-xl
-                    text-[15px] text-gray-200 placeholder-gray-500
+                    w-full pl-12 pr-10 py-2.5 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-xl
+                    text-[15px] text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500
                     transition-all duration-200
-                    hover:border-white/20
+                    hover:border-gray-400 dark:hover:border-white/20
                     focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20
                     ${className}
                 `}
@@ -685,7 +697,7 @@ export function SearchInput({ value, onClear, className = '', ...props }: Search
             {value && onClear && (
                 <button
                     onClick={onClear}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-gray-300"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
                 >
                     <X size={16} />
                 </button>
@@ -711,7 +723,7 @@ interface TabsProps {
 
 export function Tabs({ tabs, activeTab, onChange }: TabsProps) {
     return (
-        <div className="flex gap-1 p-1 bg-white/5 rounded-xl">
+        <div className="flex gap-1 p-1 bg-gray-100 dark:bg-white/5 rounded-xl">
             {tabs.map((tab) => (
                 <button
                     key={tab.id}
@@ -720,8 +732,8 @@ export function Tabs({ tabs, activeTab, onChange }: TabsProps) {
                         flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium
                         transition-all duration-200
                         ${activeTab === tab.id
-                            ? 'bg-primary text-white shadow-lg shadow-primary/25'
-                            : 'text-gray-400 hover:text-white hover:bg-white/5'
+                            ? 'bg-primary hover:bg-primary-dark text-white shadow-md shadow-primary/30'
+                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-white/5'
                         }
                     `}
                 >
@@ -755,20 +767,20 @@ const alertVariants: Record<AlertVariant, { bg: string; border: string; icon: ty
 export function Alert({ variant = 'info', title, children, onClose }: AlertProps) {
     const config = alertVariants[variant];
     const Icon = config.icon;
-    
+
     return (
         <div className={`flex gap-3 p-4 rounded-xl border ${config.bg} ${config.border}`}>
             <Icon className={`shrink-0 mt-0.5 ${
-                variant === 'success' ? 'text-emerald-400' :
-                variant === 'warning' ? 'text-amber-400' :
-                variant === 'error' ? 'text-red-400' : 'text-blue-400'
+                variant === 'success' ? 'text-emerald-600 dark:text-emerald-400' :
+                variant === 'warning' ? 'text-amber-600 dark:text-amber-400' :
+                variant === 'error' ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'
             }`} size={20} />
             <div className="flex-1">
-                {title && <p className="font-medium text-gray-200">{title}</p>}
-                <div className="text-gray-400 text-sm">{children}</div>
+                {title && <p className="font-medium text-gray-800 dark:text-gray-200">{title}</p>}
+                <div className="text-gray-600 dark:text-gray-400 text-sm">{children}</div>
             </div>
             {onClose && (
-                <button onClick={onClose} className="text-gray-500 hover:text-gray-300">
+                <button onClick={onClose} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300">
                     <X size={16} />
                 </button>
             )}
@@ -815,7 +827,7 @@ export function DataTable<T>({
         <div className="overflow-x-auto">
             <table className="w-full">
                 <thead>
-                    <tr className="border-b border-white/5">
+                    <tr className="border-b border-gray-200 dark:border-white/5">
                         {columns.map((col) => (
                             <th
                                 key={col.key}
@@ -826,20 +838,20 @@ export function DataTable<T>({
                         ))}
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-gray-200 dark:divide-white/5">
                     {data.map((item) => (
                         <tr
                             key={keyExtractor(item)}
                             onClick={() => onRowClick?.(item)}
                             className={`
-                                hover:bg-white/[0.02] transition-colors
+                                hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors
                                 ${onRowClick ? 'cursor-pointer' : ''}
                             `}
                         >
                             {columns.map((col) => (
                                 <td key={col.key} className={`py-4 px-6 ${col.className || ''}`}>
-                                    {col.render 
-                                        ? col.render(item) 
+                                    {col.render
+                                        ? col.render(item)
                                         : (item as Record<string, unknown>)[col.key] as ReactNode
                                     }
                                 </td>
@@ -870,13 +882,13 @@ const avatarSizes = {
 
 export function Avatar({ src, name, size = 'md' }: AvatarProps) {
     const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-    
+
     if (src) {
         return (
             <img
                 src={src}
                 alt={name}
-                className={`${avatarSizes[size]} rounded-full object-cover bg-white/10`}
+                className={`${avatarSizes[size]} rounded-full object-cover bg-gray-100 dark:bg-white/10`}
             />
         );
     }
@@ -912,23 +924,23 @@ interface DropdownProps {
 
 export function Dropdown({ trigger, items, align = 'right' }: DropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
-    
+
     return (
         <div className="relative">
             <div onClick={() => setIsOpen(!isOpen)}>
                 {trigger}
             </div>
-            
+
             {isOpen && (
                 <>
-                    <div 
+                    <div
                         className="fixed inset-0 z-40"
                         onClick={() => setIsOpen(false)}
                     />
                     <div
                         className={`
                             absolute z-50 mt-2 w-48
-                            bg-secondary-dark border border-white/10 rounded-xl shadow-xl
+                            bg-white dark:bg-secondary-dark border border-gray-200 dark:border-white/10 rounded-xl shadow-xl
                             py-1 overflow-hidden
                             ${align === 'right' ? 'right-0' : 'left-0'}
                         `}
@@ -944,8 +956,8 @@ export function Dropdown({ trigger, items, align = 'right' }: DropdownProps) {
                                     w-full flex items-center gap-3 px-4 py-2.5 text-sm
                                     transition-colors
                                     ${item.variant === 'danger'
-                                        ? 'text-red-400 hover:bg-red-500/10'
-                                        : 'text-gray-300 hover:bg-white/5'
+                                        ? 'text-red-600 dark:text-red-400 hover:bg-red-500/10'
+                                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5'
                                     }
                                 `}
                             >
@@ -983,11 +995,11 @@ export function SectionTitle({ title, subtitle, centered = false, light = false,
             ? 'text-white'
             : light
                 ? 'text-white'
-                : 'text-gray-900';
+                : 'text-gray-900 dark:text-white';
 
     const subtitleColor = variant === 'primary' || variant === 'white' || light
         ? 'text-gray-300'
-        : 'text-gray-600';
+        : 'text-gray-600 dark:text-gray-400';
 
     return (
         <div className={centered ? 'text-center' : ''}>
@@ -1017,10 +1029,10 @@ export function Stat({ value, label, icon, suffix }: StatProps) {
     return (
         <div className="text-center">
             {icon && <div className="flex justify-center mb-2 text-primary">{icon}</div>}
-            <div className="text-3xl md:text-4xl font-bold text-white">
-                {value}{suffix && <span className="text-primary-light">{suffix}</span>}
+            <div className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+                {value}{suffix && <span className="text-primary">{suffix}</span>}
             </div>
-            <div className="text-gray-400 mt-1">{label}</div>
+            <div className="text-gray-500 dark:text-gray-400 mt-1">{label}</div>
         </div>
     );
 }

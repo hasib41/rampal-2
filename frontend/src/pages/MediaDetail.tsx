@@ -263,7 +263,7 @@ export function MediaDetailPage() {
                                                 href={getMediaUrl(article.attachment)}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="flex items-center justify-center gap-3 w-full px-4 py-3.5 bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white rounded-xl transition-all font-medium shadow-lg shadow-primary/20"
+                                                className="flex items-center justify-center gap-3 w-full px-4 py-3.5 bg-primary hover:bg-primary-dark text-white rounded-xl transition-all font-medium shadow-md shadow-primary/30 hover:shadow-lg hover:shadow-primary/40"
                                             >
                                                 <Download size={18} />
                                                 Download Document

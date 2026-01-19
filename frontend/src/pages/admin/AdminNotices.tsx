@@ -170,14 +170,14 @@ export function AdminNotices() {
                             key={key}
                             onClick={() => setFilterCategory(filterCategory === key ? 'all' : key)}
                             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                                isActive 
-                                    ? 'bg-primary text-white' 
-                                    : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                                isActive
+                                    ? 'bg-primary text-white'
+                                    : 'bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/10'
                             }`}
                         >
                             <Icon size={16} />
                             <span className="capitalize">{key}</span>
-                            <span className={`font-medium ${isActive ? 'text-white' : 'text-white'}`}>{count}</span>
+                            <span className={`font-medium ${isActive ? 'text-white' : 'text-gray-900 dark:text-white'}`}>{count}</span>
                         </button>
                     );
                 })}
@@ -216,22 +216,22 @@ export function AdminNotices() {
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="border-b border-white/10 bg-white/[0.02]">
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Notice</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Category</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Date</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Status</th>
-                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Actions</th>
+                                <tr className="border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/[0.02]">
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Notice</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Category</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Date</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Status</th>
+                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/5">
+                            <tbody className="divide-y divide-gray-100 dark:divide-white/5">
                                 {filteredNotices?.map((notice: Notice) => {
                                     const config = categoryConfig[notice.category] || categoryConfig.general;
                                     return (
-                                        <tr key={notice.id} className="hover:bg-white/[0.02]">
+                                        <tr key={notice.id} className="hover:bg-gray-50 dark:hover:bg-white/[0.02]">
                                             <td className="py-3.5 px-5">
                                                 <div className="flex items-center gap-2 min-w-0">
-                                                    <span className="text-gray-200 truncate max-w-md">{notice.title}</span>
+                                                    <span className="text-gray-800 dark:text-gray-200 truncate max-w-md">{notice.title}</span>
                                                     {notice.is_featured && (
                                                         <Star className="text-amber-400 shrink-0" size={14} fill="currentColor" />
                                                     )}
@@ -243,7 +243,7 @@ export function AdminNotices() {
                                                 </Badge>
                                             </td>
                                             <td className="py-3.5 px-5">
-                                                <span className="text-gray-400">
+                                                <span className="text-gray-600 dark:text-gray-400">
                                                     {new Date(notice.published_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                                 </span>
                                             </td>

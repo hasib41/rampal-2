@@ -121,15 +121,15 @@ export function AdminCareers() {
 
             {/* Stats */}
             <div className="flex gap-4">
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg">
-                    <Briefcase size={16} className="text-primary-light" />
-                    <span className="text-gray-400">Total:</span>
-                    <span className="text-white font-medium">{careers?.length || 0}</span>
+                <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-white/5 rounded-lg">
+                    <Briefcase size={16} className="text-primary" />
+                    <span className="text-gray-600 dark:text-gray-400">Total:</span>
+                    <span className="text-gray-900 dark:text-white font-medium">{careers?.length || 0}</span>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-lg">
-                    <Briefcase size={16} className="text-emerald-400" />
-                    <span className="text-gray-400">Active:</span>
-                    <span className="text-white font-medium">{activeCount}</span>
+                    <Briefcase size={16} className="text-emerald-500 dark:text-emerald-400" />
+                    <span className="text-gray-600 dark:text-gray-400">Active:</span>
+                    <span className="text-gray-900 dark:text-white font-medium">{activeCount}</span>
                 </div>
             </div>
 
@@ -157,27 +157,27 @@ export function AdminCareers() {
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="border-b border-white/10 bg-white/[0.02]">
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Position</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Department</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Location</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Type</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Deadline</th>
-                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Status</th>
-                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-400 uppercase tracking-wide">Actions</th>
+                                <tr className="border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/[0.02]">
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Position</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Department</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Location</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Type</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Deadline</th>
+                                    <th className="text-left py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Status</th>
+                                    <th className="text-right py-3.5 px-5 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/5">
+                            <tbody className="divide-y divide-gray-100 dark:divide-white/5">
                                 {filteredCareers?.map((career) => (
-                                    <tr key={career.id} className="hover:bg-white/[0.02]">
+                                    <tr key={career.id} className="hover:bg-gray-50 dark:hover:bg-white/[0.02]">
                                         <td className="py-3.5 px-5">
-                                            <span className="text-white font-medium">{career.title}</span>
+                                            <span className="text-gray-900 dark:text-white font-medium">{career.title}</span>
                                         </td>
                                         <td className="py-3.5 px-5">
-                                            <span className="text-gray-400">{career.department}</span>
+                                            <span className="text-gray-600 dark:text-gray-400">{career.department}</span>
                                         </td>
                                         <td className="py-3.5 px-5">
-                                            <div className="flex items-center gap-1.5 text-gray-400">
+                                            <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
                                                 <MapPin size={14} />
                                                 {career.location}
                                             </div>
@@ -186,7 +186,7 @@ export function AdminCareers() {
                                             <Badge variant="default">{career.employment_type.replace('_', ' ')}</Badge>
                                         </td>
                                         <td className="py-3.5 px-5">
-                                            <span className="text-gray-400">
+                                            <span className="text-gray-600 dark:text-gray-400">
                                                 {new Date(career.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                             </span>
                                         </td>
