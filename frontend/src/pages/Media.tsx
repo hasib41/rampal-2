@@ -5,11 +5,11 @@ import { Button, LoadingSpinner } from '../components/ui';
 import { useNews } from '../hooks/useApi';
 import { getMediaUrl } from '../services/api';
 
-const categoryConfig: Record<string, { label: string; icon: typeof Newspaper; color: string; bgColor: string; borderColor: string }> = {
-    press: { label: 'Press Release', icon: Newspaper, color: 'text-emerald-700', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
-    event: { label: 'Event', icon: Calendar, color: 'text-blue-700', bgColor: 'bg-blue-50', borderColor: 'border-blue-200' },
-    in_the_news: { label: 'In The News', icon: TrendingUp, color: 'text-orange-700', bgColor: 'bg-orange-50', borderColor: 'border-orange-200' },
-    update: { label: 'Update', icon: Clock, color: 'text-purple-700', bgColor: 'bg-purple-50', borderColor: 'border-purple-200' },
+const categoryConfig: Record<string, { label: string; icon: typeof Newspaper; color: string; darkColor: string; bgColor: string; darkBgColor: string; borderColor: string; darkBorderColor: string }> = {
+    press: { label: 'Press Release', icon: Newspaper, color: 'text-emerald-700', darkColor: 'dark:text-emerald-400', bgColor: 'bg-emerald-50', darkBgColor: 'dark:bg-emerald-900/30', borderColor: 'border-emerald-200', darkBorderColor: 'dark:border-emerald-700' },
+    event: { label: 'Event', icon: Calendar, color: 'text-blue-700', darkColor: 'dark:text-blue-400', bgColor: 'bg-blue-50', darkBgColor: 'dark:bg-blue-900/30', borderColor: 'border-blue-200', darkBorderColor: 'dark:border-blue-700' },
+    in_the_news: { label: 'In The News', icon: TrendingUp, color: 'text-orange-700', darkColor: 'dark:text-orange-400', bgColor: 'bg-orange-50', darkBgColor: 'dark:bg-orange-900/30', borderColor: 'border-orange-200', darkBorderColor: 'dark:border-orange-700' },
+    update: { label: 'Update', icon: Clock, color: 'text-purple-700', darkColor: 'dark:text-purple-400', bgColor: 'bg-purple-50', darkBgColor: 'dark:bg-purple-900/30', borderColor: 'border-purple-200', darkBorderColor: 'dark:border-purple-700' },
 };
 
 const categories = [
@@ -36,9 +36,9 @@ export function MediaPage() {
     });
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
             {/* Hero Section */}
-            <section className="relative py-16 sm:py-20 bg-gradient-to-br from-emerald-700 via-emerald-800 to-teal-800">
+            <section className="relative pt-24 sm:pt-28 pb-16 sm:pb-20 bg-gradient-to-br from-emerald-700 via-emerald-800 to-teal-800 dark:from-emerald-800 dark:via-emerald-900 dark:to-teal-900">
                 <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10" />
                 <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-emerald-100 text-sm font-medium mb-4">
@@ -56,19 +56,19 @@ export function MediaPage() {
 
             {/* Featured Story Section */}
             {featuredNews && (
-                <section className="py-10 sm:py-12 bg-white border-b border-gray-200">
+                <section className="py-10 sm:py-12 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                         {/* Section Label */}
                         <div className="flex items-center gap-2 mb-6">
                             <Star className="text-amber-500" size={18} fill="currentColor" />
-                            <span className="text-sm font-semibold text-gray-600 uppercase tracking-wider">Featured Story</span>
+                            <span className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Featured Story</span>
                         </div>
 
                         <Link to={`/media/${featuredNews.slug}`} className="block group">
-                            <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow border border-gray-200">
+                            <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg dark:shadow-gray-900/30 transition-shadow border border-gray-200 dark:border-gray-700">
                                 <div className="grid md:grid-cols-2 gap-0">
                                     {/* Image */}
-                                    <div className="h-56 sm:h-64 md:h-72 overflow-hidden bg-gray-100">
+                                    <div className="h-56 sm:h-64 md:h-72 overflow-hidden bg-gray-100 dark:bg-gray-700">
                                         {featuredNews.image ? (
                                             <img
                                                 src={getMediaUrl(featuredNews.image)}
@@ -77,32 +77,32 @@ export function MediaPage() {
                                             />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center">
-                                                <Newspaper className="text-gray-300" size={56} />
+                                                <Newspaper className="text-gray-300 dark:text-gray-600" size={56} />
                                             </div>
                                         )}
                                     </div>
                                     {/* Content */}
                                     <div className="p-6 sm:p-8 flex flex-col justify-center">
                                         <div className="flex items-center gap-2 mb-4">
-                                            <span className="px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-xs font-semibold flex items-center gap-1">
+                                            <span className="px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-700 text-xs font-semibold flex items-center gap-1">
                                                 <Star size={10} fill="currentColor" /> Featured
                                             </span>
-                                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${categoryConfig[featuredNews.category]?.bgColor || 'bg-gray-100'} ${categoryConfig[featuredNews.category]?.color || 'text-gray-700'} border ${categoryConfig[featuredNews.category]?.borderColor || 'border-gray-200'}`}>
+                                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${categoryConfig[featuredNews.category]?.bgColor || 'bg-gray-100'} ${categoryConfig[featuredNews.category]?.darkBgColor || 'dark:bg-gray-700'} ${categoryConfig[featuredNews.category]?.color || 'text-gray-700'} ${categoryConfig[featuredNews.category]?.darkColor || 'dark:text-gray-300'} border ${categoryConfig[featuredNews.category]?.borderColor || 'border-gray-200'} ${categoryConfig[featuredNews.category]?.darkBorderColor || 'dark:border-gray-600'}`}>
                                                 {categoryConfig[featuredNews.category]?.label || 'News'}
                                             </span>
                                         </div>
-                                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-2">
+                                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary-light transition-colors line-clamp-2">
                                             {featuredNews.title}
                                         </h2>
-                                        <p className="text-gray-600 mt-3 line-clamp-3 text-sm sm:text-base">{featuredNews.excerpt}</p>
-                                        <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
-                                            <span className="text-gray-500 text-sm flex items-center gap-2">
+                                        <p className="text-gray-600 dark:text-gray-300 mt-3 line-clamp-3 text-sm sm:text-base">{featuredNews.excerpt}</p>
+                                        <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+                                            <span className="text-gray-500 dark:text-gray-400 text-sm flex items-center gap-2">
                                                 <Calendar size={14} />
                                                 {new Date(featuredNews.published_date).toLocaleDateString('en-US', {
                                                     month: 'short', day: 'numeric', year: 'numeric'
                                                 })}
                                             </span>
-                                            <span className="text-primary font-medium flex items-center gap-1 text-sm">
+                                            <span className="text-primary dark:text-primary-light font-medium flex items-center gap-1 text-sm">
                                                 Read Story <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                                             </span>
                                         </div>
@@ -115,7 +115,7 @@ export function MediaPage() {
             )}
 
             {/* Category Tabs & Search */}
-            <section className="bg-white border-b border-gray-200 sticky top-0 z-20">
+            <section className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-20">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-4">
                         {/* Category Tabs */}
@@ -129,7 +129,7 @@ export function MediaPage() {
                                         className={`whitespace-nowrap px-4 py-2 text-sm font-medium transition-all rounded-lg flex items-center gap-2 ${
                                             activeCategory === cat.key
                                                 ? 'bg-primary text-white shadow-md'
-                                                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                                                : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
                                         }`}
                                         aria-pressed={activeCategory === cat.key}
                                     >
@@ -143,20 +143,20 @@ export function MediaPage() {
                         {/* Search */}
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                                <Search className="text-gray-400" size={18} />
+                                <Search className="text-gray-400 dark:text-gray-500" size={18} />
                             </div>
                             <input
                                 type="text"
                                 placeholder="Search news..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full md:w-64 pl-11 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm"
+                                className="w-full md:w-64 pl-11 pr-10 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-primary dark:focus:border-primary-light focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary-light/20 transition-all text-sm"
                                 aria-label="Search news articles"
                             />
                             {searchTerm && (
                                 <button
                                     onClick={() => setSearchTerm('')}
-                                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 transition-colors"
+                                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                                     aria-label="Clear search"
                                 >
                                     <X size={16} />
@@ -172,12 +172,12 @@ export function MediaPage() {
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Section Header */}
                     <div className="flex items-center gap-3 mb-8">
-                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Newspaper className="text-primary" size={20} />
+                        <div className="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                            <Newspaper className="text-primary dark:text-primary-light" size={20} />
                         </div>
                         <div>
-                            <h2 className="text-xl font-bold text-gray-900">All Articles</h2>
-                            <p className="text-gray-500 text-sm">
+                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">All Articles</h2>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">
                                 {filteredNews?.length || 0} articles found
                             </p>
                         </div>
@@ -201,9 +201,9 @@ export function MediaPage() {
                                                 to={`/media/${article.slug}`}
                                                 className="group"
                                             >
-                                                <article className="h-full bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-lg">
+                                                <article className="h-full bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300 hover:shadow-lg dark:hover:shadow-gray-900/30">
                                                     {/* Image */}
-                                                    <div className="h-44 sm:h-48 overflow-hidden relative bg-gray-100">
+                                                    <div className="h-44 sm:h-48 overflow-hidden relative bg-gray-100 dark:bg-gray-700">
                                                         {article.image ? (
                                                             <img
                                                                 src={getMediaUrl(article.image)}
@@ -212,15 +212,15 @@ export function MediaPage() {
                                                             />
                                                         ) : (
                                                             <div className="w-full h-full flex items-center justify-center">
-                                                                <div className={`w-16 h-16 rounded-xl ${config.bgColor} flex items-center justify-center`}>
-                                                                    <Icon className={config.color} size={28} />
+                                                                <div className={`w-16 h-16 rounded-xl ${config.bgColor} ${config.darkBgColor} flex items-center justify-center`}>
+                                                                    <Icon className={`${config.color} ${config.darkColor}`} size={28} />
                                                                 </div>
                                                             </div>
                                                         )}
 
                                                         {/* Category Badge */}
                                                         <div className="absolute top-3 left-3">
-                                                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${config.bgColor} ${config.color} border ${config.borderColor} flex items-center gap-1`}>
+                                                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${config.bgColor} ${config.darkBgColor} ${config.color} ${config.darkColor} border ${config.borderColor} ${config.darkBorderColor} flex items-center gap-1`}>
                                                                 <Icon size={10} />
                                                                 {config.label}
                                                             </span>
@@ -231,33 +231,33 @@ export function MediaPage() {
                                                             <a
                                                                 href={getMediaUrl(article.attachment)}
                                                                 onClick={(e) => e.stopPropagation()}
-                                                                className="absolute top-3 right-3 p-2 bg-white/90 hover:bg-white rounded-lg shadow-sm hover:shadow transition-all"
+                                                                className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 rounded-lg shadow-sm hover:shadow transition-all"
                                                                 title="Download attachment"
                                                                 aria-label="Download attachment"
                                                             >
-                                                                <Download size={14} className="text-gray-700" />
+                                                                <Download size={14} className="text-gray-700 dark:text-gray-300" />
                                                             </a>
                                                         )}
                                                     </div>
 
                                                     {/* Content */}
                                                     <div className="p-5">
-                                                        <h3 className="font-semibold text-gray-900 group-hover:text-primary transition-colors line-clamp-2 mb-2">
+                                                        <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary-light transition-colors line-clamp-2 mb-2">
                                                             {article.title}
                                                         </h3>
-                                                        <p className="text-gray-600 text-sm line-clamp-2 mb-4">
+                                                        <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 mb-4">
                                                             {article.excerpt}
                                                         </p>
 
                                                         {/* Footer */}
-                                                        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                                                            <span className="text-gray-500 text-xs flex items-center gap-1.5">
+                                                        <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                                                            <span className="text-gray-500 dark:text-gray-400 text-xs flex items-center gap-1.5">
                                                                 <Calendar size={12} />
                                                                 {new Date(article.published_date).toLocaleDateString('en-US', {
                                                                     month: 'short', day: 'numeric', year: 'numeric'
                                                                 })}
                                                             </span>
-                                                            <span className="text-primary text-xs font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <span className="text-primary dark:text-primary-light text-xs font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                                                 Read more <ArrowRight size={12} />
                                                             </span>
                                                         </div>
@@ -268,10 +268,10 @@ export function MediaPage() {
                                     })}
                                 </div>
                             ) : (
-                                <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
-                                    <FileText className="mx-auto text-gray-300 mb-4" size={48} />
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No Articles Found</h3>
-                                    <p className="text-gray-500 text-sm">
+                                <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                                    <FileText className="mx-auto text-gray-300 dark:text-gray-600 mb-4" size={48} />
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Articles Found</h3>
+                                    <p className="text-gray-500 dark:text-gray-400 text-sm">
                                         {searchTerm
                                             ? `No results for "${searchTerm}". Try a different search term.`
                                             : 'No articles available in this category yet.'}
@@ -291,16 +291,16 @@ export function MediaPage() {
             </section>
 
             {/* Gallery Preview */}
-            <section className="py-10 sm:py-12 bg-white border-t border-gray-200">
+            <section className="py-10 sm:py-12 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                                <Image className="text-purple-600" size={20} />
+                            <div className="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                                <Image className="text-purple-600 dark:text-purple-400" size={20} />
                             </div>
                             <div>
-                                <h2 className="text-xl font-bold text-gray-900">Media Gallery</h2>
-                                <p className="text-gray-500 text-sm">Photos and videos from our projects</p>
+                                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Media Gallery</h2>
+                                <p className="text-gray-500 dark:text-gray-400 text-sm">Photos and videos from our projects</p>
                             </div>
                         </div>
                         <Button variant="outline" className="flex items-center gap-2">
@@ -312,13 +312,13 @@ export function MediaPage() {
                         {[1, 2, 3, 4].map((i) => (
                             <div
                                 key={i}
-                                className="aspect-video rounded-lg overflow-hidden bg-gray-100 relative group cursor-pointer border border-gray-200 hover:border-gray-300 transition-all"
+                                className="aspect-video rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 relative group cursor-pointer border border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all"
                             >
-                                <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+                                <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
                                     {i % 2 === 0 ? (
-                                        <Video className="text-gray-400" size={28} />
+                                        <Video className="text-gray-400 dark:text-gray-500" size={28} />
                                     ) : (
-                                        <Image className="text-gray-400" size={28} />
+                                        <Image className="text-gray-400 dark:text-gray-500" size={28} />
                                     )}
                                 </div>
                                 <div className="absolute inset-0 bg-primary/90 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -331,7 +331,7 @@ export function MediaPage() {
             </section>
 
             {/* Subscribe Section */}
-            <section className="relative py-16 sm:py-20 overflow-hidden bg-gradient-to-br from-primary via-emerald-700 to-teal-700">
+            <section className="relative py-16 sm:py-20 overflow-hidden bg-gradient-to-br from-primary via-emerald-700 to-teal-700 dark:from-emerald-800 dark:via-emerald-900 dark:to-teal-900">
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0" style={{
                         backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='0.3' fill-rule='evenodd'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 1.4l2.83 2.83 1.41-1.41L1.41 0H0v1.41zM38.59 40l-2.83-2.83 1.41-1.41L40 38.59V40h-1.41zM40 1.41l-2.83 2.83-1.41-1.41L38.59 0H40v1.41zM20 18.6l2.83-2.83 1.41 1.41L21.41 20l2.83 2.83-1.41 1.41L20 21.41l-2.83 2.83-1.41-1.41L18.59 20l-2.83-2.83 1.41-1.41L20 18.59z'/%3E%3C/g%3E%3C/svg%3E")`,
