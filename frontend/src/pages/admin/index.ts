@@ -5,4 +5,5 @@ export { AdminDirectors } from './AdminDirectors';
 export { AdminProjects } from './AdminProjects';
 export { AdminNews } from './AdminNews';
 export { AdminCareers } from './AdminCareers';
+export { AdminGallery } from './AdminGallery';
 export { AdminSettings } from './AdminSettings';

@@ -118,3 +118,18 @@ export interface Notice {
     updated_at?: string;
 }
 
+export interface GalleryImage {
+    id: number;
+    title: string;
+    slug: string;
+    category: 'project' | 'construction' | 'event' | 'facility';
+    category_display: string;
+    media_type: 'image' | 'video';
+    media_type_display: string;
+    description: string;
+    image: string;
+    video_url?: string;
+    order: number;
+    is_featured: boolean;
+    created_at?: string;
+}

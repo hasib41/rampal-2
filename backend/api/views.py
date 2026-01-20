@@ -5,14 +5,15 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from django_filters.rest_framework import DjangoFilterBackend
 from core.models import (
     CompanyInfo, Project, Director, NewsArticle,
-    Career, Tender, CSRInitiative, Notice
+    Career, Tender, CSRInitiative, Notice, GalleryImage
 )
 from .serializers import (
     CompanyInfoSerializer, ProjectListSerializer, ProjectDetailSerializer,
     DirectorSerializer, NewsListSerializer, NewsDetailSerializer,
     CareerListSerializer, CareerDetailSerializer, JobApplicationSerializer,
     TenderSerializer, ContactInquirySerializer, CSRInitiativeSerializer,
-    NoticeListSerializer, NoticeDetailSerializer
+    NoticeListSerializer, NoticeDetailSerializer,
+    GalleryImageListSerializer, GalleryImageDetailSerializer
 )
 
 
@@ -207,3 +208,46 @@ class NoticeViewSet(viewsets.ModelViewSet):
         serializer = NoticeListSerializer(featured, many=True)
         return Response(serializer.data)
 
+
+class GalleryImageViewSet(viewsets.ModelViewSet):
+    """CRUD operations for gallery images"""
+    queryset = GalleryImage.objects.all()
+    serializer_class = GalleryImageDetailSerializer
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['category', 'media_type', 'is_featured']
+
+    def get_object(self):
+        """Override to support both slug and pk lookups"""
+        queryset = self.get_queryset()
+        lookup_value = self.kwargs.get('pk')
+
+        # Try pk first for update/delete operations
+        if self.action in ['update', 'partial_update', 'destroy']:
+            try:
+                obj = queryset.get(pk=int(lookup_value))
+                self.check_object_permissions(self.request, obj)
+                return obj
+            except (ValueError, GalleryImage.DoesNotExist):
+                pass
+
+        # Fall back to slug lookup
+        try:
+            obj = queryset.get(slug=lookup_value)
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except GalleryImage.DoesNotExist:
+            from rest_framework.exceptions import NotFound
+            raise NotFound("Gallery image not found")
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return GalleryImageListSerializer
+        return GalleryImageDetailSerializer
+
+    @action(detail=False, methods=['get'])
+    def featured(self, request):
+        """Get featured gallery images"""
+        featured = self.queryset.filter(is_featured=True)[:8]
+        serializer = GalleryImageListSerializer(featured, many=True)
+        return Response(serializer.data)

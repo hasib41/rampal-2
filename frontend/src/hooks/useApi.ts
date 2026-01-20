@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import {
     companyApi, projectsApi, directorsApi, newsApi,
-    careersApi, tendersApi, csrApi, noticesApi
+    careersApi, tendersApi, csrApi, noticesApi, galleryApi
 } from '../services/api';
 
 export const useCompanyInfo = () =>
@@ -46,3 +46,11 @@ export const useNotice = (slug: string) =>
 export const useFeaturedNotices = () =>
     useQuery({ queryKey: ['notices', 'featured'], queryFn: noticesApi.getFeatured });
 
+export const useGallery = (params?: Record<string, string>) =>
+    useQuery({ queryKey: ['gallery', params], queryFn: () => galleryApi.getAll(params) });
+
+export const useGalleryImage = (slug: string) =>
+    useQuery({ queryKey: ['gallery', slug], queryFn: () => galleryApi.getBySlug(slug), enabled: !!slug });
+
+export const useFeaturedGallery = () =>
+    useQuery({ queryKey: ['gallery', 'featured'], queryFn: galleryApi.getFeatured });

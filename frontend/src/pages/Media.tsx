@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar, ArrowRight, Download, FileText, Search, Newspaper, Video, Image, Star, TrendingUp, Clock, Filter, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button, LoadingSpinner } from '../components/ui';
-import { useNews } from '../hooks/useApi';
+import { useNews, useGallery } from '../hooks/useApi';
 import { getMediaUrl } from '../services/api';
+import type { GalleryImage } from '../types';
 
 const categoryConfig: Record<string, { label: string; icon: typeof Newspaper; color: string; darkColor: string; bgColor: string; darkBgColor: string; borderColor: string; darkBorderColor: string }> = {
     press: { label: 'Press Release', icon: Newspaper, color: 'text-emerald-700', darkColor: 'dark:text-emerald-400', bgColor: 'bg-emerald-50', darkBgColor: 'dark:bg-emerald-900/30', borderColor: 'border-emerald-200', darkBorderColor: 'dark:border-emerald-700' },
@@ -22,8 +23,25 @@ const categories = [
 
 export function MediaPage() {
     const { data: news, isLoading } = useNews();
+    const { data: galleryImages } = useGallery();
     const [activeCategory, setActiveCategory] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+
+    // Close lightbox on Escape key
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setSelectedImage(null);
+        };
+        if (selectedImage) {
+            document.addEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = 'hidden';
+        }
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = '';
+        };
+    }, [selectedImage]);
 
     const featuredNews = news?.find((n) => n.is_featured);
     const otherNews = news?.filter((n) => !n.is_featured);
@@ -309,23 +327,61 @@ export function MediaPage() {
                         </Button>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {[1, 2, 3, 4].map((i) => (
-                            <div
-                                key={i}
-                                className="aspect-video rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 relative group cursor-pointer border border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all"
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
-                                    {i % 2 === 0 ? (
-                                        <Video className="text-gray-400 dark:text-gray-500" size={28} />
+                        {galleryImages && galleryImages.length > 0 ? (
+                            galleryImages.slice(0, 8).map((item: GalleryImage) => (
+                                <div
+                                    key={item.id}
+                                    onClick={() => setSelectedImage(item)}
+                                    className="aspect-video rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 relative group cursor-pointer border border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all hover:scale-[1.02]"
+                                >
+                                    {item.image ? (
+                                        <img
+                                            src={getMediaUrl(item.image)}
+                                            alt={item.title}
+                                            className="w-full h-full object-cover"
+                                        />
                                     ) : (
-                                        <Image className="text-gray-400 dark:text-gray-500" size={28} />
+                                        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
+                                            {item.media_type === 'video' ? (
+                                                <Video className="text-gray-400 dark:text-gray-500" size={28} />
+                                            ) : (
+                                                <Image className="text-gray-400 dark:text-gray-500" size={28} />
+                                            )}
+                                        </div>
                                     )}
+                                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-3">
+                                        <div className="flex items-center justify-between">
+                                            <span className="px-2 py-0.5 rounded text-xs font-medium bg-white/20 text-white">
+                                                {item.category_display}
+                                            </span>
+                                            {item.media_type === 'video' && (
+                                                <Video className="text-white" size={16} />
+                                            )}
+                                        </div>
+                                        <p className="text-white text-sm font-medium line-clamp-2">{item.title}</p>
+                                    </div>
                                 </div>
-                                <div className="absolute inset-0 bg-primary/90 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <span className="text-white text-sm font-medium">View</span>
+                            ))
+                        ) : (
+                            // Placeholder when no gallery images
+                            [1, 2, 3, 4].map((i) => (
+                                <div
+                                    key={i}
+                                    className="aspect-video rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 relative group cursor-pointer border border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all"
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
+                                        {i % 2 === 0 ? (
+                                            <Video className="text-gray-400 dark:text-gray-500" size={28} />
+                                        ) : (
+                                            <Image className="text-gray-400 dark:text-gray-500" size={28} />
+                                        )}
+                                    </div>
+                                    <div className="absolute inset-0 bg-primary/90 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <span className="text-white text-sm font-medium">Coming Soon</span>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                 </div>
             </section>
@@ -366,6 +422,57 @@ export function MediaPage() {
                     </p>
                 </div>
             </section>
+
+            {/* Image Lightbox Modal */}
+            {selectedImage && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
+                    onClick={() => setSelectedImage(null)}
+                >
+                    <button
+                        onClick={() => setSelectedImage(null)}
+                        className="absolute top-4 right-4 p-2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+                        aria-label="Close lightbox"
+                    >
+                        <X size={24} />
+                    </button>
+                    <div
+                        className="relative max-w-5xl max-h-[90vh] w-full"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {selectedImage.image ? (
+                            <img
+                                src={getMediaUrl(selectedImage.image)}
+                                alt={selectedImage.title}
+                                className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+                            />
+                        ) : selectedImage.media_type === 'video' && selectedImage.video_url ? (
+                            <div className="aspect-video w-full bg-black rounded-lg overflow-hidden">
+                                <iframe
+                                    src={selectedImage.video_url.replace('watch?v=', 'embed/')}
+                                    title={selectedImage.title}
+                                    className="w-full h-full"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                />
+                            </div>
+                        ) : (
+                            <div className="aspect-video w-full bg-gray-800 rounded-lg flex items-center justify-center">
+                                <Image className="text-gray-500" size={64} />
+                            </div>
+                        )}
+                        <div className="mt-4 text-center">
+                            <h3 className="text-white text-lg font-semibold">{selectedImage.title}</h3>
+                            {selectedImage.description && (
+                                <p className="text-white/70 text-sm mt-1 max-w-2xl mx-auto">{selectedImage.description}</p>
+                            )}
+                            <span className="inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white/80">
+                                {selectedImage.category_display}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

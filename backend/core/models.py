@@ -255,3 +255,47 @@ class Notice(models.Model):
     def __str__(self):
         return self.title
 
+
+class GalleryImage(models.Model):
+    """Media Gallery for photos and videos"""
+    CATEGORY_CHOICES = [
+        ('project', 'Project Photos'),
+        ('construction', 'Construction Updates'),
+        ('event', 'Events'),
+        ('facility', 'Facility'),
+    ]
+    MEDIA_TYPE_CHOICES = [
+        ('image', 'Image'),
+        ('video', 'Video'),
+    ]
+
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, max_length=250, blank=True)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='project')
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, default='image')
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='gallery/')
+    video_url = models.URLField(blank=True, help_text="YouTube or external video URL")
+    order = models.IntegerField(default=0)
+    is_featured = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-is_featured', 'order', '-created_at']
+        verbose_name = "Gallery Image"
+        verbose_name_plural = "Gallery Images"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            base_slug = slugify(self.title)[:200]
+            slug = base_slug
+            counter = 1
+            while GalleryImage.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title

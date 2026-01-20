@@ -13,7 +13,8 @@ import {
     X,
     Zap,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    Image
 } from 'lucide-react';
 import { useAuth } from '../../contexts';
 import { AdminLogin } from './AdminLogin';
@@ -24,6 +25,7 @@ const navItems = [
     { path: '/admin/projects', icon: Zap, label: 'Projects' },
     { path: '/admin/directors', icon: Users, label: 'Directors' },
     { path: '/admin/news', icon: Newspaper, label: 'News' },
+    { path: '/admin/gallery', icon: Image, label: 'Gallery' },
     { path: '/admin/careers', icon: Briefcase, label: 'Careers' },
     { path: '/admin/tenders', icon: FileText, label: 'Tenders' },
     { path: '/admin/settings', icon: Settings, label: 'Settings' },

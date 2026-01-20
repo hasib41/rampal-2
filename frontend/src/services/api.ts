@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type {
     CompanyInfo, Project, Director, NewsArticle,
-    Career, Tender, CSRInitiative, ContactFormData, Notice
+    Career, Tender, CSRInitiative, ContactFormData, Notice, GalleryImage
 } from '../types';
 
 // API Base URL (without /api suffix for media URLs)
@@ -126,6 +126,21 @@ export const noticesApi = {
         headers: { 'Content-Type': 'multipart/form-data' }
     }).then(res => res.data),
     delete: (id: number) => api.delete(`/notices/${id}/`),
+};
+
+// Gallery
+export const galleryApi = {
+    getAll: (params?: Record<string, string>) =>
+        api.get<PaginatedResponse<GalleryImage>>('/gallery/', { params }).then(getResults),
+    getBySlug: (slug: string) => api.get<GalleryImage>(`/gallery/${slug}/`).then(res => res.data),
+    getFeatured: () => api.get<GalleryImage[]>('/gallery/featured/').then(res => res.data),
+    create: (data: FormData) => api.post<GalleryImage>('/gallery/', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
+    update: (id: number, data: FormData) => api.patch<GalleryImage>(`/gallery/${id}/`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
+    delete: (id: number) => api.delete(`/gallery/${id}/`),
 };
 
 // Contact

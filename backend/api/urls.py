@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     CompanyInfoView, ProjectViewSet, DirectorViewSet, NewsViewSet,
     CareerViewSet, JobApplicationView, TenderViewSet,
-    ContactInquiryView, CSRInitiativeViewSet, NoticeViewSet
+    ContactInquiryView, CSRInitiativeViewSet, NoticeViewSet, GalleryImageViewSet
 )
 
 
@@ -21,6 +21,7 @@ router.register('careers', CareerViewSet, basename='career')
 router.register('tenders', TenderViewSet, basename='tender')
 router.register('csr', CSRInitiativeViewSet, basename='csr')
 router.register('notices', NoticeViewSet, basename='notice')
+router.register('gallery', GalleryImageViewSet, basename='gallery')
 
 urlpatterns = [
     path('health/', health_check, name='health-check'),

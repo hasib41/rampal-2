@@ -26,7 +26,8 @@ import {
   AdminProjects,
   AdminNews,
   AdminCareers,
-  AdminSettings
+  AdminSettings,
+  AdminGallery
 } from './pages/admin';
 
 const queryClient = new QueryClient({
@@ -71,6 +72,7 @@ export default function App() {
               <Route path="news" element={<AdminNews />} />
               <Route path="careers" element={<AdminCareers />} />
               <Route path="tenders" element={<AdminTenders />} />
+              <Route path="gallery" element={<AdminGallery />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
             </Routes>
