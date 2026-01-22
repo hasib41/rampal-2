@@ -1051,3 +1051,8 @@ export { NoticeBoard } from './NoticeBoard';
 // CERTIFICATE MODAL COMPONENT (Re-export)
 // ============================================================================
 export { CertificateModal } from './CertificateModal';
+
+// ============================================================================
+// CHATBOT COMPONENT (Re-export)
+// ============================================================================
+export { ChatBot } from './ChatBot';
