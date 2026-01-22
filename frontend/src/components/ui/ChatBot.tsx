@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles, HelpCircle, FileText, Briefcase, Phone } from 'lucide-react';
+import { chatApi } from '../../services/api';
 
 interface Message {
     id: string;
@@ -23,53 +24,9 @@ const quickActions: QuickAction[] = [
 
 const welcomeMessage: Message = {
     id: 'welcome',
-    content: "Hello! I'm the BIFPCL Assistant. I can help you with information about the Maitree Super Thermal Power Project, tenders, careers, and more. How can I assist you today?",
+    content: "Hello! I'm the BIFPCL AI Assistant powered by Gemini. I can help you with information about the Maitree Super Thermal Power Project, tenders, careers, and more. How can I assist you today?",
     role: 'assistant',
     timestamp: new Date(),
-};
-
-// Predefined responses for common queries
-const getResponse = (query: string): string => {
-    const lowerQuery = query.toLowerCase();
-
-    if (lowerQuery.includes('bifpcl') || lowerQuery.includes('about') || lowerQuery.includes('maitree') || lowerQuery.includes('project')) {
-        return "BIFPCL (Bangladesh-India Friendship Power Company Limited) is a 50:50 joint venture between NTPC Ltd. of India and BPDB of Bangladesh. The Maitree Super Thermal Power Project is a 1320 MW ultra-supercritical coal-fired power plant located in Rampal, Bagerhat, Bangladesh. It represents a landmark bilateral cooperation in the power sector.";
-    }
-
-    if (lowerQuery.includes('tender') || lowerQuery.includes('bid') || lowerQuery.includes('procurement')) {
-        return "You can view all active tenders on our Tenders page at /tenders. We regularly post new procurement opportunities for goods, services, and works. Each tender includes detailed specifications, deadlines, and submission requirements. Would you like me to direct you there?";
-    }
-
-    if (lowerQuery.includes('career') || lowerQuery.includes('job') || lowerQuery.includes('opening') || lowerQuery.includes('vacancy') || lowerQuery.includes('work')) {
-        return "BIFPCL offers various career opportunities across engineering, management, and administrative roles. You can view current openings on our Careers page at /careers. We're always looking for talented individuals to join our team in building Bangladesh's energy future.";
-    }
-
-    if (lowerQuery.includes('contact') || lowerQuery.includes('phone') || lowerQuery.includes('email') || lowerQuery.includes('address') || lowerQuery.includes('office')) {
-        return "You can reach BIFPCL through:\n\n**Site Office:**\nMaitree Super Thermal Power Project\nRampal, Bagerhat, Bangladesh\nPhone: +880 2 968 1234\nEmail: info@bifpcl.com\n\n**Corporate Office:**\n117 Kazi Nazrul Islam Ave, Dhaka 1205\nPhone: +880 2 968 5678\n\nOr visit our Contact page at /contact for more options.";
-    }
-
-    if (lowerQuery.includes('environment') || lowerQuery.includes('emission') || lowerQuery.includes('pollution') || lowerQuery.includes('green')) {
-        return "BIFPCL is committed to environmental sustainability. The Maitree Project uses Ultra-Supercritical Technology ensuring lower emissions and higher efficiency. We strictly adhere to IFC guidelines and Equator Principles. Advanced pollution control systems including FGD (Flue Gas Desulfurization), ESP (Electrostatic Precipitators), and SCR (Selective Catalytic Reduction) are installed.";
-    }
-
-    if (lowerQuery.includes('capacity') || lowerQuery.includes('power') || lowerQuery.includes('electricity') || lowerQuery.includes('mw') || lowerQuery.includes('megawatt')) {
-        return "The Maitree Super Thermal Power Project has a total installed capacity of 1320 MW (2 x 660 MW units). It uses ultra-supercritical technology for maximum efficiency and minimal environmental impact. The plant significantly contributes to Bangladesh's growing energy needs.";
-    }
-
-    if (lowerQuery.includes('notice') || lowerQuery.includes('announcement') || lowerQuery.includes('news')) {
-        return "Stay updated with our latest announcements on the Notices page at /notices. We regularly post important updates about the project, corporate news, and public announcements.";
-    }
-
-    if (lowerQuery.includes('hello') || lowerQuery.includes('hi') || lowerQuery.includes('hey') || lowerQuery.includes('greet')) {
-        return "Hello! Welcome to BIFPCL. I'm here to help you with information about our organization, the Maitree Power Project, tenders, careers, and more. What would you like to know?";
-    }
-
-    if (lowerQuery.includes('thank')) {
-        return "You're welcome! If you have any more questions about BIFPCL or the Maitree Project, feel free to ask. I'm here to help!";
-    }
-
-    // Default response
-    return "Thank you for your question. For specific inquiries, I recommend:\n\n• **Tenders:** Visit /tenders for procurement opportunities\n• **Careers:** Check /careers for job openings\n• **Notices:** See /notices for announcements\n• **Contact:** Reach us at /contact\n\nIs there something specific about BIFPCL or the Maitree Project I can help you with?";
 };
 
 export function ChatBot() {
@@ -108,19 +65,39 @@ export function ChatBot() {
         setInputValue('');
         setIsTyping(true);
 
-        // Simulate typing delay for more natural feel
-        await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 700));
+        try {
+            // Prepare conversation history for API (exclude welcome message)
+            const history = messages
+                .filter(m => m.id !== 'welcome')
+                .map(m => ({
+                    role: m.role,
+                    content: m.content,
+                }));
 
-        const response = getResponse(content);
-        const assistantMessage: Message = {
-            id: `assistant-${Date.now()}`,
-            content: response,
-            role: 'assistant',
-            timestamp: new Date(),
-        };
+            // Call the API
+            const response = await chatApi.sendMessage(content.trim(), history);
 
-        setMessages(prev => [...prev, assistantMessage]);
-        setIsTyping(false);
+            const assistantMessage: Message = {
+                id: `assistant-${Date.now()}`,
+                content: response.response,
+                role: 'assistant',
+                timestamp: new Date(),
+            };
+
+            setMessages(prev => [...prev, assistantMessage]);
+        } catch (error) {
+            console.error('Chat API error:', error);
+            // Show error message
+            const errorMessage: Message = {
+                id: `error-${Date.now()}`,
+                content: "I apologize, but I'm having trouble connecting right now. Please try again later or visit our Contact page for assistance.",
+                role: 'assistant',
+                timestamp: new Date(),
+            };
+            setMessages(prev => [...prev, errorMessage]);
+        } finally {
+            setIsTyping(false);
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -137,8 +114,10 @@ export function ChatBot() {
         let formatted = content.replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-gray-900 dark:text-white">$1</strong>');
         // Convert newlines to <br>
         formatted = formatted.replace(/\n/g, '<br/>');
-        // Convert bullet points
-        formatted = formatted.replace(/• /g, '<span class="text-primary mr-1">•</span>');
+        // Convert bullet points (• or -)
+        formatted = formatted.replace(/^[•-]\s+/gm, '<span class="text-primary mr-1">•</span>');
+        // Convert numbered lists
+        formatted = formatted.replace(/^(\d+)\.\s+/gm, '<span class="text-primary font-medium mr-1">$1.</span>');
         return formatted;
     };
 
@@ -185,10 +164,10 @@ export function ChatBot() {
                             <Bot className="text-white" size={22} />
                         </div>
                         <div>
-                            <h3 className="text-white font-semibold text-sm">BIFPCL Assistant</h3>
+                            <h3 className="text-white font-semibold text-sm">BIFPCL AI Assistant</h3>
                             <div className="flex items-center gap-1.5">
                                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                                <span className="text-white/70 text-xs">Online</span>
+                                <span className="text-white/70 text-xs">Powered by Gemini</span>
                             </div>
                         </div>
                     </div>
@@ -336,7 +315,7 @@ export function ChatBot() {
                         </button>
                     </div>
                     <p className="text-xs text-gray-400 dark:text-gray-500 text-center mt-2">
-                        Powered by BIFPCL AI Assistant
+                        Powered by Google Gemini AI
                     </p>
                 </form>
             </div>

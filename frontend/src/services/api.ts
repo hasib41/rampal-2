@@ -155,3 +155,19 @@ export const siteSettingsApi = {
         headers: { 'Content-Type': 'multipart/form-data' }
     }).then(res => res.data),
 };
+
+// ChatBot API
+interface ChatMessage {
+    role: 'user' | 'assistant';
+    content: string;
+}
+
+interface ChatResponse {
+    response: string;
+    fallback?: boolean;
+}
+
+export const chatApi = {
+    sendMessage: (message: string, history: ChatMessage[]) =>
+        api.post<ChatResponse>('/chat/', { message, history }).then(res => res.data),
+};

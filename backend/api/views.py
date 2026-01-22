@@ -1,8 +1,15 @@
 from rest_framework import viewsets, generics, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
+from django.conf import settings
+import requests
+import json
+import logging
+
+logger = logging.getLogger(__name__)
 from core.models import (
     CompanyInfo, Project, Director, NewsArticle,
     Career, Tender, CSRInitiative, Notice, GalleryImage, SiteSettings
@@ -261,3 +268,170 @@ class SiteSettingsView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return SiteSettings.get_settings()
+
+
+class ChatBotView(APIView):
+    """AI-powered chatbot using Google Gemini API"""
+
+    # System prompt with BIFPCL context
+    SYSTEM_PROMPT = """You are the official AI assistant for BIFPCL (Bangladesh-India Friendship Power Company Limited).
+You help visitors with information about:
+
+**About BIFPCL:**
+- BIFPCL is a 50:50 joint venture between NTPC Ltd. of India and BPDB of Bangladesh
+- The Maitree Super Thermal Power Project is a 1320 MW (2 x 660 MW) ultra-supercritical coal-fired power plant
+- Located in Rampal, Bagerhat, Bangladesh
+- Represents landmark bilateral cooperation in the power sector
+
+**Environmental Commitment:**
+- Uses Ultra-Supercritical Technology for lower emissions and higher efficiency
+- Adheres to IFC guidelines and Equator Principles
+- Advanced pollution control: FGD (Flue Gas Desulfurization), ESP (Electrostatic Precipitators), SCR (Selective Catalytic Reduction)
+
+**Contact Information:**
+- Site Office: Maitree Super Thermal Power Project, Rampal, Bagerhat, Bangladesh
+- Phone: +880 2 968 1234, Email: info@bifpcl.com
+- Corporate Office: 117 Kazi Nazrul Islam Ave, Dhaka 1205
+- Working Hours: Sun - Thu: 9:00 AM - 5:00 PM
+
+**Website Pages:**
+- /tenders - View active procurement opportunities
+- /careers - Job openings and applications
+- /notices - Official announcements
+- /contact - Contact form and office locations
+- /projects - Project information
+- /sustainability - Environmental initiatives
+
+Guidelines:
+1. Be helpful, professional, and concise
+2. Provide accurate information about BIFPCL
+3. Direct users to relevant website pages when appropriate
+4. If unsure, recommend contacting BIFPCL directly
+5. Keep responses brief (2-3 sentences for simple queries, more for complex ones)
+6. Use bullet points for lists
+7. Be friendly but maintain professional tone"""
+
+    def post(self, request):
+        """Handle chat messages"""
+        message = request.data.get('message', '').strip()
+        conversation_history = request.data.get('history', [])
+
+        if not message:
+            return Response(
+                {'error': 'Message is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        api_key = settings.GEMINI_API_KEY
+        if not api_key:
+            # Fallback to predefined responses if no API key
+            return Response({
+                'response': self.get_fallback_response(message),
+                'fallback': True
+            })
+
+        try:
+            response_text = self.call_gemini_api(api_key, message, conversation_history)
+            return Response({'response': response_text})
+        except Exception as e:
+            logger.error(f"Gemini API error: {str(e)}")
+            # Fallback on error
+            return Response({
+                'response': self.get_fallback_response(message),
+                'fallback': True
+            })
+
+    def call_gemini_api(self, api_key, message, history):
+        """Call Google Gemini API"""
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+
+        # Build conversation with system prompt
+        contents = []
+
+        # Add system instruction as first user message
+        contents.append({
+            "role": "user",
+            "parts": [{"text": self.SYSTEM_PROMPT}]
+        })
+        contents.append({
+            "role": "model",
+            "parts": [{"text": "I understand. I'm the BIFPCL AI Assistant, ready to help visitors with information about the Maitree Super Thermal Power Project, tenders, careers, and more. How can I assist you?"}]
+        })
+
+        # Add conversation history
+        for msg in history[-10:]:  # Keep last 10 messages for context
+            role = "user" if msg.get('role') == 'user' else "model"
+            contents.append({
+                "role": role,
+                "parts": [{"text": msg.get('content', '')}]
+            })
+
+        # Add current message
+        contents.append({
+            "role": "user",
+            "parts": [{"text": message}]
+        })
+
+        payload = {
+            "contents": contents,
+            "generationConfig": {
+                "temperature": 0.7,
+                "topK": 40,
+                "topP": 0.95,
+                "maxOutputTokens": 1024,
+            },
+            "safetySettings": [
+                {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+            ]
+        }
+
+        response = requests.post(
+            url,
+            headers={"Content-Type": "application/json"},
+            json=payload,
+            timeout=30
+        )
+
+        if response.status_code != 200:
+            logger.error(f"Gemini API error: {response.status_code} - {response.text}")
+            raise Exception(f"API returned {response.status_code}")
+
+        data = response.json()
+
+        # Extract response text
+        if 'candidates' in data and len(data['candidates']) > 0:
+            candidate = data['candidates'][0]
+            if 'content' in candidate and 'parts' in candidate['content']:
+                return candidate['content']['parts'][0].get('text', '')
+
+        raise Exception("No valid response from API")
+
+    def get_fallback_response(self, query):
+        """Fallback responses when API is unavailable"""
+        query_lower = query.lower()
+
+        if any(word in query_lower for word in ['bifpcl', 'about', 'maitree', 'project', 'company']):
+            return "BIFPCL (Bangladesh-India Friendship Power Company Limited) is a 50:50 joint venture between NTPC Ltd. of India and BPDB of Bangladesh. The Maitree Super Thermal Power Project is a 1320 MW ultra-supercritical coal-fired power plant located in Rampal, Bagerhat, Bangladesh."
+
+        if any(word in query_lower for word in ['tender', 'bid', 'procurement']):
+            return "You can view all active tenders on our Tenders page at /tenders. We regularly post new procurement opportunities for goods, services, and works."
+
+        if any(word in query_lower for word in ['career', 'job', 'opening', 'vacancy', 'work']):
+            return "BIFPCL offers various career opportunities. View current openings on our Careers page at /careers. We're always looking for talented individuals to join our team."
+
+        if any(word in query_lower for word in ['contact', 'phone', 'email', 'address', 'office']):
+            return "Contact BIFPCL at:\n• Site Office: Rampal, Bagerhat - Phone: +880 2 968 1234\n• Corporate Office: 117 Kazi Nazrul Islam Ave, Dhaka\n• Email: info@bifpcl.com\n\nVisit /contact for more options."
+
+        if any(word in query_lower for word in ['environment', 'emission', 'pollution', 'green', 'sustainable']):
+            return "BIFPCL uses Ultra-Supercritical Technology for lower emissions and higher efficiency. We adhere to IFC guidelines and Equator Principles with advanced pollution control systems."
+
+        if any(word in query_lower for word in ['hello', 'hi', 'hey', 'greet']):
+            return "Hello! Welcome to BIFPCL. I'm here to help you with information about our organization, the Maitree Power Project, tenders, careers, and more. What would you like to know?"
+
+        if 'thank' in query_lower:
+            return "You're welcome! If you have any more questions about BIFPCL, feel free to ask."
+
+        return "Thank you for your question. For more information, please visit:\n• /tenders - Procurement opportunities\n• /careers - Job openings\n• /notices - Announcements\n• /contact - Get in touch\n\nIs there something specific about BIFPCL I can help you with?"

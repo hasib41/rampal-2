@@ -5,7 +5,7 @@ from .views import (
     CompanyInfoView, ProjectViewSet, DirectorViewSet, NewsViewSet,
     CareerViewSet, JobApplicationView, TenderViewSet,
     ContactInquiryView, CSRInitiativeViewSet, NoticeViewSet, GalleryImageViewSet,
-    SiteSettingsView
+    SiteSettingsView, ChatBotView
 )
 
 
@@ -31,4 +31,5 @@ urlpatterns = [
     path('apply/', JobApplicationView.as_view(), name='job-application'),
     path('contact/', ContactInquiryView.as_view(), name='contact-inquiry'),
     path('settings/', SiteSettingsView.as_view(), name='site-settings'),
+    path('chat/', ChatBotView.as_view(), name='chatbot'),
 ]
