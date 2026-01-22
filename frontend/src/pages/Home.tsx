@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, Users, Leaf, MapPin, Calendar, ChevronRight, ArrowRight, ChevronLeft, Briefcase, Newspaper, Clock, ExternalLink, TrendingUp } from 'lucide-react';
+import { Zap, Users, Leaf, MapPin, Calendar, ChevronRight, ArrowRight, ChevronLeft, Briefcase, Newspaper, Clock, ExternalLink, TrendingUp, FileText } from 'lucide-react';
 import { Button, Stat, Card, LoadingSpinner, ProjectLocationMap, NoticeBoard } from '../components/ui';
 import { useDirectors, useCSRInitiatives, useNotices, useNews, useTenders } from '../hooks/useApi';
 import { getMediaUrl } from '../services/api';
@@ -123,7 +123,13 @@ export function HomePage() {
                             <Button className="w-full sm:w-auto shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-shadow">Explore Projects</Button>
                         </Link>
                         <Link to="/tenders">
-                            <Button variant="secondary" className="w-full sm:w-auto bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm">View Active Tenders</Button>
+                            <Button
+                                variant="secondary"
+                                className="w-full sm:w-auto bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm group relative overflow-hidden"
+                            >
+                                <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                                View Active Tenders
+                            </Button>
                         </Link>
                     </div>
                 </div>
@@ -260,7 +266,7 @@ export function HomePage() {
                                                 {isFirst && article.excerpt && (
                                                     <p className="text-gray-600 dark:text-gray-400 text-sm mt-2 line-clamp-2 hidden sm:block">{article.excerpt}</p>
                                                 )}
-                                                <div className="flex items-center gap-1.5 sm:gap-2 mt-2 sm:mt-3 text-gray-500 text-xs">
+                                                <div className="flex items-center gap-1.5 sm:gap-2 mt-2 sm:mt-3 text-gray-500 dark:text-gray-400 text-xs">
                                                     <Calendar size={10} className="sm:w-3 sm:h-3" />
                                                     {new Date(article.published_date).toLocaleDateString('en-US', {
                                                         month: 'short',
@@ -277,7 +283,7 @@ export function HomePage() {
                             {(!recentNews || recentNews.length === 0) && (
                                 <div className="text-center py-16 bg-white dark:bg-secondary-dark rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm">
                                     <Newspaper className="mx-auto text-gray-400 dark:text-gray-600 mb-4" size={48} />
-                                    <p className="text-gray-500">No news articles available.</p>
+                                    <p className="text-gray-500 dark:text-gray-400">No news articles available.</p>
                                 </div>
                             )}
 
@@ -363,7 +369,7 @@ export function HomePage() {
                                                     <p className={`text-xs sm:text-sm font-semibold ${isUrgent ? 'text-red-400' : 'text-gray-900 dark:text-white'}`}>
                                                         {daysRemaining > 0 ? `${daysRemaining} days remaining` : 'Deadline passed'}
                                                     </p>
-                                                    <p className="text-gray-500 text-xs truncate">
+                                                    <p className="text-gray-500 dark:text-gray-400 text-xs truncate">
                                                         Due: {new Date(tender.deadline).toLocaleDateString('en-US', {
                                                             month: 'short',
                                                             day: 'numeric',
@@ -389,7 +395,7 @@ export function HomePage() {
                             {(!openTenders || openTenders.length === 0) && (
                                 <div className="text-center py-16 bg-white dark:bg-secondary rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm">
                                     <Briefcase className="mx-auto text-gray-400 dark:text-gray-600 mb-4" size={48} />
-                                    <p className="text-gray-500">No open tenders at this time.</p>
+                                    <p className="text-gray-500 dark:text-gray-400">No open tenders at this time.</p>
                                     <Link to="/tenders" className="inline-flex items-center gap-2 text-primary mt-3 hover:underline">
                                         View all tenders <ArrowRight size={14} />
                                     </Link>
@@ -437,21 +443,21 @@ export function HomePage() {
                                     <MapPin className="text-primary shrink-0" size={20} />
                                     <div className="min-w-0">
                                         <p className="text-gray-900 dark:text-white font-semibold text-sm sm:text-base">Rampal, Bagerhat</p>
-                                        <p className="text-gray-500 text-xs sm:text-sm">Khulna Division, Bangladesh</p>
+                                        <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">Khulna Division, Bangladesh</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white dark:bg-secondary-dark rounded-xl border border-slate-200 dark:border-transparent shadow-sm">
                                     <Zap className="text-accent-orange shrink-0" size={20} />
                                     <div className="min-w-0">
                                         <p className="text-gray-900 dark:text-white font-semibold text-sm sm:text-base">1320 MW Capacity</p>
-                                        <p className="text-gray-500 text-xs sm:text-sm">2 x 660 MW Ultra-Supercritical Units</p>
+                                        <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">2 x 660 MW Ultra-Supercritical Units</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white dark:bg-secondary-dark rounded-xl border border-slate-200 dark:border-transparent shadow-sm">
                                     <Leaf className="text-accent-green shrink-0" size={20} />
                                     <div className="min-w-0">
                                         <p className="text-gray-900 dark:text-white font-semibold text-sm sm:text-base">Environmental Compliance</p>
-                                        <p className="text-gray-500 text-xs sm:text-sm">World-class emission controls and monitoring</p>
+                                        <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">World-class emission controls and monitoring</p>
                                     </div>
                                 </div>
                             </div>
