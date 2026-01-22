@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Search, Download, Calendar, Eye, Filter } from 'lucide-react';
-import { Card, Select, LoadingSpinner, Button } from '../components/ui';
+import { Search, Download, Calendar, Eye, Filter, FileText, DollarSign, Tag } from 'lucide-react';
+import { Card, Select, LoadingSpinner, Button, Modal } from '../components/ui';
 import { useTenders } from '../hooks/useApi';
 import { getMediaUrl } from '../services/api';
+import type { Tender } from '../types';
 
 const statusColors: Record<string, string> = {
     open: 'bg-accent-green',
@@ -37,6 +38,7 @@ const statusOptions = [
 export function TendersPage() {
     const [filters, setFilters] = useState({ category: '', status: '' });
     const [search, setSearch] = useState('');
+    const [selectedTender, setSelectedTender] = useState<Tender | null>(null);
     const { data: tenders, isLoading } = useTenders(
         Object.fromEntries(Object.entries(filters).filter(([, v]) => v))
     );
@@ -45,6 +47,37 @@ export function TendersPage() {
         t.title.toLowerCase().includes(search.toLowerCase()) ||
         t.tender_id.toLowerCase().includes(search.toLowerCase())
     );
+
+    // Export tenders to CSV
+    const exportToCSV = () => {
+        if (!filteredTenders || filteredTenders.length === 0) return;
+
+        const headers = ['Tender ID', 'Title', 'Category', 'Status', 'Publication Date', 'Deadline', 'Value Range'];
+        const rows = filteredTenders.map(tender => [
+            tender.tender_id,
+            `"${tender.title.replace(/"/g, '""')}"`, // Escape quotes in title
+            tender.category,
+            tender.status,
+            new Date(tender.publication_date).toLocaleDateString(),
+            new Date(tender.deadline).toLocaleDateString(),
+            tender.value_range || 'N/A'
+        ]);
+
+        const csvContent = [
+            headers.join(','),
+            ...rows.map(row => row.join(','))
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `BIFPCL_Tenders_${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
 
     return (
         <div className="min-h-screen">
@@ -66,7 +99,13 @@ export function TendersPage() {
                         Access comprehensive public and restricted procurement opportunities for the Bangladesh-India Friendship Power Company (Pvt.) Ltd.
                     </p>
                     <div className="flex items-center gap-4 mt-4">
-                        <Button variant="outline" size="sm" className="border-white/30 text-white hover:bg-white/10">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="border-white/30 text-white hover:bg-white/10"
+                            onClick={exportToCSV}
+                            disabled={!filteredTenders || filteredTenders.length === 0}
+                        >
                             <Download className="mr-2" size={16} />
                             Export CSV
                         </Button>
@@ -202,11 +241,21 @@ export function TendersPage() {
                                                     </td>
                                                     <td className="px-4 py-4">
                                                         <div className="flex gap-3">
-                                                            <button className="text-gray-500 dark:text-gray-400 hover:text-primary transition-colors" title="View Details">
+                                                            <button
+                                                                className="text-gray-500 dark:text-gray-400 hover:text-primary transition-colors"
+                                                                title="View Details"
+                                                                onClick={() => setSelectedTender(tender)}
+                                                            >
                                                                 <Eye size={18} />
                                                             </button>
                                                             {tender.document && (
-                                                                <a href={getMediaUrl(tender.document)} className="text-gray-500 dark:text-gray-400 hover:text-primary transition-colors" title="Download Document">
+                                                                <a
+                                                                    href={getMediaUrl(tender.document)}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="text-gray-500 dark:text-gray-400 hover:text-primary transition-colors"
+                                                                    title="Download Document"
+                                                                >
                                                                     <Download size={18} />
                                                                 </a>
                                                             )}
@@ -223,6 +272,111 @@ export function TendersPage() {
 
                 </div>
             </section>
+
+            {/* Tender Detail Modal */}
+            <Modal
+                isOpen={!!selectedTender}
+                onClose={() => setSelectedTender(null)}
+                title="Tender Details"
+                size="lg"
+            >
+                {selectedTender && (
+                    <div className="space-y-6">
+                        {/* Header Info */}
+                        <div className="flex items-start justify-between gap-4">
+                            <div>
+                                <span className="text-primary font-mono text-sm font-semibold">
+                                    {selectedTender.tender_id}
+                                </span>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mt-1">
+                                    {selectedTender.title}
+                                </h3>
+                            </div>
+                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold text-white ${statusColors[selectedTender.status]}`}>
+                                {statusLabels[selectedTender.status]}
+                            </span>
+                        </div>
+
+                        {/* Meta Info Grid */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-secondary rounded-lg">
+                                <Tag size={18} className="text-primary" />
+                                <div>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">Category</p>
+                                    <p className="text-sm font-medium text-gray-900 dark:text-white capitalize">
+                                        {selectedTender.category}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-secondary rounded-lg">
+                                <DollarSign size={18} className="text-primary" />
+                                <div>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">Value Range</p>
+                                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                        {selectedTender.value_range || 'Not specified'}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-secondary rounded-lg">
+                                <Calendar size={18} className="text-primary" />
+                                <div>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">Publication Date</p>
+                                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                        {new Date(selectedTender.publication_date).toLocaleDateString('en-US', {
+                                            month: 'long', day: 'numeric', year: 'numeric'
+                                        })}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-secondary rounded-lg">
+                                <Calendar size={18} className={selectedTender.status === 'open' ? 'text-accent-orange' : 'text-gray-400'} />
+                                <div>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">Deadline</p>
+                                    <p className={`text-sm font-medium ${selectedTender.status === 'open' ? 'text-accent-orange' : 'text-gray-900 dark:text-white'}`}>
+                                        {new Date(selectedTender.deadline).toLocaleDateString('en-US', {
+                                            month: 'long', day: 'numeric', year: 'numeric'
+                                        })}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Description */}
+                        {selectedTender.description && (
+                            <div>
+                                <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Description</h4>
+                                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                                    {selectedTender.description}
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Actions */}
+                        <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                            {selectedTender.document && (
+                                <a
+                                    href={getMediaUrl(selectedTender.document)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1"
+                                >
+                                    <Button className="w-full">
+                                        <FileText size={16} className="mr-2" />
+                                        Download Document
+                                    </Button>
+                                </a>
+                            )}
+                            <Button
+                                variant="ghost"
+                                onClick={() => setSelectedTender(null)}
+                                className={selectedTender.document ? '' : 'flex-1'}
+                            >
+                                Close
+                            </Button>
+                        </div>
+                    </div>
+                )}
+            </Modal>
         </div>
     );
 }
