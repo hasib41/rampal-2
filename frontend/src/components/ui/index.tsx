@@ -1050,4 +1050,4 @@ export { NoticeBoard } from './NoticeBoard';
 // ============================================================================
 // CERTIFICATE MODAL COMPONENT (Re-export)
 // ============================================================================
-export { CertificateModal, useCertificateModal } from './CertificateModal';
+export { CertificateModal } from './CertificateModal';
