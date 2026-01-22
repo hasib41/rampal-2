@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, Users, Leaf, MapPin, Calendar, ChevronRight, ArrowRight, ChevronLeft, Briefcase, Newspaper, Clock, ExternalLink, TrendingUp, FileText } from 'lucide-react';
+import { Zap, Users, Leaf, MapPin, Calendar, ChevronRight, ArrowRight, ChevronLeft, Briefcase, Newspaper, Clock, ExternalLink, TrendingUp } from 'lucide-react';
 import { Button, Stat, Card, LoadingSpinner, ProjectLocationMap, NoticeBoard } from '../components/ui';
 import { useDirectors, useCSRInitiatives, useNotices, useNews, useTenders } from '../hooks/useApi';
 import { getMediaUrl } from '../services/api';
