@@ -53,7 +53,7 @@ export function ProjectsPage() {
                         A futuristic energy landmark at Rampal, Bangladesh featuring high-efficiency power generation through international collaboration and sustainable engineering excellence.
                     </p>
                     <div className="flex gap-4 mt-6">
-                        <Button className="bg-white text-emerald-900 hover:bg-white/90">
+                        <Button className="bg-white text-emerald-900 hover:bg-emerald-50 shadow-lg shadow-black/20">
                             <BarChart3 className="mr-2" size={18} />
                             Technical Metrics
                         </Button>

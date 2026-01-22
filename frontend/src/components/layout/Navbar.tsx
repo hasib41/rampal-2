@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { ChevronDown, Zap, Users, Newspaper, HelpCircle, Briefcase, Mail, Leaf, FolderOpen, ChevronRight, Sun, Moon, FileText, ExternalLink } from 'lucide-react';
+import { ChevronDown, Zap, Users, Newspaper, HelpCircle, Briefcase, Mail, Leaf, FolderOpen, ChevronRight, Sun, Moon, FileText, MapPin } from 'lucide-react';
 import { useTheme } from '../../contexts';
 
-// Partner site links
-const partnerLinks = [
-    { name: 'BPDB', url: 'https://bpdb.gov.bd', label: 'Bangladesh Power Development Board' },
-    { name: 'NTPC', url: 'https://ntpc.co.in', label: 'NTPC Limited, India' },
+// Office locations
+const officeLinks = [
+    { name: 'Site Office', location: 'Rampal, Bagerhat' },
+    { name: 'Corporate Office', location: '117 Kazi Nazrul Islam Ave, Dhaka' },
 ];
 
 // Navigation structure with icons for dropdowns
@@ -66,23 +66,21 @@ export function Navbar() {
                     : 'bg-white/95 dark:bg-secondary-dark/90 backdrop-blur-md border-b border-gray-100/50 dark:border-transparent'
             }`}
         >
-            {/* Top accent bar with partner links */}
+            {/* Top accent bar with office locations */}
             <div className="h-7 bg-gradient-to-r from-primary via-primary-dark to-primary hidden sm:flex items-center justify-end px-4">
                 <div className="flex items-center gap-4 text-[11px]">
-                    <span className="text-white/60">Partners:</span>
-                    {partnerLinks.map((partner, index) => (
-                        <a
-                            key={partner.name}
-                            href={partner.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title={partner.label}
-                            className="flex items-center gap-1 text-white/80 hover:text-white transition-colors"
+                    {officeLinks.map((office, index) => (
+                        <Link
+                            key={office.name}
+                            to="/contact"
+                            title={office.location}
+                            className="flex items-center gap-1.5 text-white/80 hover:text-white transition-colors"
                         >
-                            {partner.name}
-                            <ExternalLink size={10} />
-                            {index < partnerLinks.length - 1 && <span className="ml-3 text-white/30">|</span>}
-                        </a>
+                            <MapPin size={10} />
+                            <span className="font-medium">{office.name}:</span>
+                            <span className="text-white/70">{office.location}</span>
+                            {index < officeLinks.length - 1 && <span className="ml-3 text-white/30">|</span>}
+                        </Link>
                     ))}
                 </div>
             </div>

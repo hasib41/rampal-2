@@ -12,7 +12,7 @@ const categoryOptions = [
 
 const officeLocations = [
     {
-        name: 'BIFPCL Head Office',
+        name: 'Site Office',
         type: 'Project Site',
         address: 'Maitree Super Thermal Power Project',
         city: 'Rampal, Bagerhat',
@@ -22,30 +22,20 @@ const officeLocations = [
         hours: 'Sun - Thu: 9:00 AM - 5:00 PM',
         website: 'https://bifpcl.com',
         websiteLabel: 'bifpcl.com',
+        mapUrl: 'https://maps.google.com/?q=Maitree+Super+Thermal+Power+Project+Rampal+Bagerhat+Bangladesh',
     },
     {
-        name: 'BPDB Office',
-        type: 'Partner Office',
-        address: 'Bidyut Bhaban, 1 Abdul Gani Road',
-        city: 'Dhaka 1000',
+        name: 'Corporate Office',
+        type: 'Head Office',
+        address: '117 Kazi Nazrul Islam Ave',
+        city: 'Dhaka 1205',
         country: 'Bangladesh',
-        phone: '+880 2 9540125',
-        email: 'info@bpdb.gov.bd',
+        phone: '+880 2 968 5678',
+        email: 'corporate@bifpcl.com',
         hours: 'Sun - Thu: 9:00 AM - 5:00 PM',
-        website: 'https://bpdb.gov.bd',
-        websiteLabel: 'bpdb.gov.bd',
-    },
-    {
-        name: 'NTPC Limited',
-        type: 'Partner Office',
-        address: 'NTPC Bhawan, Scope Complex',
-        city: 'New Delhi 110003',
-        country: 'India',
-        phone: '+91 11 2436 0100',
-        email: 'cc@ntpc.co.in',
-        hours: 'Mon - Fri: 9:30 AM - 6:00 PM',
-        website: 'https://ntpc.co.in',
-        websiteLabel: 'ntpc.co.in',
+        website: 'https://bifpcl.com',
+        websiteLabel: 'bifpcl.com',
+        mapUrl: 'https://maps.google.com/?q=117+Kazi+Nazrul+Islam+Avenue+Dhaka+Bangladesh',
     },
 ];
 
@@ -167,7 +157,7 @@ export function ContactPage() {
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Office Locations</h2>
-                                    <p className="text-gray-500 dark:text-gray-400 text-sm">Our offices across Bangladesh & India</p>
+                                    <p className="text-gray-500 dark:text-gray-400 text-sm">BIFPCL Site Office & Corporate Office</p>
                                 </div>
                             </div>
 
@@ -213,16 +203,27 @@ export function ContactPage() {
                                                 </div>
                                             </div>
 
-                                            {/* Visit Website Button */}
-                                            <a
-                                                href={office.website}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-primary hover:text-white text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition-all"
-                                            >
-                                                <Globe size={16} />
-                                                Visit {office.websiteLabel}
-                                            </a>
+                                            {/* Action Buttons */}
+                                            <div className="mt-4 flex gap-2">
+                                                <a
+                                                    href={office.website}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-primary hover:text-white text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition-all"
+                                                >
+                                                    <Globe size={16} />
+                                                    Website
+                                                </a>
+                                                <a
+                                                    href={office.mapUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-primary hover:text-white text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition-all"
+                                                >
+                                                    <MapPin size={16} />
+                                                    View on Map
+                                                </a>
+                                            </div>
                                         </div>
                                     </Card>
                                 ))}
