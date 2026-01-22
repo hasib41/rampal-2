@@ -52,11 +52,11 @@ export function ProjectsPage() {
                     <p className="mt-4 text-xl text-white/80 max-w-2xl">
                         A futuristic energy landmark at Rampal, Bangladesh featuring high-efficiency power generation through international collaboration and sustainable engineering excellence.
                     </p>
-                    <div className="flex gap-4 mt-6">
-                        <Button className="bg-white text-emerald-900 hover:bg-emerald-50 shadow-lg shadow-black/20">
+                    <div className="flex flex-wrap gap-4 mt-6">
+                        <button className="inline-flex items-center px-5 py-2.5 bg-white text-emerald-900 font-semibold rounded-xl shadow-lg shadow-black/20 hover:bg-emerald-50 transition-all">
                             <BarChart3 className="mr-2" size={18} />
                             Technical Metrics
-                        </Button>
+                        </button>
                         <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
                             <ExternalLink className="mr-2" size={18} />
                             Live Site View
