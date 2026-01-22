@@ -37,7 +37,7 @@ export function NoticesPage() {
     return (
         <>
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-r from-emerald-900 to-teal-800 py-24">
+            <section className="relative bg-gradient-to-r from-emerald-900 to-teal-800 py-24 pt-32">
                 <div className="absolute inset-0 bg-[url('/hero-bg.jpg')] bg-cover bg-center" />
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/90 via-teal-800/75 to-emerald-900/85" />
                 <div className="relative max-w-7xl mx-auto px-4 text-center">
