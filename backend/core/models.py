@@ -256,6 +256,31 @@ class Notice(models.Model):
         return self.title
 
 
+class SiteSettings(models.Model):
+    """Singleton model for site-wide settings like certificate, logo, etc."""
+    certificate_image = models.ImageField(upload_to='settings/', blank=True, null=True)
+    certificate_title = models.CharField(max_length=200, default="BIFPCL ISO CERTIFICATE")
+    show_certificate_modal = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Site Settings"
+        verbose_name_plural = "Site Settings"
+
+    def __str__(self):
+        return "Site Settings"
+
+    def save(self, *args, **kwargs):
+        # Ensure only one instance exists (singleton pattern)
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get_settings(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
 class GalleryImage(models.Model):
     """Media Gallery for photos and videos"""
     CATEGORY_CHOICES = [

@@ -8,7 +8,9 @@
       "Bash(npm run lint)",
       "Bash(npm run build:*)",
       "Bash(python manage.py makemigrations:*)",
-      "Bash(python manage.py showmigrations:*)"
+      "Bash(python manage.py showmigrations:*)",
+      "Bash(python -c:*)",
+      "Bash(python manage.py shell:*)"
     ]
   }
 }

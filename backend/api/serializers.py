@@ -3,7 +3,7 @@ from django.utils.text import slugify
 from core.models import (
     CompanyInfo, Project, Director, NewsArticle,
     Career, JobApplication, Tender, ContactInquiry, CSRInitiative, Notice,
-    GalleryImage
+    GalleryImage, SiteSettings
 )
 
 
@@ -190,3 +190,23 @@ class GalleryImageDetailSerializer(serializers.ModelSerializer):
         if 'slug' in validated_data and not validated_data['slug']:
             del validated_data['slug']
         return super().update(instance, validated_data)
+
+
+class SiteSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteSettings
+        fields = ['certificate_image', 'certificate_title', 'show_certificate_modal', 'updated_at']
+        read_only_fields = ['updated_at']
+
+    def to_internal_value(self, data):
+        # Handle string boolean for show_certificate_modal from FormData
+        if 'show_certificate_modal' in data:
+            value = data.get('show_certificate_modal')
+            if isinstance(value, str):
+                if hasattr(data, '_mutable'):
+                    data._mutable = True
+                    data['show_certificate_modal'] = value.lower() in ('true', '1', 'yes')
+                else:
+                    data = dict(data)
+                    data['show_certificate_modal'] = value.lower() in ('true', '1', 'yes')
+        return super().to_internal_value(data)

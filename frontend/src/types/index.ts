@@ -133,3 +133,10 @@ export interface GalleryImage {
     is_featured: boolean;
     created_at?: string;
 }
+
+export interface SiteSettings {
+    certificate_image: string | null;
+    certificate_title: string;
+    show_certificate_modal: boolean;
+    updated_at: string;
+}

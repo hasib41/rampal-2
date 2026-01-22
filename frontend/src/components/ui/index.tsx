@@ -1046,3 +1046,8 @@ export { ProjectLocationMap } from './ProjectLocationMap';
 // NOTICE BOARD COMPONENT (Re-export)
 // ============================================================================
 export { NoticeBoard } from './NoticeBoard';
+
+// ============================================================================
+// CERTIFICATE MODAL COMPONENT (Re-export)
+// ============================================================================
+export { CertificateModal, useCertificateModal } from './CertificateModal';

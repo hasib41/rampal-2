@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type {
     CompanyInfo, Project, Director, NewsArticle,
-    Career, Tender, CSRInitiative, ContactFormData, Notice, GalleryImage
+    Career, Tender, CSRInitiative, ContactFormData, Notice, GalleryImage, SiteSettings
 } from '../types';
 
 // API Base URL (without /api suffix for media URLs)
@@ -146,4 +146,12 @@ export const galleryApi = {
 // Contact
 export const contactApi = {
     submit: (data: ContactFormData) => api.post('/contact/', data),
+};
+
+// Site Settings (certificate, etc.)
+export const siteSettingsApi = {
+    get: () => api.get<SiteSettings>('/settings/').then(res => res.data),
+    update: (data: FormData) => api.patch<SiteSettings>('/settings/', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(res => res.data),
 };

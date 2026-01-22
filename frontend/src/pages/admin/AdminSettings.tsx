@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Save, Globe, Bell, Shield, Building, AlertTriangle,
     MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin,
-    Youtube, Image, Eye, EyeOff, Check,
+    Youtube, Image, Eye, EyeOff, Check, Award, Upload, Trash2,
     Calendar, Users, Briefcase, FileText
 } from 'lucide-react';
 import { useCompanyInfo } from '../../hooks/useApi';
+import { siteSettingsApi, getMediaUrl } from '../../services/api';
+import type { SiteSettings } from '../../types';
 import {
     Card,
     Button,
@@ -124,8 +126,89 @@ export function AdminSettings() {
         twoFactorEnabled: false,
     });
 
+    // Certificate settings
+    const [certificateSettings, setCertificateSettings] = useState<SiteSettings | null>(null);
+    const [certificateFile, setCertificateFile] = useState<File | null>(null);
+    const [certificatePreview, setCertificatePreview] = useState<string>('');
+    const [isCertificateLoading, setIsCertificateLoading] = useState(true);
+    const [isCertificateSaving, setIsCertificateSaving] = useState(false);
+
+    // Load certificate settings on mount
+    useEffect(() => {
+        const loadCertificateSettings = async () => {
+            try {
+                const settings = await siteSettingsApi.get();
+                setCertificateSettings(settings);
+                if (settings.certificate_image) {
+                    setCertificatePreview(getMediaUrl(settings.certificate_image));
+                }
+            } catch (error) {
+                console.error('Failed to load certificate settings:', error);
+            } finally {
+                setIsCertificateLoading(false);
+            }
+        };
+        loadCertificateSettings();
+    }, []);
+
+    const handleCertificateFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setCertificateFile(file);
+            // Create preview
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setCertificatePreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleCertificateSave = async () => {
+        setIsCertificateSaving(true);
+        try {
+            const formData = new FormData();
+            if (certificateFile) {
+                formData.append('certificate_image', certificateFile);
+            }
+            formData.append('certificate_title', certificateSettings?.certificate_title || 'BIFPCL ISO CERTIFICATE');
+            formData.append('show_certificate_modal', String(certificateSettings?.show_certificate_modal ?? true));
+
+            const updatedSettings = await siteSettingsApi.update(formData);
+            setCertificateSettings(updatedSettings);
+            setCertificateFile(null);
+            setSaveSuccess(true);
+            setTimeout(() => setSaveSuccess(false), 3000);
+        } catch (error) {
+            console.error('Failed to save certificate settings:', error);
+        } finally {
+            setIsCertificateSaving(false);
+        }
+    };
+
+    const handleRemoveCertificate = async () => {
+        if (!confirm('Are you sure you want to remove the certificate image?')) return;
+        setIsCertificateSaving(true);
+        try {
+            const formData = new FormData();
+            formData.append('certificate_image', '');
+            formData.append('certificate_title', certificateSettings?.certificate_title || 'BIFPCL ISO CERTIFICATE');
+            formData.append('show_certificate_modal', 'false');
+
+            const updatedSettings = await siteSettingsApi.update(formData);
+            setCertificateSettings(updatedSettings);
+            setCertificatePreview('');
+            setCertificateFile(null);
+        } catch (error) {
+            console.error('Failed to remove certificate:', error);
+        } finally {
+            setIsCertificateSaving(false);
+        }
+    };
+
     const tabs = [
         { id: 'general', label: 'General', icon: <Globe size={16} /> },
+        { id: 'certificate', label: 'Certificate', icon: <Award size={16} /> },
         { id: 'company', label: 'Company', icon: <Building size={16} /> },
         { id: 'contact', label: 'Contact', icon: <MapPin size={16} /> },
         { id: 'notifications', label: 'Notifications', icon: <Bell size={16} /> },
@@ -291,6 +374,141 @@ export function AdminSettings() {
                     <div className="flex justify-end">
                         <Button leftIcon={<Save size={16} />} onClick={handleSave} isLoading={isSaving}>
                             Save Changes
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {/* ============ CERTIFICATE TAB ============ */}
+            {activeTab === 'certificate' && (
+                <div className="space-y-5">
+                    {/* Certificate Modal Settings */}
+                    <Card padding="md">
+                        <SectionHeader
+                            title="ISO Certificate Modal"
+                            description="Configure the certificate popup that appears when visitors first access the website"
+                        />
+
+                        {isCertificateLoading ? (
+                            <div className="flex items-center justify-center py-12">
+                                <div className="animate-spin rounded-full h-8 w-8 border-4 border-primary border-t-transparent" />
+                            </div>
+                        ) : (
+                            <div className="space-y-6">
+                                {/* Enable/Disable Toggle */}
+                                <div className="flex items-start justify-between p-4 bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-gray-200 dark:border-gray-700/50">
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2">
+                                            <h4 className="font-medium text-gray-900 dark:text-white">Show Certificate Modal</h4>
+                                            {certificateSettings?.show_certificate_modal && (
+                                                <span className="px-2 py-0.5 bg-accent-green/20 text-accent-green text-xs font-medium rounded-full">
+                                                    Active
+                                                </span>
+                                            )}
+                                        </div>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                            When enabled, visitors will see the certificate popup on their first visit to the website.
+                                        </p>
+                                    </div>
+                                    <Toggle
+                                        checked={certificateSettings?.show_certificate_modal ?? false}
+                                        onChange={(checked) => setCertificateSettings(prev => prev ? {...prev, show_certificate_modal: checked} : null)}
+                                    />
+                                </div>
+
+                                {/* Certificate Title */}
+                                <Input
+                                    label="Certificate Modal Title"
+                                    value={certificateSettings?.certificate_title || ''}
+                                    onChange={(e) => setCertificateSettings(prev => prev ? {...prev, certificate_title: e.target.value} : null)}
+                                    placeholder="e.g., BIFPCL ISO CERTIFICATE"
+                                    hint="This title appears at the top of the certificate modal"
+                                />
+
+                                {/* Certificate Image Upload */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                                        Certificate Image
+                                    </label>
+
+                                    {certificatePreview ? (
+                                        <div className="space-y-4">
+                                            {/* Preview */}
+                                            <div className="relative border border-gray-300 dark:border-gray-700 rounded-xl overflow-hidden bg-white">
+                                                <img
+                                                    src={certificatePreview}
+                                                    alt="Certificate Preview"
+                                                    className="w-full max-h-96 object-contain"
+                                                />
+                                                {certificateFile && (
+                                                    <div className="absolute top-2 right-2 px-2 py-1 bg-accent-orange text-white text-xs rounded-md">
+                                                        Unsaved
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Actions */}
+                                            <div className="flex gap-3">
+                                                <label className="cursor-pointer">
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={handleCertificateFileChange}
+                                                        className="hidden"
+                                                    />
+                                                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                                                        <Upload size={16} />
+                                                        Replace Image
+                                                    </span>
+                                                </label>
+                                                <button
+                                                    onClick={handleRemoveCertificate}
+                                                    className="inline-flex items-center gap-2 px-4 py-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                                                >
+                                                    <Trash2 size={16} />
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <label className="cursor-pointer block">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleCertificateFileChange}
+                                                className="hidden"
+                                            />
+                                            <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-8 text-center hover:border-primary dark:hover:border-primary transition-colors">
+                                                <div className="w-16 h-16 bg-primary/10 rounded-xl mx-auto mb-4 flex items-center justify-center">
+                                                    <Award className="text-primary" size={32} />
+                                                </div>
+                                                <p className="text-gray-700 dark:text-gray-300 font-medium">
+                                                    Click to upload certificate image
+                                                </p>
+                                                <p className="text-gray-500 text-sm mt-1">
+                                                    PNG, JPG up to 5MB (recommended: high resolution for clarity)
+                                                </p>
+                                            </div>
+                                        </label>
+                                    )}
+                                </div>
+
+                                <InfoCallout>
+                                    The certificate modal will appear once per session for each visitor.
+                                    Users can close it by clicking the X button or clicking outside the modal.
+                                </InfoCallout>
+                            </div>
+                        )}
+                    </Card>
+
+                    <div className="flex justify-end">
+                        <Button
+                            leftIcon={<Save size={16} />}
+                            onClick={handleCertificateSave}
+                            isLoading={isCertificateSaving}
+                            disabled={isCertificateLoading}
+                        >
+                            Save Certificate Settings
                         </Button>
                     </div>
                 </div>

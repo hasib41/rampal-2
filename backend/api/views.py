@@ -5,7 +5,7 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from django_filters.rest_framework import DjangoFilterBackend
 from core.models import (
     CompanyInfo, Project, Director, NewsArticle,
-    Career, Tender, CSRInitiative, Notice, GalleryImage
+    Career, Tender, CSRInitiative, Notice, GalleryImage, SiteSettings
 )
 from .serializers import (
     CompanyInfoSerializer, ProjectListSerializer, ProjectDetailSerializer,
@@ -13,7 +13,8 @@ from .serializers import (
     CareerListSerializer, CareerDetailSerializer, JobApplicationSerializer,
     TenderSerializer, ContactInquirySerializer, CSRInitiativeSerializer,
     NoticeListSerializer, NoticeDetailSerializer,
-    GalleryImageListSerializer, GalleryImageDetailSerializer
+    GalleryImageListSerializer, GalleryImageDetailSerializer,
+    SiteSettingsSerializer
 )
 
 
@@ -251,3 +252,12 @@ class GalleryImageViewSet(viewsets.ModelViewSet):
         featured = self.queryset.filter(is_featured=True)[:8]
         serializer = GalleryImageListSerializer(featured, many=True)
         return Response(serializer.data)
+
+
+class SiteSettingsView(generics.RetrieveUpdateAPIView):
+    """Get and update site settings (singleton)"""
+    serializer_class = SiteSettingsSerializer
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+
+    def get_object(self):
+        return SiteSettings.get_settings()

@@ -4,7 +4,8 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     CompanyInfoView, ProjectViewSet, DirectorViewSet, NewsViewSet,
     CareerViewSet, JobApplicationView, TenderViewSet,
-    ContactInquiryView, CSRInitiativeViewSet, NoticeViewSet, GalleryImageViewSet
+    ContactInquiryView, CSRInitiativeViewSet, NoticeViewSet, GalleryImageViewSet,
+    SiteSettingsView
 )
 
 
@@ -29,4 +30,5 @@ urlpatterns = [
     path('company/', CompanyInfoView.as_view(), name='company-info'),
     path('apply/', JobApplicationView.as_view(), name='job-application'),
     path('contact/', ContactInquiryView.as_view(), name='contact-inquiry'),
+    path('settings/', SiteSettingsView.as_view(), name='site-settings'),
 ]
