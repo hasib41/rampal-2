@@ -24,7 +24,7 @@ const quickActions: QuickAction[] = [
 
 const welcomeMessage: Message = {
     id: 'welcome',
-    content: "Hello! I'm the BIFPCL AI Assistant powered by Gemini. I can help you with information about the Maitree Super Thermal Power Project, tenders, careers, and more. How can I assist you today?",
+    content: "Hello! I'm the BIFPCL AI Assistant. I can help you with information about the Maitree Super Thermal Power Project, tenders, careers, and more. How can I assist you today?",
     role: 'assistant',
     timestamp: new Date(),
 };
@@ -167,7 +167,7 @@ export function ChatBot() {
                             <h3 className="text-white font-semibold text-sm">BIFPCL AI Assistant</h3>
                             <div className="flex items-center gap-1.5">
                                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                                <span className="text-white/70 text-xs">Powered by Gemini</span>
+                                <span className="text-white/70 text-xs">Online</span>
                             </div>
                         </div>
                     </div>
@@ -314,9 +314,6 @@ export function ChatBot() {
                             )}
                         </button>
                     </div>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 text-center mt-2">
-                        Powered by Google Gemini AI
-                    </p>
                 </form>
             </div>
         </>
