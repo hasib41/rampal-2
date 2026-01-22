@@ -35,7 +35,7 @@ export function NoticeDetailPage() {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-secondary-dark flex items-center justify-center">
+            <div className="min-h-screen bg-slate-50 dark:bg-secondary-dark flex items-center justify-center">
                 <LoadingSpinner />
             </div>
         );
@@ -43,11 +43,11 @@ export function NoticeDetailPage() {
 
     if (error || !notice) {
         return (
-            <div className="min-h-screen bg-secondary-dark flex items-center justify-center">
+            <div className="min-h-screen bg-slate-50 dark:bg-secondary-dark flex items-center justify-center">
                 <div className="text-center">
-                    <FileText className="mx-auto text-gray-600 mb-4" size={64} />
-                    <h1 className="text-2xl font-bold text-white mb-2">Notice Not Found</h1>
-                    <p className="text-gray-400 mb-6">The notice you're looking for doesn't exist.</p>
+                    <FileText className="mx-auto text-gray-400 dark:text-gray-600 mb-4" size={64} />
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Notice Not Found</h1>
+                    <p className="text-gray-500 dark:text-gray-400 mb-6">The notice you're looking for doesn't exist.</p>
                     <Link to="/notices">
                         <Button>Back to Notices</Button>
                     </Link>
@@ -62,13 +62,13 @@ export function NoticeDetailPage() {
     return (
         <>
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-br from-secondary-dark via-secondary to-secondary-dark py-16">
+            <section className="relative bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-700 dark:from-secondary-dark dark:via-secondary dark:to-secondary-dark py-16 pt-32">
                 <div className="absolute inset-0 bg-[url('/hero-bg.jpg')] bg-cover bg-center opacity-10" />
                 <div className="relative max-w-4xl mx-auto px-4">
                     {/* Breadcrumb */}
                     <Link
                         to="/notices"
-                        className="inline-flex items-center gap-2 text-gray-400 hover:text-primary-light transition-colors mb-8"
+                        className="inline-flex items-center gap-2 text-white/70 hover:text-white dark:text-gray-400 dark:hover:text-primary-light transition-colors mb-8"
                     >
                         <ArrowLeft size={18} />
                         Back to Notices
@@ -93,7 +93,7 @@ export function NoticeDetailPage() {
                     </h1>
 
                     {/* Meta */}
-                    <div className="flex flex-wrap items-center gap-6 text-gray-400">
+                    <div className="flex flex-wrap items-center gap-6 text-white/70 dark:text-gray-400">
                         <span className="flex items-center gap-2">
                             <Calendar size={18} />
                             Published: {new Date(notice.published_date).toLocaleDateString('en-US', {
@@ -117,37 +117,37 @@ export function NoticeDetailPage() {
             </section>
 
             {/* Content Section */}
-            <section className="bg-secondary-dark py-12">
+            <section className="bg-slate-50 dark:bg-secondary-dark py-12">
                 <div className="max-w-4xl mx-auto px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Main Content */}
                         <div className="lg:col-span-2">
-                            <Card dark className="p-8">
+                            <Card className="p-8">
                                 {notice.excerpt && (
-                                    <p className="text-lg text-gray-300 mb-6 pb-6 border-b border-gray-700">
+                                    <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
                                         {notice.excerpt}
                                     </p>
                                 )}
 
                                 {notice.content ? (
-                                    <div className="prose prose-invert prose-lg max-w-none">
+                                    <div className="prose prose-lg dark:prose-invert max-w-none">
                                         <div
-                                            className="text-gray-300 leading-relaxed"
+                                            className="text-gray-700 dark:text-gray-300 leading-relaxed [&_strong]:text-gray-900 dark:[&_strong]:text-white"
                                             dangerouslySetInnerHTML={{
                                                 __html: notice.content
                                                     // Convert **bold** to <strong>
-                                                    .replace(/\*\*(.+?)\*\*/g, '<strong class="text-white">$1</strong>')
+                                                    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
                                                     // Convert numbered lists (1. item)
                                                     .replace(/^(\d+)\.\s+(.+)$/gm, '<li class="ml-4">$1. $2</li>')
                                                     // Convert bullet points (- item)
-                                                    .replace(/^-\s+(.+)$/gm, '<li class="ml-4 list-disc">• $1</li>')
+                                                    .replace(/^-\s+(.+)$/gm, '<li class="ml-4 list-disc">$1</li>')
                                                     // Convert newlines to <br>
                                                     .replace(/\n/g, '<br/>')
                                             }}
                                         />
                                     </div>
                                 ) : (
-                                    <p className="text-gray-400">
+                                    <p className="text-gray-500 dark:text-gray-400">
                                         No additional content available for this notice. Please download the attached document for more details.
                                     </p>
                                 )}
@@ -157,8 +157,8 @@ export function NoticeDetailPage() {
                         {/* Sidebar */}
                         <div className="space-y-6">
                             {/* Actions */}
-                            <Card dark className="p-6">
-                                <h3 className="text-lg font-semibold text-white mb-4">Actions</h3>
+                            <Card className="p-6">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Actions</h3>
                                 <div className="space-y-3">
                                     {notice.document && (
                                         <a
@@ -177,7 +177,7 @@ export function NoticeDetailPage() {
                                             href={notice.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex items-center gap-3 w-full px-4 py-3 bg-secondary-light hover:bg-gray-600 text-white rounded-lg transition-colors"
+                                            className="flex items-center gap-3 w-full px-4 py-3 bg-gray-100 dark:bg-secondary-light hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-white rounded-lg transition-colors"
                                         >
                                             <ExternalLink size={18} />
                                             <span>Visit Link</span>
@@ -186,7 +186,7 @@ export function NoticeDetailPage() {
 
                                     <button
                                         onClick={handleShare}
-                                        className="flex items-center gap-3 w-full px-4 py-3 bg-secondary-light hover:bg-gray-600 text-white rounded-lg transition-colors"
+                                        className="flex items-center gap-3 w-full px-4 py-3 bg-gray-100 dark:bg-secondary-light hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-white rounded-lg transition-colors"
                                     >
                                         <Share2 size={18} />
                                         <span>Share Notice</span>
@@ -196,19 +196,19 @@ export function NoticeDetailPage() {
 
                             {/* Related Notices */}
                             {relatedNotices && relatedNotices.length > 0 && (
-                                <Card dark className="p-6">
-                                    <h3 className="text-lg font-semibold text-white mb-4">Related Notices</h3>
+                                <Card className="p-6">
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Related Notices</h3>
                                     <div className="space-y-3">
                                         {relatedNotices.map((related) => (
                                             <Link
                                                 key={related.id}
                                                 to={`/notices/${related.slug}`}
-                                                className="block p-3 rounded-lg bg-secondary-dark hover:bg-secondary-light transition-colors group"
+                                                className="block p-3 rounded-lg bg-gray-50 dark:bg-secondary-dark hover:bg-gray-100 dark:hover:bg-secondary-light transition-colors group"
                                             >
-                                                <p className="text-gray-300 group-hover:text-primary-light transition-colors line-clamp-2 text-sm">
+                                                <p className="text-gray-700 dark:text-gray-300 group-hover:text-primary transition-colors line-clamp-2 text-sm">
                                                     {related.title}
                                                 </p>
-                                                <p className="text-gray-500 text-xs mt-1">
+                                                <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">
                                                     {new Date(related.published_date).toLocaleDateString('en-US', {
                                                         month: 'short',
                                                         day: 'numeric',
