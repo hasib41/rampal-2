@@ -150,8 +150,8 @@ export function HomePage() {
                     <ChevronRight size={20} className="sm:w-6 sm:h-6 group-hover:translate-x-0.5 transition-transform" />
                 </button>
 
-                {/* Slide Indicators - positioned above the stats card */}
-                <div className="absolute bottom-36 sm:bottom-40 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-3 bg-black/20 backdrop-blur-sm px-3 py-2 rounded-full">
+                {/* Slide Indicators - positioned above the stats card (hidden on mobile) */}
+                <div className="hidden md:flex absolute bottom-36 sm:bottom-40 left-1/2 -translate-x-1/2 z-20 items-center gap-2 sm:gap-3 bg-black/20 backdrop-blur-sm px-3 py-2 rounded-full">
                     {heroSlides.map((_, index) => (
                         <button
                             key={index}
@@ -175,8 +175,8 @@ export function HomePage() {
                     />
                 </div>
 
-                {/* Stats Section - Dark Glass Design */}
-                <div id="stats-section" className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-30 w-[calc(100%-1.5rem)] max-w-5xl">
+                {/* Stats Section - Dark Glass Design (hidden on mobile) */}
+                <div id="stats-section" className="hidden md:block absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-30 w-[calc(100%-1.5rem)] max-w-5xl">
                     {/* Glow effect */}
                     <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/30 via-teal-400/20 to-emerald-500/30 rounded-2xl blur-lg opacity-60" />
 

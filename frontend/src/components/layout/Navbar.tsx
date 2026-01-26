@@ -98,9 +98,9 @@ export function Navbar() {
                                 className="w-12 h-12 sm:w-14 sm:h-14 object-contain group-hover:scale-105 transition-transform duration-300"
                             />
                         </div>
-                        <div className="flex flex-col">
+                        <div className="hidden sm:flex flex-col">
                             <span className="text-gray-900 dark:text-white font-bold text-lg leading-tight tracking-tight">BIFPCL</span>
-                            <span className="text-gray-500 dark:text-gray-400 text-[10px] leading-tight hidden sm:block font-medium">Maitree Super Thermal Power</span>
+                            <span className="text-gray-500 dark:text-gray-400 text-[10px] leading-tight font-medium">Maitree Super Thermal Power</span>
                         </div>
                     </Link>
 
