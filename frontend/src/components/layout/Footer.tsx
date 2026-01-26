@@ -21,7 +21,14 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* Brand */}
                     <div>
-                        <h3 className="text-gray-900 dark:text-white font-bold text-xl mb-4">BIFPCL</h3>
+                        <div className="flex items-center gap-3 mb-4">
+                            <img
+                                src="/Logo.png"
+                                alt="BIFPCL Logo"
+                                className="w-14 h-14 object-contain"
+                            />
+                            <h3 className="text-gray-900 dark:text-white font-bold text-xl">BIFPCL</h3>
+                        </div>
                         <p className="text-sm leading-relaxed">
                             Bangladesh-India Friendship Power Company (Pvt.) Limited. A mega-scale joint venture
                             powering the nation's progress with sustainable energy.

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { ChevronDown, Zap, Users, Newspaper, HelpCircle, Briefcase, Mail, Leaf, FolderOpen, ChevronRight, Sun, Moon, FileText, MapPin } from 'lucide-react';
+import { ChevronDown, Users, Newspaper, HelpCircle, Briefcase, Mail, Leaf, FolderOpen, ChevronRight, Sun, Moon, FileText, MapPin } from 'lucide-react';
 import { useTheme } from '../../contexts';
 
 // Office locations
@@ -92,11 +92,11 @@ export function Navbar() {
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-3 group">
                         <div className="relative">
-                            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg shadow-primary/25 group-hover:shadow-xl group-hover:shadow-primary/30 transition-all duration-300 group-hover:scale-105">
-                                <Zap className="text-white" size={22} />
-                            </div>
-                            {/* Pulse effect on hover */}
-                            <div className="absolute inset-0 rounded-xl bg-primary/20 animate-ping opacity-0 group-hover:opacity-75 transition-opacity" style={{ animationDuration: '1.5s' }} />
+                            <img
+                                src="/Logo.png"
+                                alt="BIFPCL Logo"
+                                className="w-12 h-12 sm:w-14 sm:h-14 object-contain group-hover:scale-105 transition-transform duration-300"
+                            />
                         </div>
                         <div className="flex flex-col">
                             <span className="text-gray-900 dark:text-white font-bold text-lg leading-tight tracking-tight">BIFPCL</span>
