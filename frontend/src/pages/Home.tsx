@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Zap, Users, Leaf, MapPin, Calendar, ChevronRight, ArrowRight, ChevronLeft, Briefcase, Newspaper, Clock, ExternalLink, TrendingUp } from 'lucide-react';
-import { Button, Stat, Card, LoadingSpinner, ProjectLocationMap, NoticeBoard } from '../components/ui';
+import { Button, Card, LoadingSpinner, ProjectLocationMap, NoticeBoard } from '../components/ui';
 import { useDirectors, useCSRInitiatives, useNotices, useNews, useTenders } from '../hooks/useApi';
 import { getMediaUrl } from '../services/api';
 
@@ -87,7 +87,7 @@ export function HomePage() {
     return (
         <>
             {/* Hero Section with Slider */}
-            <section className="relative min-h-[85vh] sm:min-h-screen flex items-center bg-gradient-to-r from-emerald-900 to-teal-800 overflow-hidden">
+            <section className="relative min-h-[70vh] sm:min-h-[80vh] flex items-center bg-gradient-to-r from-emerald-900 to-teal-800 overflow-hidden">
                 {/* Slide Backgrounds - Full opacity for clean look */}
                 {heroSlides.map((slide, index) => (
                     <div
@@ -150,8 +150,8 @@ export function HomePage() {
                     <ChevronRight size={20} className="sm:w-6 sm:h-6 group-hover:translate-x-0.5 transition-transform" />
                 </button>
 
-                {/* Slide Indicators */}
-                <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-3 bg-black/20 backdrop-blur-sm px-3 py-2 rounded-full">
+                {/* Slide Indicators - positioned above the stats card */}
+                <div className="absolute bottom-36 sm:bottom-40 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-3 bg-black/20 backdrop-blur-sm px-3 py-2 rounded-full">
                     {heroSlides.map((_, index) => (
                         <button
                             key={index}
@@ -174,14 +174,62 @@ export function HomePage() {
                         }}
                     />
                 </div>
-            </section>
 
-            {/* Stats Section */}
-            <section className="bg-slate-100 dark:bg-secondary py-10 sm:py-12 md:py-16 border-y border-slate-200 dark:border-gray-700">
-                <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-                    <Stat value="1320" suffix="MW" label="Total Capacity" />
-                    <Stat value="Ultra-Super" label="Critical Technology" />
-                    <Stat value="50:50" label="India-Bangladesh Joint Venture" />
+                {/* Stats Section - Dark Glass Design */}
+                <div id="stats-section" className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-30 w-[calc(100%-1.5rem)] max-w-5xl">
+                    {/* Glow effect */}
+                    <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/30 via-teal-400/20 to-emerald-500/30 rounded-2xl blur-lg opacity-60" />
+
+                    {/* Main card */}
+                    <div className="relative bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+                        {/* Top accent line */}
+                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
+
+                        {/* Content */}
+                        <div className="relative grid grid-cols-3 py-4 sm:py-5">
+                            {/* Stat 1 */}
+                            <div className="group text-center px-3 sm:px-6 relative">
+                                <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+                                    <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
+                                    <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
+                                        1320<span className="text-emerald-400">MW</span>
+                                    </span>
+                                </div>
+                                <p className="text-[10px] sm:text-xs text-white/60 mt-1 font-medium uppercase tracking-wider">Total Capacity</p>
+                            </div>
+
+                            {/* Divider */}
+                            <div className="absolute left-1/3 top-1/2 -translate-y-1/2 h-10 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+
+                            {/* Stat 2 */}
+                            <div className="group text-center px-3 sm:px-6 relative">
+                                <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+                                    <Leaf className="w-4 h-4 sm:w-5 sm:h-5 text-teal-400" />
+                                    <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">
+                                        Ultra-Super
+                                    </span>
+                                </div>
+                                <p className="text-[10px] sm:text-xs text-white/60 mt-1 font-medium uppercase tracking-wider">Critical Tech</p>
+                            </div>
+
+                            {/* Divider */}
+                            <div className="absolute left-2/3 top-1/2 -translate-y-1/2 h-10 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+
+                            {/* Stat 3 */}
+                            <div className="group text-center px-3 sm:px-6 relative">
+                                <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+                                    <Users className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
+                                    <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
+                                        50:50
+                                    </span>
+                                </div>
+                                <p className="text-[10px] sm:text-xs text-white/60 mt-1 font-medium uppercase tracking-wider">Joint Venture</p>
+                            </div>
+                        </div>
+
+                        {/* Bottom accent line */}
+                        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal-400/30 to-transparent" />
+                    </div>
                 </div>
             </section>
 

@@ -1023,16 +1023,17 @@ interface StatProps {
     label: string;
     icon?: ReactNode;
     suffix?: string;
+    compact?: boolean;
 }
 
-export function Stat({ value, label, icon, suffix }: StatProps) {
+export function Stat({ value, label, icon, suffix, compact }: StatProps) {
     return (
         <div className="text-center">
             {icon && <div className="flex justify-center mb-2 text-primary">{icon}</div>}
-            <div className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+            <div className={`font-bold text-gray-900 dark:text-white ${compact ? 'text-xl sm:text-2xl' : 'text-3xl md:text-4xl'}`}>
                 {value}{suffix && <span className="text-primary">{suffix}</span>}
             </div>
-            <div className="text-gray-500 dark:text-gray-400 mt-1">{label}</div>
+            <div className={`text-gray-500 dark:text-gray-400 ${compact ? 'text-xs sm:text-sm mt-0.5' : 'mt-1'}`}>{label}</div>
         </div>
     );
 }
