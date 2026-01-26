@@ -547,18 +547,13 @@ export function HomePage() {
                             { icon: Users, title: 'Community Impact', desc: 'Local employment & sustainable development programs', color: 'from-accent-orange to-orange-600' },
                             { icon: Leaf, title: 'Operational Safety', desc: 'Zero-incident commitment with rigorous safety protocols', color: 'from-accent-green to-green-600' },
                             { icon: MapPin, title: 'Strategic Location', desc: 'Optimally positioned in Rampal, Bagerhat', color: 'from-purple-500 to-purple-700' },
-                        ].map((item, index) => (
+                        ].map((item) => (
                             <div
                                 key={item.title}
                                 className="group relative bg-white dark:bg-secondary-dark rounded-2xl p-5 sm:p-6 md:p-8 hover:bg-slate-50 dark:hover:bg-secondary-dark/80 transition-all duration-500 border border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 overflow-hidden shadow-sm"
                             >
                                 {/* Hover gradient overlay */}
                                 <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-[0.05] transition-opacity duration-500`} />
-
-                                {/* Number badge */}
-                                <span className="absolute top-4 right-4 text-4xl sm:text-5xl font-bold text-slate-200 dark:text-gray-800 group-hover:text-slate-300 dark:group-hover:text-gray-700 transition-colors">
-                                    0{index + 1}
-                                </span>
 
                                 {/* Icon */}
                                 <div className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-lg mb-4 sm:mb-5 group-hover:scale-110 transition-transform duration-300`}>
@@ -606,18 +601,13 @@ export function HomePage() {
                         <LoadingSpinner />
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-                            {csrInitiatives?.slice(0, 3).map((initiative, index) => (
+                            {csrInitiatives?.slice(0, 3).map((initiative) => (
                                 <div
                                     key={initiative.id}
                                     className="group relative bg-white dark:bg-secondary rounded-2xl p-5 sm:p-6 hover:bg-slate-50 dark:hover:bg-secondary/80 transition-all duration-500 border border-slate-200 dark:border-gray-700 hover:border-accent-green/50 overflow-hidden shadow-sm"
                                 >
                                     {/* Hover gradient overlay */}
                                     <div className="absolute inset-0 bg-gradient-to-br from-accent-green to-green-600 opacity-0 group-hover:opacity-[0.05] transition-opacity duration-500" />
-
-                                    {/* Number badge */}
-                                    <span className="absolute top-4 right-4 text-4xl sm:text-5xl font-bold text-slate-200 dark:text-gray-800 group-hover:text-slate-300 dark:group-hover:text-gray-700 transition-colors">
-                                        0{index + 1}
-                                    </span>
 
                                     {/* Icon */}
                                     <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-accent-green to-green-600 flex items-center justify-center shadow-lg mb-4 sm:mb-5 group-hover:scale-110 transition-transform duration-300">
