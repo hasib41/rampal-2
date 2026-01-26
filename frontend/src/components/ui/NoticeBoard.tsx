@@ -23,12 +23,12 @@ interface Director {
     order: number;
 }
 
-// Category colors - using actual category values from API
-const categoryColors: Record<string, { bg: string; text: string; lightBg: string }> = {
-    urgent: { bg: 'bg-red-500', text: 'text-white', lightBg: 'bg-red-50 dark:bg-red-500/10' },
-    general: { bg: 'bg-blue-500', text: 'text-white', lightBg: 'bg-blue-50 dark:bg-blue-500/10' },
-    tender: { bg: 'bg-emerald-500', text: 'text-white', lightBg: 'bg-emerald-50 dark:bg-emerald-500/10' },
-    recruitment: { bg: 'bg-purple-500', text: 'text-white', lightBg: 'bg-purple-50 dark:bg-purple-500/10' },
+// Category colors - subtle, professional design
+const categoryColors: Record<string, { bg: string; text: string; border: string; dot: string }> = {
+    urgent: { bg: 'bg-red-50 dark:bg-red-500/10', text: 'text-red-600 dark:text-red-400', border: 'border-red-200 dark:border-red-500/30', dot: 'bg-red-500' },
+    general: { bg: 'bg-slate-100 dark:bg-slate-500/10', text: 'text-slate-600 dark:text-slate-400', border: 'border-slate-200 dark:border-slate-500/30', dot: 'bg-slate-500' },
+    tender: { bg: 'bg-emerald-50 dark:bg-emerald-500/10', text: 'text-emerald-600 dark:text-emerald-400', border: 'border-emerald-200 dark:border-emerald-500/30', dot: 'bg-emerald-500' },
+    recruitment: { bg: 'bg-violet-50 dark:bg-violet-500/10', text: 'text-violet-600 dark:text-violet-400', border: 'border-violet-200 dark:border-violet-500/30', dot: 'bg-violet-500' },
 };
 
 interface NoticeBoardProps {
@@ -77,7 +77,7 @@ export function NoticeBoard({ notices, directors, loading, getMediaUrl }: Notice
                     </div>
 
                     {/* Notice List */}
-                    <div className="divide-y divide-gray-100 dark:divide-gray-800">
+                    <div className="p-4 space-y-3">
                         {notices?.slice(0, 5).map((notice, index) => {
                             const date = new Date(notice.published_date);
                             const formattedDate = date.toLocaleDateString('en-US', {
@@ -93,55 +93,60 @@ export function NoticeBoard({ notices, directors, loading, getMediaUrl }: Notice
                                 <Link
                                     key={notice.id}
                                     to={`/notices/${notice.slug}`}
-                                    className={`flex items-start gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all group ${index === 0 ? 'bg-gradient-to-r from-primary/5 to-transparent dark:from-primary/10' : ''}`}
+                                    className={`block rounded-xl border ${catStyle.border} ${catStyle.bg} hover:shadow-md transition-all group overflow-hidden`}
                                 >
-                                    {/* Number Badge */}
-                                    <div className={`${catStyle.bg} text-white rounded-xl w-12 h-12 flex items-center justify-center shadow-lg flex-shrink-0 group-hover:scale-105 transition-transform`}>
-                                        <span className="text-lg font-bold">{String(index + 1).padStart(2, '0')}</span>
-                                    </div>
+                                    <div className="flex items-start gap-3 p-3">
+                                        {/* Left accent bar */}
+                                        <div className={`w-1 self-stretch rounded-full ${catStyle.dot} flex-shrink-0`} />
 
-                                    {/* Content */}
-                                    <div className="flex-1 min-w-0">
-                                        {/* Tags Row */}
-                                        <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                                            {/* Category Tag */}
-                                            <span className={`${catStyle.bg} ${catStyle.text} text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide`}>
-                                                {notice.category_display || category}
-                                            </span>
-
-                                            {/* Date */}
-                                            <span className="flex items-center gap-1 text-[11px] text-gray-500 dark:text-gray-400">
-                                                <Calendar size={10} />
-                                                {formattedDate}
-                                            </span>
-
-                                            {/* File Attached */}
-                                            {notice.document && (
-                                                <span className="flex items-center gap-1 text-[10px] font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 rounded">
-                                                    <Paperclip size={10} />
-                                                    Attachment
+                                        {/* Content */}
+                                        <div className="flex-1 min-w-0">
+                                            {/* Tags Row */}
+                                            <div className="flex flex-wrap items-center gap-2 mb-1">
+                                                {/* Category Tag */}
+                                                <span className={`${catStyle.text} text-[10px] font-bold uppercase tracking-wide`}>
+                                                    {notice.category_display || category}
                                                 </span>
+
+                                                <span className="text-gray-300 dark:text-gray-600">•</span>
+
+                                                {/* Date */}
+                                                <span className="flex items-center gap-1 text-[11px] text-gray-500 dark:text-gray-400">
+                                                    <Calendar size={10} />
+                                                    {formattedDate}
+                                                </span>
+
+                                                {/* File Attached */}
+                                                {notice.document && (
+                                                    <>
+                                                        <span className="text-gray-300 dark:text-gray-600">•</span>
+                                                        <span className="flex items-center gap-1 text-[10px] font-medium text-gray-500 dark:text-gray-400">
+                                                            <Paperclip size={10} />
+                                                            File
+                                                        </span>
+                                                    </>
+                                                )}
+                                            </div>
+
+                                            {/* Title */}
+                                            <h3 className="text-gray-800 dark:text-gray-100 font-medium text-sm group-hover:text-primary transition-colors line-clamp-2 leading-snug">
+                                                {notice.title}
+                                            </h3>
+
+                                            {/* Excerpt for first item */}
+                                            {index === 0 && notice.excerpt && (
+                                                <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 line-clamp-1">
+                                                    {notice.excerpt}
+                                                </p>
                                             )}
                                         </div>
 
-                                        {/* Title */}
-                                        <h3 className="text-gray-900 dark:text-white font-semibold text-sm group-hover:text-primary transition-colors line-clamp-2 leading-snug">
-                                            {notice.title}
-                                        </h3>
-
-                                        {/* Excerpt for first item */}
-                                        {index === 0 && notice.excerpt && (
-                                            <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 line-clamp-1">
-                                                {notice.excerpt}
-                                            </p>
-                                        )}
+                                        {/* Arrow */}
+                                        <ChevronRight
+                                            size={16}
+                                            className="text-gray-400 dark:text-gray-500 group-hover:text-primary group-hover:translate-x-1 transition-all flex-shrink-0 mt-1"
+                                        />
                                     </div>
-
-                                    {/* Arrow */}
-                                    <ChevronRight
-                                        size={18}
-                                        className="text-gray-300 dark:text-gray-600 group-hover:text-primary group-hover:translate-x-1 transition-all flex-shrink-0 mt-3"
-                                    />
                                 </Link>
                             );
                         })}
